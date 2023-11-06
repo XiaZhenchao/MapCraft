@@ -16,4 +16,4 @@ jobs:
 
       - run: npm install  # Install dependencies
 
-      - run: npm run cypress:run  # Execute Cypress tests
+      - run: npx cypress run --spec cypress/e2e/splashscreen.cy.js 
