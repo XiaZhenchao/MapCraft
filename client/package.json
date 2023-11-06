@@ -21,9 +21,13 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build",
-    "test": "react-scripts --openssl-legacy-provider test",
-    "eject": "react-scripts --openssl-legacy-provider eject"
+    "build": "rollup -c",
+    "test": "cypress run",
+    "eject": "react-scripts --openssl-legacy-provider eject",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:record": "cypress run --record --key"
+
   },
   "eslintConfig": {
     "extends": [
