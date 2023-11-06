@@ -11,5 +11,14 @@ mongoose
 
 const db = mongoose.connection
 
-module.exports = db
+db.close = async () => {
+  try {
+    await mongoose.disconnect();
+    console.log('Disconnected from the database');
+  } catch (error) {
+    console.error('Disconnection error:', error.message);
+  }
+};
 
+
+module.exports = db
