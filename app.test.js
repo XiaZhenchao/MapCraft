@@ -16,11 +16,11 @@ describe("Test application", () => {
         const res = await request(app)
             .post('/auth/register') 
             .send({
-                firstName: 'test4',
-                lastName: 'test4',
-                email: 'test4@gmail.com',
-                password: 'testtest4',
-                passwordVerify:'testtest4'
+                firstName: 'test3',
+                lastName: 'test3',
+                email: 'test3@gmail.com',
+                password: 'testtest3',
+                passwordVerify:'testtest3'
             });
         expect(res.statusCode).toBe(200);
     });
@@ -29,8 +29,8 @@ describe("Test application", () => {
         const res = await request(app)
             .post('/auth/login') 
             .send({
-                email: 'test3@gmail.com',
-                password: 'testtest3',
+                email: 'test4@gmail.com',
+                password: 'testtest4',
             });
         expect(res.statusCode).toBe(200);
     });
