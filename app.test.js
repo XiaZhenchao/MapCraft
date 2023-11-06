@@ -16,9 +16,9 @@ describe("Test application", () => {
         const res = await request(app)
             .post('/auth/register') 
             .send({
-                firstName: 'test4123',
-                lastName: 'test4123',
-                email: 'test4324324@gmail.com',
+                firstName: 'test4121233',
+                lastName: 'test4121233',
+                email: 'test4324312324@gmail.com',
                 password: 'testtest4',
                 passwordVerify:'testtest4'
             });
