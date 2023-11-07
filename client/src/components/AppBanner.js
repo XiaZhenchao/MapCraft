@@ -87,9 +87,12 @@ export default function AppBanner() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
+        <Box sx={{ flexGrow: 1}}>
+            <AppBar position="static" className="ToolBar" >
+                <Toolbar className="ToolBar">
+                <Box className="custom-box"></Box>
+                <span className="custom-text">Mapcraft</span>
+                <Box sx={{ flexGrow: 1 }}></Box>
                     <Typography                        
                         variant="h4"
                         noWrap
@@ -98,7 +101,6 @@ export default function AppBanner() {
                     >
                         <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                     </Typography>
-                   
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
