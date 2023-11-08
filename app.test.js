@@ -36,13 +36,8 @@ describe("Test application", () => {
     });
 
     afterAll(async () => {
-        try {
-            await db.close();
-            done()
-        } catch (error) {
-            console.log(error);
-            done()
-        }
+        await db.close();
+        done()
       });
 
 });
