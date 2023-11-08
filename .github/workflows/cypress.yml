@@ -40,4 +40,4 @@ jobs:
       run: npm run build --if-present
       
     - name: Cypress Run
-      run: npx cypress run client/cypress/e2e/splashscreen
+      run: npx cypress run cypress/e2e/splashscreen
