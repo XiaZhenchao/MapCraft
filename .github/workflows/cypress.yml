@@ -28,7 +28,10 @@ jobs:
     
     - name: Install dependencies
       run: npm install
-    
+      
+    - name: Cypress Install
+      run: npx cypress install
+      
     - name: Return to the original working directory 
     # Add this step to go back to the original working directory
       run: cd ..
