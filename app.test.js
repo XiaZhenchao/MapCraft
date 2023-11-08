@@ -37,6 +37,7 @@ describe("Test application", () => {
 
     afterAll(async () => {
         await db.close();
+        done()
       });
 
 });
