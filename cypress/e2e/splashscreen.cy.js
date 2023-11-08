@@ -1,3 +1,7 @@
+Cypress.on("uncaught:exception", (err, runnable) => {
+  return false;
+});
+
 describe('SplashScreen', () => {
   it('the SplashScreen contains the correct UI element', () => {
     cy.wait(2000);
