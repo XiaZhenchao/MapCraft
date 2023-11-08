@@ -16,11 +16,11 @@ describe("Test application", () => {
         const res = await request(app)
             .post('/auth/register') 
             .send({
-                firstName: 'test4121233',
-                lastName: 'test4121233',
-                email: 'test4324312324@gmail.com',
-                password: 'testtest4',
-                passwordVerify:'testtest4'
+                firstName: 'test41212336',
+                lastName: 'test41212336',
+                email: 'test43243123246@gmail.com',
+                password: 'testtest46',
+                passwordVerify:'testtest46'
             });
         expect(res.statusCode).toBe(200);
     });
