@@ -41,3 +41,6 @@ jobs:
       
     - name: Cypress Run
       run: npx cypress run cypress/e2e/splashscreen
+
+    - name: Ignore D-Bus Error
+        run: echo "D-Bus error can be safely ignored."
