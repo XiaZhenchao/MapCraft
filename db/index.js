@@ -23,6 +23,7 @@ db.close = async () => {
   }
 };
 
+
 // try {
 //   await mongoose.disconnect();
 //   console.log('Disconnected from the database');
