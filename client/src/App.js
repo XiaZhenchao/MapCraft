@@ -33,7 +33,7 @@ const App = () => {
                         <Route path="/register/" exact component={RegisterScreen} />
                         
                     </Switch>
-                    
+                    <SplashScreen />
                
             </AuthContextProvider>
         </BrowserRouter>
