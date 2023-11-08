@@ -22,6 +22,17 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Change working directory to 'client' 
+    # Add this step to change the working directory to 'client'
+      run: cd client
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Return to the original working directory 
+    # Add this step to go back to the original working directory
+      run: cd ..
+
     - name: Build
       run: npm run build --if-present
       
