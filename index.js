@@ -26,7 +26,7 @@ const authRouter = require('./routes/auth-router')
 app.use('/auth', authRouter)
 
 //DB configs
-mongoose.connect(process.env.MONGO_URI).catch((err)=> console.log(err))
+//mongoose.connect(process.env.MONGO_URI).catch((err)=> console.log(err))
 
 // INITIALIZE OUR DATABASE OBJECT
 const db = require('./db')
