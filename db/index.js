@@ -14,14 +14,14 @@ mongoose
 
 const db = mongoose.connection
 
-db.close = async () => {
-  try {
-    await mongoose.disconnect();
-    console.log('Disconnected from the database');
-  } catch (error) {
-    console.error('Disconnection error:', error.message);
-  }
-};
+// db.close = async () => {
+//   try {
+//     await mongoose.disconnect();
+//     console.log('Disconnected from the database');
+//   } catch (error) {
+//     console.error('Disconnection error:', error.message);
+//   }
+// };
 
 
 // try {
