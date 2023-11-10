@@ -15,7 +15,7 @@ const app = express()
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: ["http://localhost:3000", "https://mapcraft-55160ee4aae1.herokuapp.com/"],
+    origin: ["https://mapcraft-55160ee4aae1.herokuapp.com/"],
     credentials: true
 }))
 app.use(express.json())
