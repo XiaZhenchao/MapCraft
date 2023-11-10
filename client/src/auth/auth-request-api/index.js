@@ -13,7 +13,7 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const api = axios.create({
-    baseURL: 'https://mapcraft-55160ee4aae1.herokuapp.com/auth',
+    baseURL: 'https://mapcraft-55160ee4aae1.herokuapp.com',
 })
 
 // THESE ARE ALL THE REQUESTS WE`LL BE MAKING, ALL REQUESTS HAVE A
