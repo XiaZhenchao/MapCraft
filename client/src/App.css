@@ -21,7 +21,7 @@ body {
 }
 
 #root {
-  background-color: var(--swatch-primary);
+  background-color: #ABC8B2;
   font-family: "Lexend Exa";
   position: absolute;
   width: 80%;
@@ -30,6 +30,7 @@ body {
   top: 5%;
   grid-template-columns: 70% 30%;
   grid-template-rows: 10% 80% 10%;
+  border-radius: 10px;
 }
 
 #app-root {
@@ -40,21 +41,6 @@ body {
   left: 0%;
 }
 
-#top5-banner {
-  position: absolute;
-  left: 0%;
-  top: 0%;
-  width: 100%;
-  height: 10%;
-  float: left;
-  background-image: linear-gradient(to bottom, #b8b808, #636723);
-  color: white;
-  font-size: 48pt;
-  border-color: black;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 10px;
-}
 #splash-screen {
   background-image: url("background.jpg");
   background-size: cover;
@@ -67,186 +53,60 @@ body {
   padding-left: 10%;
   padding-top: 5%;
   padding-bottom: 5%;
-  height:70%;
+  height:80%;
   text-align: center;
   vertical-align: center;
+  
 }
 
-#edit-toolbar {
-  background-color: transparent;
-  float: right;
-}
-
-#playlister-statusbar {
-  left: 10%;
-  top: 90%;
-  width: 80%;
-  height: 10%;
-  background-color: #e1e4cb;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36pt;
-  padding-top: 4px;
-  position: fixed;
-}
-
-.top5-button,
-.top5-button-disabled {
-  font-size: 36pt;
-  border-width: 0px;
-  float: left;
-  color: black;
-  cursor: pointer;
-  opacity: 100%;
-}
-
-.top5-button:hover {
-  cursor: pointer;
-  color: black;
-}
-
-.top5-button-disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
-}
-
-#top5-list-selector {
+#navigation-bar {
   position: absolute;
-  left: 0%;
-  top: 10%;
-  width: 100%;
-  height: 80%;
-  background-color: var(--swatch-primary);
+  width: 30%;
+  height: 7%;
+  top: 15%;
+  left: 2%;
+  border-radius: 10px;
 }
 
-#top5-workspace {
+#list{
   position: absolute;
-  left: 0%;
-  top: 10%;
-  width: 100%;
-  height: 80%;
-  background-color: var(--swatch-accent);
-}
-
-#top5-statusbar {
-  position: absolute;
-  left: 0%;
-  top: 90%;
-  width: 100%;
-  height: 10%;
-  background-color:lightsalmon;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36pt;
-}
-
-#list-selector-heading {
-  position: absolute;
-  left: 25%;
-  top: 0%;
-  width: 60%;
-  height: 10%;
-  text-align: center;
-  font-size: 24pt;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#add-list-button {
-  float: left;
-}
-
-#list-selector-list {
-  position: absolute;
-  left: 0%;
-  top: 10%;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  width: 30%;
+  height: 70%;
+  top: 25%;
+  left: 2%;
+  border-radius: 10px;
   overflow: scroll;
 }
 
-.list-card,
-.selected-list-card,
-.unselected-list-card {
-  font-size: 18pt;
-  margin: 10px;
-  padding: 20px;
+#container{
+  background-color: #e1e4cb;
+  position: absolute;
+  width: 63%;
+  height: 82%;
+  top: 15%;
+  left: 35%;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+.map-card {
   border-radius: 25px;
-}
-
-.list-card:aria-disabled,
-.list-card[aria-disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-  pointer-events: none;
-}
-
-.unselected-list-card:hover {
-  cursor: pointer;
-  background-color: var(--swatch-contrast);
-  color: white;
-}
-
-.selected-list-card {
-  background-color: var(--swatch-accent);
-  color: white;
-}
-
-.unselected-list-card {
-  background-color: var(--swatch-complement);
-}
-
-.list-card-button {
-  float: right;
-  transform: scale(2);
-  font-size: 10pt;
-}
-
-#workspace-home,
-#workspace-edit {
-  position: absolute;
-  left: 0%;
-  top: 0%;
-  width: 100%;
-  height: 100%;
-}
-
-#edit-numbering {
-  position: absolute;
-  left: 0%;
-  top: 0%;
+  background-color: #e1e4cb;
+  height: 150px;
   width: 20%;
-  height: 100%;
-  background-color: var(--swatch-status);
-}
-
-#edit-items {
-  position: absolute;
-  left: 20%;
-  top: 0%;
-  width: 80%;
-  height: 100%;
-  background-color: var(--swatch-primary);
 }
 
 .ToolBar {
-  background-color: #ABC8B2;
+  background-color: rgb(225, 233, 227);
   border-radius: 10px;
 }
 
 .custom-box {
   background-image: url("logo.jpg");
-  background-size: cover; /* Adjust as needed */
-  background-position: center; /* Adjust as needed */
-  width: 10%; /* Adjust the width as needed */
-  height:80px; /* Adjust the height as needed */
+  background-size: cover; 
+  background-position: center; 
+  width: 10%; 
+  height:80px;
 }
 
 .custom-text {
@@ -254,55 +114,6 @@ body {
   font-size: 40px;
   color: black;
   font-style: italic;
-}
-
-.item-number,
-.top5-item,
-.top5-item-dragged-to {
-  display: flex;
-  align-items: center;
-  font-size: 48pt;
-  height: 20%;
-}
-
-.item-number {
-  justify-content: center;
-  width: 100%;
-  border: 1px 0px 1px 1px;
-  border-color: black;
-  background-color: linen;
-  color: black;
-}
-
-input {
-  font-size: 20pt;
-}
-
-.top5-item,
-.top5-item-dragged-to {
-  text-align: left;
-  width: 95%;
-  padding-left: 5%;
-}
-.top5-item {
-  background-color: var(--swatch-complement);
-}
-.top5-item-dragged-to {
-  background-color: var(--swatch-accent);
-}
-
-.disabled {
-  background-color: lightgray;
-}
-
-.disabled:hover {
-  color: var(--swatch-neutral);
-}
-
-.playlister-button-disabled {
-  cursor: not-allowed;
-  background-color: lightgray;
-  pointer-events: none;
 }
 
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
