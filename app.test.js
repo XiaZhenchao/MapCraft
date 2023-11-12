@@ -2,7 +2,7 @@ const request = require("supertest");
 const express = require('express');
 // const db = require("./db/index.js");
 const AuthController = require('./controllers/auth-controller.js');
-const { app,db } = require('./index');
+const { app} = require('./index');
 
 beforeAll(async () => {
   // Increase the timeout for dropping the collection

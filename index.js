@@ -15,7 +15,7 @@ const app = express()
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: ["https://mapcraft-55160ee4aae1.herokuapp.com/"],
+    origin: ["https://mapcraft-55160ee4aae1.herokuapp.com", "https://mapcraft-55160ee4aae1.herokuapp.com/api"],
     credentials: true
 }))
 app.use(express.json())
@@ -40,10 +40,11 @@ if(process.env.NODE_ENV==="production"){
 }
 
 // PUT THE SERVER IN LISTENING MODE
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+// if (process.env.NODE_ENV !== 'test') {
+//     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// }
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-module.exports = { app,db };
+module.exports = { app};
 
 
