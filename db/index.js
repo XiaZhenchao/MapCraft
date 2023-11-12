@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config();
@@ -11,7 +10,6 @@ mongoose
     .catch(e => {
         console.error('Connection error', e.message)
     })
-
 const db = mongoose.connection
 
 // db.close = async () => {

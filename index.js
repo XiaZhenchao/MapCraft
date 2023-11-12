@@ -15,12 +15,12 @@ const app = express()
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: ["https://mapcraft-55160ee4aae1.herokuapp.com/auth"],
+    // origin: ["https://mapcraft-55160ee4aae1.herokuapp.com"],
+    origin: "*",
     credentials: true
 }))
 app.use(express.json())
 app.use(cookieParser())
-
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 const authRouter = require('./routes/auth-router')
 app.use('/auth', authRouter)
@@ -46,5 +46,4 @@ if (process.env.NODE_ENV !== 'test') {
 //app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app, db};
-
 
