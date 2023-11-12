@@ -12,8 +12,11 @@
 
 import axios from 'axios'
 axios.defaults.withCredentials = true;
+const baseURL = process.env.NODE_ENV === 'production'
+  ? 'https://mapcraft-55160ee4aae1.herokuapp.com/api'
+  : 'http://localhost:4000'; // Your local development server
 const api = axios.create({
-    baseURL: 'https://mapcraft-55160ee4aae1.herokuapp.com/auth',
+    baseURL,
 })
 
 // THESE ARE ALL THE REQUESTS WE`LL BE MAKING, ALL REQUESTS HAVE A
