@@ -13,8 +13,13 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 const baseURL = process.env.NODE_ENV === 'production'
+<<<<<<< HEAD
   ? 'https://mapcraft-55160ee4aae1.herokuapp.com/auth'
   : 'http://localhost:4000'; 
+=======
+  ? 'https://mapcraft-55160ee4aae1.herokuapp.com/api'
+  : 'http://localhost:4000'; // Your local development server
+>>>>>>> parent of e053dd580 (solve internet issue)
 const api = axios.create({
     baseURL,
 })
