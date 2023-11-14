@@ -26,7 +26,7 @@ const HomeScreen = () => {
     let appBanner = <AppBanner />
 
     const handleEditButton = () => {
-        history.push("/EditScreen/");
+        history.push("/edit/");
     }
 
     

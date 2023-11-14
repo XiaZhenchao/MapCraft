@@ -36,7 +36,7 @@ export default function AppBanner() {
     }
 
     const handleCommunityButton = () => {
-        history.push("/CommunityScreen/");
+        history.push("/community/");
     }
 
     const menuId = 'primary-search-account-menu';
