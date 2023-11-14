@@ -10,12 +10,14 @@ import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import MUILoginErrorModal from './MUILoginErrorModal';
+import ForgotPassword from './ForgotPassword';
 
 export default function LoginScreen() {
     const { auth } = useContext(AuthContext);
@@ -104,7 +106,7 @@ export default function LoginScreen() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Link to = "/forgot-password" variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
