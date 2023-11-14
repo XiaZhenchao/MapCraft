@@ -111,7 +111,7 @@ export default function ForgotPassword() {
                     </Box>
                 </Box>
             </Grid>
-            { modalJSX }
+            
         </Grid>
     );
 }
