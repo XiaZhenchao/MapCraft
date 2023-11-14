@@ -5,18 +5,22 @@ import AuthContext from '../auth';
 
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const history = useHistory();
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -29,6 +33,10 @@ export default function AppBanner() {
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
+    }
+
+    const handleCommunityButton = () => {
+        history.push("/CommunityScreen/");
     }
 
     const menuId = 'primary-search-account-menu';
@@ -72,9 +80,11 @@ export default function AppBanner() {
         </Menu>        
 
 
+    let logIn = false;
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
+        logIn = true;
     }
 
     function getAccountMenu(loggedIn) {
@@ -97,9 +107,17 @@ export default function AppBanner() {
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
+                        sx={{ display: { xs: 'none', sm: 'block'} }}                        
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                        <div style={{ display: 'flex', alignItems: 'left' }}>
+                            <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                            <Box>
+                                {logIn?<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon></GroupsOutlinedIcon>
+                                </IconButton> : null}
+                                
+                            </Box>
+                        </div>
+                        
                     </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton

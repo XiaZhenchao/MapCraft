@@ -4,6 +4,7 @@ import HomeWrapper from './HomeWrapper'
 import SplashScreen from './SplashScreen'
 import LoginScreen from './LoginScreen'
 import RegisterScreen from './RegisterScreen'
+import CommunityScreen from './CommunityScreen '
 
 /*
     This serves as a module so that we can import
@@ -18,4 +19,5 @@ export {
     SplashScreen,
     LoginScreen,
     RegisterScreen,
+    CommunityScreen
     }
