@@ -20,18 +20,37 @@ import MUILoginErrorModal from './MUILoginErrorModal';
 export default function ForgotPassword() {
     const { auth } = useContext(AuthContext);
     
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        auth.forgotPassword(
-            formData.get('email'),
-        );
-
-    };
-
+    
     return (
-        <Grid container component="main" sx={{ height: '100vh' }}>
-            
-        </Grid>
+        <div>
+            <Box id = "reset-box"> </Box>
+            <Grid item xs={12} sm={8} md={5} elevation={6} square>
+                <Box
+                    sx={{
+                        my: 30,
+                        mx: 20,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <TextField
+                            style={{
+                                width: '50%', 
+                                margin: '0.4rem auto', // Center the TextField using margin
+                                backgroundColor: '#e1e4cb'
+                            }}
+                            required
+                            name="Input Email Address"
+                            label="Input Email Address"
+                            type="Input Email Address"
+                            
+                        />
+                        <Button style={{ color: 'Black', backgroundColor: '#e1e4cb', margin: '3.0rem' }}>Send Code</Button>
+                </Box>
+            </Grid>
+        </div>
+        
+        
     );
 }

@@ -12,6 +12,8 @@ import SortIcon from '@mui/icons-material/Sort';
 import Button from '@mui/material/Button';
 import { useHistory } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import CloseIcon from '@mui/icons-material/Close';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -42,7 +44,9 @@ const HomeScreen = () => {
             }
             
         </List>
-        <div id = "map-name">Map1 <IconButton><EditIcon></EditIcon></IconButton></div>
+        <div id = "map-name">Map1 <IconButton><EditIcon></EditIcon></IconButton>
+        </div>
+        <Box  id = "export-close"><ExitToAppIcon></ExitToAppIcon><CloseIcon></CloseIcon></Box>
         <div id = "container">
 
         </div>

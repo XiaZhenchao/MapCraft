@@ -96,6 +96,25 @@ body {
   left: 65%;
 }
 
+#export-close{
+  position: absolute;
+  width: 63%;
+  height: 5%;
+  top: 15%;
+  left: 92%;
+}
+
+#reset-box{
+  background-image: url("password_recovery.jpg");
+  background-repeat: no-repeat;
+  background-size:10%;
+  position: absolute;
+  width: 63%;
+  height: 35%;
+  top: 30%;
+  left: 48%;
+}
+
 #container{
   background-color: #e1e4cb;
   position: absolute;
