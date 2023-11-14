@@ -109,7 +109,8 @@ body {
 .button {
   border-radius: 25px;
   height: 30px;
-  width: 8%;
+  width: 14%;
+  left: 2%
 }
 
 .ToolBar {
