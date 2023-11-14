@@ -5,9 +5,14 @@ import { AuthContextProvider } from './auth';
 //import { GlobalStoreContextProvider } from './store'
 import {
     AppBanner,
+    CommunityScreen,
     HomeWrapper,
     LoginScreen,
-    RegisterScreen
+    RegisterScreen,
+    HomeScreen,
+    ForgotPassword,
+    ResetPassword,
+    EditScreen,
 } from './components'
 /*
     This is our application's top-level component.
@@ -31,7 +36,11 @@ const App = () => {
                         <Route path="/" exact component={HomeWrapper} />
                         <Route path="/login/" exact component={LoginScreen} />
                         <Route path="/register/" exact component={RegisterScreen} />
-                        
+                        <Route path="/home/" exact component={HomeScreen} />
+                        <Route path="/forgot-password/" exact component={ForgotPassword} />
+                        <Route path="/reset-password/" exact component={ResetPassword} />
+                        <Route path="/edit/" exact component={EditScreen} />
+                        <Route path="/community/" exact component={CommunityScreen} />
                     </Switch>
                
             </AuthContextProvider>
