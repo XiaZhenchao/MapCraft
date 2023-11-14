@@ -11,7 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -106,12 +106,12 @@ export default function LoginScreen() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href = "/forgot-password" variant="body2">
+                                <Link to = "/forgot-password" variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href = "/register" variant="body2">
+                                <Link Link to='/register/' variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
