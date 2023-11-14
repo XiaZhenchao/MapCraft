@@ -9,6 +9,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import LockIcon from '@mui/icons-material/Lock';
 import SortIcon from '@mui/icons-material/Sort';
+import Button from '@mui/material/Button';
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -35,6 +37,14 @@ const HomeScreen = () => {
         </List>
         <div id = "container">
 
+        </div>
+        <div id = "function-bar">
+            <Button className='button' sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>select File</Button>
+            <Button className='button' sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Fork</Button>
+            <Button className='button' sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Edit</Button>
+            <Button className='button' sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Render</Button>
+            <Button className='button' sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Publish</Button>
+            <Button className='button' sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Delete</Button>
         </div>
         </div>)
 }

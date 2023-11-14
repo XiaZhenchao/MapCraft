@@ -26,6 +26,7 @@ const CommunityScreen = () => {
         <div id = "container">
 
         </div>
+        <div id = "function-bar"></div>
         </div>)
 }
 
