@@ -11,6 +11,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import SortIcon from '@mui/icons-material/Sort';
 import Button from '@mui/material/Button';
 import { useHistory } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -41,6 +42,7 @@ const HomeScreen = () => {
             }
             
         </List>
+        <div id = "map-name">Map1 <IconButton><EditIcon></EditIcon></IconButton></div>
         <div id = "container">
 
         </div>
