@@ -9,7 +9,7 @@ function MapList() {
     let mapCard =
     <div>
        <ListItem
-            sx={{p: "10px", marginTop: '15px', display: 'flex', p: 1}}
+            sx={{p: "10px", marginTop: '15px', display: 'flex', p: 2}}
             className = {"map-card"}
                   
         ></ListItem>
