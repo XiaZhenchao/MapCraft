@@ -48,7 +48,7 @@ From @Mary</Typography>
         </List>
         
         <Box  id = "export-close"><CloseIcon></CloseIcon></Box>
-        <div id = "container" style={{padding: '50px', background: 'lightgray',fontSize: '40px', maxWidth: '700px', marginLeft: 'auto' }}>
+        <div id = "admin-container" style={{padding: '50px', background: 'lightgray',fontSize: '30px', maxWidth: '700px', marginLeft: 'auto' }}>
         Report:
         <br /> 
         <br /> 

@@ -121,7 +121,7 @@ body {
   height: 5%;
   top: 15%;
   left: 65%;
-  
+
 }
 
 #map-name-another{
@@ -231,6 +231,18 @@ body {
   height: 95%;
   top: 0%;
   left: 14%;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+#admin-container{
+  /* background: url(MapContainer.png);
+  background-size: cover; */
+  position: absolute;
+  width: 55%;
+  height: 69%;
+  top: 15%;
+  left: 33%;
   border-radius: 10px;
   overflow: scroll;
 }
