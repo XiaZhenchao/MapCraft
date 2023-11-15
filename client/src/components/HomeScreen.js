@@ -61,13 +61,15 @@ const HomeScreen = () => {
   
    return (
        <div >
+        <div style={{ display: 'flex', flexDirection: 'column',maxHeight:'630px'}}>
        <Box sx={{ flexGrow: 1,background: 'lightgray', alignItems: 'center', paddingLeft: '30px'}} id = "navigation-bar" >
            <IconButton style = {{color:'black'}}> <AddCircleIcon onClick={handleAdd} style={{fontSize: '2rem'}}></AddCircleIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <PublishedWithChangesIcon onClick={handlePublic} style={{ fontSize: '2rem',border: isBorderVisible ? '2px solid black' : 'none' }}></PublishedWithChangesIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <LockIcon onClick={handlePrivate} style={{ fontSize: '2rem',border: !isBorderVisible ? '2px solid black' : 'none' }}></LockIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
        </Box>
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px" }}id = "list" >
+       <List sx={{ bgcolor: '#ABC8B2', mb:"20px" ,
+            overflow: 'auto'}}id = "list" >
            {
            <MapList  style ={{ borderColor:'#e1ed05'} } >111</MapList>               
            }
@@ -94,6 +96,7 @@ const HomeScreen = () => {
            <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
            <div className="underscore"></div>
        </List>
+       </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>Map1 <IconButton ><EditIcon style={{fontSize: '2rem'}}></EditIcon></IconButton>
        </div>
        <Box  id = "export-close"><ExitToAppIcon style={{fontSize: '2rem'}}></ExitToAppIcon><CloseIcon style={{fontSize: '2rem'}}></CloseIcon></Box>
