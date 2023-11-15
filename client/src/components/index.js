@@ -10,6 +10,9 @@ import ForgotPassword from './ForgotPassword'
 import ResetPassword from './ResetPassword'
 import Setting from './Setting'
 import ValueControl from './ValueControl'
+import AdminHome from './AdminHome'
+import AdminCommunity from './AdminCommunity'
+import AdminBanner from './AdminBanner'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -29,4 +32,7 @@ export {
     ResetPassword,
     Setting,
     ValueControl
+    AdminHome,
+    AdminCommunity,
+    AdminBanner
     }

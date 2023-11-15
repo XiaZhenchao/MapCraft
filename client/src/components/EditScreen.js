@@ -58,10 +58,9 @@ const EditScreen = () => {
               <IconButton> <SaveIcon></SaveIcon></IconButton>
               <IconButton> <DeleteIcon></DeleteIcon></IconButton>
           </Box>
-          <div id = "map-name">Map1 <IconButton><EditIcon></EditIcon></IconButton></div>
+          <div id = "map-name-another">Map1 <IconButton><EditIcon></EditIcon></IconButton></div>
         <Box  id = "export-close"><ExitToAppIcon></ExitToAppIcon><CloseIcon></CloseIcon></Box>
       <div id = "edit-container"></div>
-        
       </div>)
 }
 
