@@ -14,8 +14,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
-export default function AppBanner() {
+export default function AdminBanner() {
     const { auth } = useContext(AuthContext);
     
     const [anchorEl, setAnchorEl] = useState(null);
@@ -36,32 +38,10 @@ export default function AppBanner() {
     }
 
     const handleCommunityButton = () => {
-        history.push("/community/");
+        history.push("/admin-community/");
     }
 
     const menuId = 'primary-search-account-menu';
-    const loggedOutMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/community/'>Continue As Guest</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/admin-home/'>Continue As Admin </Link></MenuItem>
-        </Menu>
-    );
     const loggedInMenu = 
         <Menu
             anchorEl={anchorEl}
@@ -82,20 +62,12 @@ export default function AppBanner() {
         </Menu>        
 
 
-    let logIn = false;
-    let menu = loggedOutMenu;
-    if (auth.loggedIn) {
-        menu = loggedInMenu;
-        logIn = true;
-    }
+    let logIn = true;
+    let menu = loggedInMenu;
+    
 
     function getAccountMenu(loggedIn) {
-        let userInitials = auth.getUserInitials();
-        console.log("userInitials: " + userInitials);
-        if (loggedIn) 
-            return <div>{userInitials}</div>;
-        else
-            return <AccountCircle />;
+        return <div>{"ADMIN"}</div>;
     }
 
     return (
@@ -104,18 +76,33 @@ export default function AppBanner() {
                 <Toolbar className="ToolBar">
                 <Box className="custom-box"></Box>
                 <span className="custom-text">Mapcraft</span>
+                <Box sx={{ flexGrow: 1 }}></Box>      
+            {(
+                <TextField
+                  className="text"
+                  label="Search"
+                  variant="outlined"
+                  placeholder="Search..."
+                  size="small"
+                  sx={{ width: '500px' }}
+                />
+              )}
                 <Box sx={{ flexGrow: 1 }}></Box>
+             
                     <Typography                        
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block'} }}                        
+                        sx={{ display: { xs: 'none', sm: 'block'} }}  
+                                              
                     >
+                        
                         <div style={{ display: 'flex', alignItems: 'left' }}>
+                           
                             <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                             <Box>
-                                {logIn?<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon></GroupsOutlinedIcon>
-                                </IconButton> : null}
+                                {<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon></GroupsOutlinedIcon>
+                                </IconButton>}
                                 
                             </Box>
                         </div>

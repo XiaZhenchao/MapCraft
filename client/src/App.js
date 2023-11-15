@@ -13,6 +13,8 @@ import {
     ForgotPassword,
     ResetPassword,
     EditScreen,
+    AdminHome,
+    AdminCommunity
 } from './components'
 /*
     This is our application's top-level component.
@@ -41,6 +43,8 @@ const App = () => {
                         <Route path="/reset-password/" exact component={ResetPassword} />
                         <Route path="/edit/" exact component={EditScreen} />
                         <Route path="/community/" exact component={CommunityScreen} />
+                        <Route path="/admin-home/" exact component={AdminHome} />
+                        <Route path="/admin-community/" exact component={AdminCommunity} />
                     </Switch>
                
             </AuthContextProvider>
