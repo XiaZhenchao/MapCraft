@@ -22,7 +22,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^6.2.0",
     "mongoose": "^5.13.21",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "cypress": "^13.3.0",

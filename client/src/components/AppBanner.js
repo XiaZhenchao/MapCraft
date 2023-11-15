@@ -111,19 +111,18 @@ export default function AppBanner() {
                         sx={{ display: { xs: 'none', sm: 'block'} }}                        
                     >
                         <div style={{ display: 'flex', alignItems: 'left' }}>
-                            <Link style={{color:'black',fontSize:'3rem'}} to='/'>⌂</Link>
+                            <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                             <Box>
-                                {logIn?<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon style={{color:'black',fontSize:'3rem'}}></GroupsOutlinedIcon>
+                                {logIn?<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon></GroupsOutlinedIcon>
                                 </IconButton> : null}
                                 
                             </Box>
                         </div>
                         
                     </Typography>
-                    <Box sx={{ display: { xs: 'none', md: 'flex'} }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
-                            
-                            fontSize ='3rem'
+                            size="large"
                             edge="end"
                             aria-label="account of current user"
                             aria-controls={menuId}
