@@ -68,6 +68,16 @@ body {
   border-radius: 10px;
 }
 
+#edit-bar {
+  position: absolute;
+  background-color: #e1e4cb;
+  width: 6%;
+  height: 50%;
+  top: 25%;
+  left: 2%;
+  border-radius: 10px;
+}
+
 #function-bar {
   background-color: #e1e4cb;
   position: absolute;
@@ -111,7 +121,53 @@ body {
   position: absolute;
   width: 63%;
   height: 35%;
-  top: 30%;
+  top: 20%;
+  left: 48%;
+}
+
+#login-box{
+  background-image: url("login.jpg");
+  background-repeat: no-repeat;
+  background-size:10%;
+  position: absolute;
+  width: 63%;
+  height: 35%;
+  top: 20%;
+  left: 48%;
+}
+
+#line-box{
+  background-image: url("line.jpg");
+  background-repeat: no-repeat;
+  background-size:30%;
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  top: 20%;
+  left: -30%;
+}
+
+
+#color-box{
+  background-image: url("color.jpg");
+  background-repeat: no-repeat;
+  background-size:30%;
+  position: absolute;
+  width: 20%;
+  height: 600%;
+  top: 40%;
+  left: 30%;
+  
+}
+
+#register-box{
+  background-image: url("register.jpg");
+  background-repeat: no-repeat;
+  background-size:10%;
+  position: absolute;
+  width: 63%;
+  height: 35%;
+  top: 20%;
   left: 48%;
 }
 
@@ -122,6 +178,17 @@ body {
   height: 62%;
   top: 20%;
   left: 35%;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+#edit-container{
+  background-color: #e1e4cb;
+  position: absolute;
+  width: 83%;
+  height: 75%;
+  top: 22%;
+  left: 13%;
   border-radius: 10px;
   overflow: scroll;
 }

@@ -25,7 +25,7 @@ export default function ForgotPassword() {
                     <TextField
                             style={{
                                 width: '60%', 
-                                margin: '0.4rem auto', // Center the TextField using margin
+                                margin: '1.0rem auto', // Center the TextField using margin
                                 backgroundColor: '#e1e4cb',
                                 borderRadius: '10px'
                             }}
@@ -38,9 +38,9 @@ export default function ForgotPassword() {
                     <TextField
                             style={{
                                 width: '60%', 
-                                margin: '0.4rem auto', // Center the TextField using margin
+                                margin: '1.0rem auto', // Center the TextField using margin
                                 backgroundColor: '#e1e4cb',
-                                borderRadius: '20px'
+                                borderRadius: '10px'
                             }}
                             required
                             name="Input Verification Code"
@@ -53,20 +53,25 @@ export default function ForgotPassword() {
             <Button
               type="submit"
               variant="contained"
-              sx={{ borderRadius: '20px', mt: 3, mb: 2, backgroundColor: '#e1e4cb', flex: 1, marginRight: '0.5rem' }}
+              sx={{ borderRadius: '20px', mt: 3, mb: 2, color: 'black', backgroundColor: '#e1e4cb', flex: 1, marginRight: '0.5rem' }}
             >
               Verify Code
             </Button>
             <Button
               type="submit"
               variant="contained"
-              sx={{ borderRadius: '20px', mt: 3, mb: 2, backgroundColor: '#e1e4cb', flex: 1, marginLeft: '0.5rem' }}
+              sx={{ borderRadius: '20px', mt: 3, mb: 2, color: 'black', backgroundColor: '#e1e4cb', flex: 1, marginLeft: '0.5rem' }}
             >
               Send me a password reset link
             </Button>
+            
           </div>
+          <Copyright sx={{ mt: 5 }} />
                 </Box>
+               
             </Grid>
+            
+               
         </div>
         
         

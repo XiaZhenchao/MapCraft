@@ -39,22 +39,21 @@ export default function RegisterScreen() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        marginTop: 15,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
+                    <Box id = "register-box"></Box>
+                    
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <TextField
+                                <TextField style={{
+                                backgroundColor: '#e1e4cb',
+                                borderRadius: '10px'
+                                }}
                                     autoComplete="fname"
                                     name="firstName"
                                     required
@@ -62,10 +61,14 @@ export default function RegisterScreen() {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                   
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField
+                                <TextField  style={{
+                                backgroundColor: '#e1e4cb',
+                                borderRadius: '10px'
+                                }}
                                     required
                                     fullWidth
                                     id="lastName"
@@ -75,7 +78,10 @@ export default function RegisterScreen() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
+                                <TextField  style={{
+                                backgroundColor: '#e1e4cb',
+                                borderRadius: '10px'
+                                }}
                                     required
                                     fullWidth
                                     id="email"
@@ -85,7 +91,10 @@ export default function RegisterScreen() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
+                                <TextField  style={{
+                                backgroundColor: '#e1e4cb',
+                                borderRadius: '10px'
+                                }}
                                     required
                                     fullWidth
                                     name="password"
@@ -96,7 +105,10 @@ export default function RegisterScreen() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
+                                <TextField  style={{
+                                backgroundColor: '#e1e4cb',
+                                borderRadius: '10px'
+                                }}
                                     required
                                     fullWidth
                                     name="passwordVerify"
@@ -111,12 +123,12 @@ export default function RegisterScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 3, mb: 2,  color: 'black', backgroundColor: '#e1e4cb' }}
                         >
                             Sign Up
                         </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
+                        <Grid container justifyContent="center" alignItems="center" >
+                            <Grid item justifyContent="center" alignItems="center">
                                 <Link href="/login/" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
