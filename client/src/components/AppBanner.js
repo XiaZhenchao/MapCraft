@@ -39,6 +39,9 @@ export default function AppBanner() {
         history.push("/community/");
     }
 
+    const handleSetting = () => {
+        history.push("/setting/");
+    }
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -59,6 +62,7 @@ export default function AppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/community/'>Continue As Guest</Link></MenuItem>
+            <MenuItem onClick={handleSetting}><Link>Setting</Link></MenuItem>
         </Menu>
     );
     const loggedInMenu = 
@@ -78,6 +82,7 @@ export default function AppBanner() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleSetting}>Setting</MenuItem>
         </Menu>        
 
 

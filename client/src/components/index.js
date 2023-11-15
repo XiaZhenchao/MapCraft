@@ -8,6 +8,8 @@ import CommunityScreen from './CommunityScreen '
 import EditScreen from './EditScreen'
 import ForgotPassword from './ForgotPassword'
 import ResetPassword from './ResetPassword'
+import Setting from './Setting'
+import ValueControl from './ValueControl'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -25,4 +27,6 @@ export {
     EditScreen,
     ForgotPassword,
     ResetPassword,
+    Setting,
+    ValueControl
     }
