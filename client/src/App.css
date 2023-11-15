@@ -123,6 +123,14 @@ body {
   left: 65%;
 }
 
+#map-name-another{
+  position: absolute;
+  width: 63%;
+  height: 5%;
+  top: 15%;
+  left: 50%;
+}
+
 #export-close{
   position: absolute;
   width: 63%;
@@ -188,6 +196,19 @@ body {
   left: 48%;
 }
 
+#community-container{
+  /* background: url(MapContainer.png);
+  background-size: cover; */
+  background-color: #e1e4cb;
+  position: absolute;
+  width: 100%;
+  height: 95%;
+  top: 0%;
+  left: 0%;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
 #container{
   /* background: url(MapContainer.png);
   background-size: cover; */
@@ -201,6 +222,44 @@ body {
   overflow: scroll;
 }
 
+#big-container{
+  /* background: url(MapContainer.png);
+  background-size: cover; */
+  position: absolute;
+  width: 77%;
+  height: 95%;
+  top: 0%;
+  left: 14%;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+#comment{
+  /* background: url(MapContainer.png);
+  background-size: cover; */
+  background-color: #e1e4cb;
+  position: absolute;
+  width:100%;
+  height: 30%;
+  top: 100%;
+  left:0%;
+  border-radius: 10px;
+  overflow: scroll;
+  
+}
+
+#report{
+  /* background: url(MapContainer.png);
+  background-size: cover; */
+  position: absolute;
+  width:100%;
+  height: 5%;
+  top: 95%;
+  left:0%;
+  border-radius: 10px;
+  
+}
+
 #edit-container{
   background-color: #e1e4cb;
   position: absolute;
@@ -210,6 +269,15 @@ body {
   left: 13%;
   border-radius: 10px;
   overflow: scroll;
+}
+
+#report-box {
+  background-image: url("report.jpg");
+  background-size: 20%; 
+  background-repeat: no-repeat;
+  height: 20%;
+  padding-top: 2%;
+  margin: 0.5rem;
 }
 
 .map-card {
@@ -254,6 +322,7 @@ body {
   width: 10%; 
   height:80px;
 }
+
 
 .custom-text {
   font-family: 'Times New Roman', sans-serif; 
