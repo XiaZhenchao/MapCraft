@@ -14,6 +14,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -103,14 +105,29 @@ export default function AppBanner() {
                 <Toolbar className="ToolBar">
                 <Box className="custom-box"></Box>
                 <span className="custom-text">Mapcraft</span>
+                <Box sx={{ flexGrow: 1 }}></Box>      
+            {logIn ? (
+                <TextField
+                  className="text"
+                  label="Search"
+                  variant="outlined"
+                  placeholder="Search..."
+                  size="small"
+                  sx={{ width: '500px' }}
+                />
+              ) : null}
                 <Box sx={{ flexGrow: 1 }}></Box>
+             
                     <Typography                        
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block'} }}                        
+                        sx={{ display: { xs: 'none', sm: 'block'} }}  
+                                              
                     >
+                        
                         <div style={{ display: 'flex', alignItems: 'left' }}>
+                           
                             <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                             <Box>
                                 {logIn?<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon></GroupsOutlinedIcon>
