@@ -61,29 +61,46 @@ body {
 
 #navigation-bar {
   position: absolute;
-  width: 25%;
-  height: 7%;
+  border: 1px solid ; 
+  width: 27%;
+  height: 6%;
   top: 15%;
   left: 2%;
-  border-radius: 10px;
+  border-radius: 0px;
 }
 
 #function-bar {
-  background-color: #e1e4cb;
+  background-color: white;
   position: absolute;
-  width: 63%;
+  width: 77%;
   height: 8%;
-  top: 86%;
-  left: 35%;
-  border-radius: 10px;
+  top: 88%;
+  left: 14%;
+  border-radius: 0px;
 }
 
 #list{
   position: absolute;
-  width: 30%;
+  width: 29%;
   height: 70%;
-  top: 25%;
+  top: 22%;
   left: 2%;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+.underscore {
+  border-top: 1px solid white;
+  width: 100%; /* Adjust width as needed */
+  margin: 10px 0; /* Add some space above and below the underscore */
+}
+
+#Mapview{
+  position: absolute;
+  width: 73%;
+  height: 70%;
+  top: 23%;
+  left: 29%;
   border-radius: 10px;
   overflow: scroll;
 }
@@ -116,23 +133,41 @@ body {
 }
 
 #container{
+  background: url(MapContainer.png);
+  background-size: cover;
   background-color: #e1e4cb;
   position: absolute;
-  width: 63%;
-  height: 62%;
-  top: 20%;
-  left: 35%;
+  width: 77%;
+  height: 82%;
+  top: 0%;
+  left: 14%;
   border-radius: 10px;
   overflow: scroll;
 }
 
 .map-card {
-  border-radius: 25px;
-  background-color: #e1e4cb;
-  height: 150px;
-  width: 20%;
-}
+  /* image 2 */
 
+  /* position: absolute;
+  width: 197px;
+  height: 104px;
+  left: 126px;
+  top: 194px; */
+  
+  background: url(exampleMap.jpg);
+  background-size: cover;
+  border-radius: 20px;
+  border: 1px solid ; 
+  padding: 10px;
+  background-color: #e1e4cb;
+  left:0%;
+  height: 150px;
+  width: 5%;
+}
+.element-with-stroke {
+  border: 1px solid #000000; /* 2px width solid black border */
+  padding: 10px; /* Optional: Add padding to give space between content and border */
+}
 .button {
   border-radius: 25px;
   height: 30px;
