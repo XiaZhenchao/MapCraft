@@ -14,14 +14,14 @@ const app = express()
 
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
-//app.use(cors({
-    //origin: ["https://mapcraft-55160ee4aae1.herokuapp.com", "https://mapcraft-55160ee4aae1.herokuapp.com/auth"],
-    //credentials: true
-//}))
 app.use(cors({
-   origin: ["http://localhost:3000"],
-     credentials: true
- }))
+    origin: ["https://mapcraft-55160ee4aae1.herokuapp.com", "https://mapcraft-55160ee4aae1.herokuapp.com/auth"],
+    credentials: true
+}))
+// app.use(cors({
+//    origin: ["http://localhost:3000"],
+//      credentials: true
+//  }))
 app.use(express.json())
 app.use(cookieParser())
 
