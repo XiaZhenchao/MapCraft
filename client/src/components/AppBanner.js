@@ -122,22 +122,26 @@ export default function AppBanner() {
                 />
               ) : null}
               <Box sx={{ flexGrow: 1 }}></Box>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block'} }}                        
-                    >
-                        <div style={{ display: 'flex', alignItems: 'left' }}>
-                            <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
-                            <Box>
-                                {logIn?<IconButton onClick={handleCommunityButton}><GroupsOutlinedIcon></GroupsOutlinedIcon>
-                                </IconButton> : null}
-                                
-                            </Box>
-                        </div>
-                        
-                    </Typography>
+              <Typography
+                    variant="h4"
+                    noWrap
+                    component="div"
+                    sx={{ 
+                        display: { xs: 'none', sm: 'block' },
+                        marginRight: '20px',
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'left' }}>
+                        <Link style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }} to='/'>⌂</Link>
+                        <Box>
+                            {logIn ? (
+                                <IconButton onClick={handleCommunityButton}>
+                                    <GroupsOutlinedIcon />
+                                </IconButton>
+                            ) : null}
+                        </Box>
+                    </div>
+                </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
