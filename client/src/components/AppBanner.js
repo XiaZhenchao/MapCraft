@@ -14,7 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-
+import TextField from '@mui/material/TextField';
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     
@@ -111,6 +111,17 @@ export default function AppBanner() {
                 <Box className="custom-box"></Box>
                 <span className="custom-text">Mapcraft</span>
                 <Box sx={{ flexGrow: 1 }}></Box>
+                {logIn ? (
+                <TextField
+                  className="text"
+                  label="Search"
+                  variant="outlined"
+                  placeholder="Search..."
+                  size="small"
+                  sx={{ width: '500px' }}
+                />
+              ) : null}
+              <Box sx={{ flexGrow: 1 }}></Box>
                     <Typography                        
                         variant="h4"
                         noWrap

@@ -304,6 +304,12 @@ body {
   
 }
 
+#map-info{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #edit-container{
   background-color: #e1e4cb;
   position: absolute;
