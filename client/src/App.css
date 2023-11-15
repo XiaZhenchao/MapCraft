@@ -62,12 +62,10 @@ body {
 }
 
 #navigation-bar {
-  position: absolute;
   border: 1px solid ; 
   width: 27%;
-  height: 6%;
-  top: 15%;
-  left: 2%;
+  margin-top: 2%;
+  margin-left: 2%;
   border-radius: 0px;
 }
 
@@ -92,10 +90,10 @@ body {
 }
 
 #list{
-  position: absolute;
+  /* position: absolute; */
   width: 29%;
   height: 70%;
-  top: 22%;
+  /* top: 22%; */
   left: 2%;
   border-radius: 10px;
   overflow: scroll;
@@ -124,6 +122,14 @@ body {
   top: 15%;
   left: 65%;
 
+}
+
+#sort-selection{
+  font-size: large;
+  color:#000000;
+  border-bottom: 1px solid black;
+  width: 100%; /* Adjust width as needed */
+  margin: 10px 0; /* Add some space above and below the underscore */
 }
 
 #map-name-another{

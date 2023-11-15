@@ -29,7 +29,8 @@ const CommunityScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     let appBanner = <AppBanner />
 
-
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [buttonText, setButtonText] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [map, setMap] = useState(null);
     const history = useHistory();
@@ -54,14 +55,32 @@ const CommunityScreen = () => {
        history.push("/edit/");
    }
 
+   const handleSort = () => {
+    setIsExpanded(!isExpanded);
+   }
+   const handleselect = (value) => {
+    setButtonText(value)
+    setIsExpanded(!isExpanded);
+   }
 
   
    return (
        <div >
-       <Box sx={{ flexGrow: 1,background: 'lightgray', alignItems: 'center', paddingLeft: '30px'}} id = "navigation-bar" >
-           <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
+        <div style={{ display: 'flex', flexDirection: 'column',maxHeight:'630px'}}>
+       <Box sx={{ background: 'lightgray', alignItems: 'center',padding:'0%'}} id = "navigation-bar" >
+           <IconButton onClick = {handleSort} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon><div style={{paddingLeft:'60px'}}>{buttonText}</div></IconButton>
+           {isExpanded && (
+        <div>
+          <Button id='sort-selection' onClick={() => handleselect('Date (asc)')} >Date (asc)</Button>
+          <Button id='sort-selection' onClick={() => handleselect('Date (desc)')} >Date (desc)</Button>
+          <Button id='sort-selection' onClick={() => handleselect('Likes')} >Likes</Button>
+          <Button id='sort-selection' onClick={() => handleselect('Dislikes')} >Dislikes</Button>
+        </div>
+        
+      )}
        </Box>
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px" }}id = "list" >
+       <List sx={{ bgcolor: '#ABC8B2', mb:"20px" ,
+            overflow: 'auto'}}id = "list" >
        {
            <MapList  style ={{ borderColor:'#e1ed05'} } >111</MapList>               
            }
@@ -88,6 +107,7 @@ const CommunityScreen = () => {
            <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
            <div className="underscore"></div>
        </List>
+       </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>Map1 <IconButton ><EditIcon style={{fontSize: '2rem'}}></EditIcon></IconButton>
        </div>
        <Box  id = "export-close"><ExitToAppIcon style={{fontSize: '2rem'}}></ExitToAppIcon><CloseIcon style={{fontSize: '2rem'}}></CloseIcon></Box>
