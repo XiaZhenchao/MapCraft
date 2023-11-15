@@ -40,6 +40,7 @@ export default function AppBanner() {
     }
 
     const handleSetting = () => {
+        handleMenuClose();
         history.push("/setting/");
     }
     const menuId = 'primary-search-account-menu';
@@ -62,7 +63,7 @@ export default function AppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/community/'>Continue As Guest</Link></MenuItem>
-            <MenuItem onClick={handleSetting}><Link>Setting</Link></MenuItem>
+            <MenuItem onClick={handleSetting}>Setting</MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/admin-home/'>Continue As Admin </Link></MenuItem>
         </Menu>
     );

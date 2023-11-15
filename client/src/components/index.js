@@ -31,8 +31,8 @@ export {
     ForgotPassword,
     ResetPassword,
     Setting,
-    ValueControl
+    ValueControl,
     AdminHome,
     AdminCommunity,
-    AdminBanner
+    AdminBanner,
     }
