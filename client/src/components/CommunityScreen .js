@@ -7,6 +7,7 @@ import MapList from './MapList.js';
 import LockIcon from '@mui/icons-material/Lock';
 import SortIcon from '@mui/icons-material/Sort';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 import { useHistory } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -29,9 +30,9 @@ const CommunityScreen = () => {
     let appBanner = <AppBanner />
 
 
-   const [selectedFile, setSelectedFile] = useState(null);
-  const [map, setMap] = useState(null);
-  const history = useHistory();
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [map, setMap] = useState(null);
+    const history = useHistory();
 
   useEffect(() => {
     // Load the map when the component mounts
