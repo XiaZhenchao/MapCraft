@@ -133,8 +133,8 @@ body {
 }
 
 #container{
-  background: url(MapContainer.png);
-  background-size: cover;
+  /* background: url(MapContainer.png);
+  background-size: cover; */
   background-color: #e1e4cb;
   position: absolute;
   width: 77%;
