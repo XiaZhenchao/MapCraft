@@ -8,8 +8,12 @@ const UserSchema = new Schema(
         lastName: { type: String, required: true },
         email: { type: String, required: true },
         passwordHash: { type: String, required: true },
+        maplist: [{type: ObjectId, ref: 'Map'}],
         // role: { type: String, required: false},
-        maplist: [{type: ObjectId, ref: 'Map'}]
+    
+        resetPasswordToken: { type: String },
+        resetPasswordExpires: { type: Date },
+        resetTokenUsed: { type: Boolean, default: false }
     },
     { timestamps: true },
 )

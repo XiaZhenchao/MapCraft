@@ -34,6 +34,7 @@ export const loginUser = (email, password) => {
     })
 }
 export const logoutUser = () => api.get(`/logout/`)
+
 export const registerUser = (firstName, lastName, email, password, passwordVerify) => {
     return api.post(`/register/`, {
         firstName : firstName,
@@ -43,11 +44,44 @@ export const registerUser = (firstName, lastName, email, password, passwordVerif
         passwordVerify : passwordVerify
     })
 }
+
+export const forgotPassword = (email) => {
+    console.log("forgotPassword444");
+    return api.post(`/forgot-password`, { email: email })
+        .then(response => {
+            console.log("Response data: ", response.data);
+            return response.data; // Returning the data from the resolved Promise
+        })
+        .catch(error => {
+            console.error("Error in forgotPassword:", error);
+            throw error;
+        });
+};
+
+export const resetPassword = (newPassword, verifyNewPassword, resetToken) => {
+    console.log("resetPassword444");
+    return api.put(`/reset-password/`, {
+        newPassword: newPassword,
+        verifyNewPassword: verifyNewPassword,
+        resetToken: resetToken // Include the resetToken here
+    })
+    .then(response => {
+        console.log("Response data: ", response.data);
+        return response.data; // Returning the data from the resolved Promise
+    })
+    .catch(error => {
+        console.error("Error in resetPassword:", error);
+        throw error;
+    });
+};
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    forgotPassword,
+    resetPassword
 }
 
 export default apis

@@ -50,6 +50,11 @@ function authManager() {
             userId: userId
         }, process.env.JWT_SECRET);
     }
+    forgotPassword = (req, res, next) => {
+
+        console.log("auth-index.js")
+    };
+
 
     return this;
 }
