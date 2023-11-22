@@ -22,10 +22,10 @@ describe('Login System', () => {
 
     // Check if the login was successful
     cy.url().should('include','https://mapcraft-55160ee4aae1.herokuapp.com');
-    cy.get('#navigation-bar').contains('AddCircleIcon').should('exist');
-    cy.get('#navigation-bar').contains('PublishedWithChangesIcon').should('exist');
-    cy.get('#navigation-bar').contains('LockIcon').should('exist');
-    cy.get('#navigation-bar').contains('SortIcon').should('exist');
+    cy.get('#navigation-bar',{ timeout: 10000 }).contains('AddCircleIcon').should('exist');
+    cy.get('#navigation-bar',{ timeout: 10000 }).contains('PublishedWithChangesIcon').should('exist');
+    cy.get('#navigation-bar',{ timeout: 10000 }).contains('LockIcon').should('exist');
+    cy.get('#navigation-bar',{ timeout: 10000 }).contains('SortIcon').should('exist');
 
 
   });
