@@ -28,7 +28,8 @@ app.use(cookieParser())
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 const authRouter = require('./routes/auth-router')
 app.use('/auth', authRouter)
-
+const maplistRouter = require('./routes/maplist-router')
+app.use('/auth', maplistRouter)
 //DB configs
 //mongoose.connect(process.env.MONGO_URI).catch((err)=> console.log(err))
 
