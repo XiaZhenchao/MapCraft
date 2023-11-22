@@ -22,10 +22,18 @@ describe('Login System', () => {
 
     // Check if the login was successful
     cy.url().should('include','https://mapcraft-55160ee4aae1.herokuapp.com');
-    cy.get('#navigation-bar',{ timeout: 10000 }).contains('AddCircleIcon').should('exist');
-    cy.get('#navigation-bar',{ timeout: 10000 }).contains('PublishedWithChangesIcon').should('exist');
-    cy.get('#navigation-bar',{ timeout: 10000 }).contains('LockIcon').should('exist');
-    cy.get('#navigation-bar',{ timeout: 10000 }).contains('SortIcon').should('exist');
+    
+    // Check if an element with ID "map-name" exists
+cy.get('#map-name').should('exist');
+
+// Check if an element with ID "export-close" exists
+cy.get('#export-close').should('exist');
+
+// Check if an element with ID "container" exists
+cy.get('#container').should('exist');
+
+// Check if an element with ID "function-bar" exists
+cy.get('#function-bar').should('exist');
 
 
   });
