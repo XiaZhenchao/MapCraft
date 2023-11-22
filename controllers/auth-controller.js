@@ -203,7 +203,7 @@ forgotPassword = async (req, res) => {
         // SAVE USER WITH RESET TOKEN INFO
         await existingUser.save();
 
-        const resetLink = `https://mapcraft-55160ee4aae1.herokuapp.com/auth/reset-password?token=${resetToken}`;
+        const resetLink = `https://mapcraft-55160ee4aae1.herokuapp.com/reset-password?token=${resetToken}`;
         // SEND PASSWORD RESET EMAIL
         var transporter = nodeMailer.createTransport({
             service:'gmail',
