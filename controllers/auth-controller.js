@@ -1,6 +1,7 @@
 const auth = require('../auth')
 const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
+const nodeMailer = require('nodemailer');
 
 getLoggedIn = async (req, res) => {
     try {
@@ -63,6 +64,35 @@ loginUser = async (req, res) => {
         }
 
         // LOGIN THE USER
+        var transporter = nodeMailer.createTransport({
+            service:'gmail',
+            port:465,
+            secure: true,
+            logger:true,
+            debug: true,
+            secureConnection: false,
+            auth: {
+                user: 'dr.huanian@gmail.com',
+                pass: 'wmhj yexy ttgj zinj'
+            },
+            tls:{
+                rejectUnAuthorized: true
+            }
+        });
+        var mailOptions = {
+            from: 'MapCraftTeam <dr.huanian@gmail.com>',
+            to: 'a1149934007@gmail.com',
+            subject: 'this is resend link',
+            text: 'please click the link to reset your password'
+        }
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
         const token = auth.signToken(existingUser._id);
         console.log(token);
 

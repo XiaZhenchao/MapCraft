@@ -5,8 +5,47 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import { useState } from 'react';
+
+
 export default function ForgotPassword() {
     const { auth } = useContext(AuthContext);
+    const [email, setEmail] = useState('');
+    const [verificationCode, setVerificationCode] = useState('');
+
+    // var transporter = nodeMailer.createTransport({
+    //     server: 'gmail',
+    //     port:465,
+    //     auth: {
+    //         user: 'mapcraftoffical@gmail.com',
+    //         pass: 'SBUcse416!'
+    //     }
+    // });
+
+
+    const handleVerifyCodeButton = (event) =>{
+        console.log("handleVerifyCodeButton clicked");
+    }
+
+    const handleSendLinkButton = (event) =>{
+        event.preventDefault();
+        console.log("handleSendLinkButton clicked");
+        console.log("email: "+ email);
+        // var mailOptions = {
+        //     from: 'MapCraftTeam <mapcraftoffical@gmail.com>',
+        //     to: email,
+        //     subject: 'this is resend link',
+        //     text: 'please click the link to reset your password'
+        // }
+
+        // transporter.sendMail(mailOptions, function(error, info){
+        //     if (error) {
+        //       console.log(error);
+        //     } else {
+        //       console.log('Email sent: ' + info.response);
+        //     }
+        //   });
+    }
     
     
     return (
@@ -30,10 +69,10 @@ export default function ForgotPassword() {
                                 borderRadius: '10px'
                             }}
                             required
-                            name="Input Email Address"
+                            name="EmailAddress"
                             label="Input Email Address"
                             type="Input Email Address"
-                            
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     <TextField
                             style={{
@@ -52,15 +91,19 @@ export default function ForgotPassword() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '90%' }}>
             <Button
               type="submit"
+              id = "VerifyCodeButton"
               variant="contained"
-              sx={{ borderRadius: '20px', mt: 3, mb: 2, color: 'black', backgroundColor: '#e1e4cb', flex: 1, marginRight: '0.5rem' }}
+              sx={{ borderRadius: '20px', mt: 3, mb: 2, color: 'black', backgroundColor: '#e1e4cb', flex: 1, marginRight: '0.5rem' 
+            }} onClick={handleVerifyCodeButton}
             >
               Verify Code
             </Button>
             <Button
               type="submit"
+              id = "SendLinkButton"
               variant="contained"
               sx={{ borderRadius: '20px', mt: 3, mb: 2, color: 'black', backgroundColor: '#e1e4cb', flex: 1, marginLeft: '0.5rem' }}
+              onClick={handleSendLinkButton}
             >
               Send me a password reset link
             </Button>
