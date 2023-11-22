@@ -22,30 +22,40 @@ const api = axios.create({
 // WORK, AND SOME REQUIRE DATA, WHICH WE WE WILL FORMAT HERE, FOR WHEN
 // WE NEED TO PUT THINGS INTO THE DATABASE OR IF WE HAVE SOME
 // CUSTOM FILTERS FOR QUERIES
-export const createPlaylist = (newListName, newSongs, userEmail) => {
-    return api.post(`/playlist/`, {
+export const createMap = (newMapName, userEmail, username) => {
+    const currentDate = new Date();
+    return api.post(`/map/`, {
         // SPECIFY THE PAYLOAD
-        name: newListName,
-        songs: newSongs,
-        ownerEmail: userEmail
+        name: newMapName,
+        ownerEmail: userEmail,
+        publishDate: currentDate.toISOString(),
+        publishStatus: false,
+        renderStatus: false,
+        likes: 0,
+        disLikes: 0,
+        authorName: username,
+        commentObject: [],
+        banned: false,
+        editStatus: false,
+        //source: "",
     })
 }
-export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)
-export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
-export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
-export const updatePlaylistById = (id, playlist) => {
-    return api.put(`/playlist/${id}`, {
-        // SPECIFY THE PAYLOAD
-        playlist : playlist
+export const deleteMapById = (id) => api.delete(`/map/${id}`)
+export const getMapById = (id) => api.get(`/map/${id}`)
+export const getMapPairs = () => api.get(`/mapairs/`)
+export const updateMapById = (id, map) => {
+    return api.put(`/map/${id}`, {
+         //SPECIFY THE PAYLOAD
+        map : map
     })
 }
 
 const apis = {
-    createPlaylist,
-    deletePlaylistById,
-    getPlaylistById,
-    getPlaylistPairs,
-    updatePlaylistById
+    createMap,
+    deleteMapById,
+    getMapById,
+    getMapPairs,
+    updateMapById
 }
 
 export default apis

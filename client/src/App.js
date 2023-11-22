@@ -2,7 +2,7 @@ import './App.css';
 import { React, useContext } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AuthContextProvider } from './auth';
-//import { GlobalStoreContextProvider } from './store'
+import { GlobalStoreContextProvider } from './store'
 import {
     AppBanner,
     CommunityScreen,
@@ -33,7 +33,7 @@ const App = () => {
     return (
         <BrowserRouter>
             <AuthContextProvider>
-                           
+                <GlobalStoreContextProvider> 
                     <AppBanner />
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />
@@ -48,7 +48,7 @@ const App = () => {
                         <Route path="/admin-home/" exact component={AdminHome} />
                         <Route path="/admin-community/" exact component={AdminCommunity} />
                     </Switch>
-               
+                 </GlobalStoreContextProvider> 
             </AuthContextProvider>
         </BrowserRouter>
     )

@@ -61,6 +61,7 @@ body {
   
 }
 
+
 #navigation-bar {
   border: 1px solid ; 
   width: 27%;
@@ -93,10 +94,10 @@ body {
   /* position: absolute; */
   width: 29%;
   height: 70%;
-  /* top: 22%; */
   left: 2%;
   border-radius: 10px;
   overflow: scroll;
+  background-color: '#ABC8B2';
 }
 
 .underscore {
@@ -353,7 +354,8 @@ body {
   background-color: #e1e4cb;
   left:0%;
   height: 150px;
-  width: 5%;
+  width: 40%;
+  cursor: pointer
 }
 .element-with-stroke {
   border: 1px solid #000000; /* 2px width solid black border */
@@ -469,7 +471,9 @@ body {
 #confirm-cancel-container {
   text-align: center;
 }
-
+#Select-File-Button {
+  margin-left: 0px;
+}
 
 
 /* ANIMATIONS

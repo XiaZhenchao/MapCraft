@@ -14,20 +14,22 @@ const app = express()
 
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
+//app.use(cors({
+   // origin: ["https://mapcraft-55160ee4aae1.herokuapp.com", "https://mapcraft-55160ee4aae1.herokuapp.com/auth"],
+    //credentials: true
+//}))
 app.use(cors({
-    origin: ["https://mapcraft-55160ee4aae1.herokuapp.com", "https://mapcraft-55160ee4aae1.herokuapp.com/auth"],
-    credentials: true
-}))
-// app.use(cors({
-//    origin: ["http://localhost:3000"],
-//      credentials: true
-//  }))
+    origin: ["http://localhost:3000"],
+      credentials: true
+  }))
 app.use(express.json())
 app.use(cookieParser())
 
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 const authRouter = require('./routes/auth-router')
 app.use('/auth', authRouter)
+const maplistRouter = require('./routes/maplist-router')
+app.use('/api', maplistRouter)
 
 //DB configs
 //mongoose.connect(process.env.MONGO_URI).catch((err)=> console.log(err))

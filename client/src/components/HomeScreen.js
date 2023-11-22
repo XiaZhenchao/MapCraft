@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react'
-//import { GlobalStoreContext } from '../store'
+import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import AppBanner from './AppBanner';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import MapList from './MapList.js';
+import MapList from './MapList.js'
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
@@ -16,20 +17,74 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import MUIDeleteModal from './MUIDeleteModal.js';
 
 /*
    This React component lists all the top5 lists in the UI.
   
    @author McKilla Gorilla
 */
-const HomeScreen = () => {
-   //const { store } = useContext(GlobalStoreContext);
-   let appBanner = <AppBanner />
+const HomeScreen = (props) => {
+   const { store } = useContext(GlobalStoreContext);
+   const { auth } = useContext(AuthContext);
 
    const [selectedFile, setSelectedFile] = useState(null);
-  const [map, setMap] = useState(null);
-  const history = useHistory();
-  const [isBorderVisible, setIsBorderVisible] = useState(false);
+   const [map, setMap] = useState(null);
+   const history = useHistory();
+   const [isBorderVisible, setIsBorderVisible] = useState(false);
+   const { idNamePairs, selected } = props;
+   const [fileExtension, setFileExtension] = useState(null);
+   const [rendering, setRendering] = useState(false);
+  
+
+    const handleFileInputChange = () => {
+        const fileInput = document.getElementById('fileInput');
+        const selectedFile = fileInput.files[0];
+        if (selectedFile) {
+            const fileName = selectedFile.name;
+            const fileExtension = fileName.split('.').pop().toLowerCase();
+
+            if (fileExtension === 'shp' || fileExtension === 'json' || fileExtension === 'kml'){
+                setSelectedFile( selectedFile );
+                const uploadButton = document.getElementById('Select-File-Button');
+                uploadButton.disabled = true;
+                //this.loadMap(selectedFile);
+                setFileExtension( fileExtension );
+            } else if (fileExtension === 'zip') {
+                setSelectedFile( selectedFile );
+                const uploadButton = document.getElementById('Select-File-Button');
+                uploadButton.disabled = true;
+                //this.loadMap(selectedFile);
+                setFileExtension( fileExtension );
+            }
+            else {
+                alert('Please select a valid SHP, GeoJSON, or KML file.');
+            }
+        } else {
+                setSelectedFile( null );
+            const uploadButton = document.getElementById('Select-File-Button');
+            uploadButton.disabled = false;
+        }
+    };
+   
+const handleCancelClick = () => {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.value = '';
+        // const container = document.getElementById('Container');
+        // container.innerHTML = '';
+        
+        if(map!=null){
+            setMap(null) // Remove the old map
+        }       
+
+        setSelectedFile(null)
+        setRendering(false)
+        handleFileInputChange();
+    };
+
+  useEffect(() => {
+        store.loadIdNamePairs();
+    }, []);
   useEffect(() => {
     // Load the map when the component mounts
     loadMap();
@@ -50,14 +105,48 @@ const HomeScreen = () => {
        history.push("/edit/");
    }
    const handleAdd =()=>{
-
+        store.createNewMap();
    }
+
+   const handleDeleteButton =()=>{
+        store.markMapForDeletion(store.currentMap._id);
+   }
+
    const handlePublic =()=>{
         setIsBorderVisible(!isBorderVisible);
    }
    const handlePrivate=()=>{
         setIsBorderVisible(!isBorderVisible);
    }
+
+   const handleSelectFileButton = () => {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.accept = '.zip,.shp,.json,.kml,.dbf';
+        fileInput.click();
+    };
+
+
+   let listCard = "";
+    if (store) {
+        listCard = 
+        <div>
+            {
+                store.idNamePairs.filter((pair) => (pair.authorName == auth.user.firstName+" "+auth.user.lastName)).map((pair) => (
+                
+                    <MapList
+                        key={pair._id}
+                        idNamePair={pair}
+                        publish = {pair.publishStatus}
+                        publishDate = {pair.publishDate}
+                        likes = {pair.likes}
+                        disLikes = {pair.disLikes}
+                    />
+                ))
+            }
+        
+        </div>
+
+    }
   
    return (
        <div >
@@ -68,34 +157,12 @@ const HomeScreen = () => {
            <IconButton style = {{color:'black'}}> <LockIcon onClick={handlePrivate} style={{ fontSize: '2rem',border: !isBorderVisible ? '2px solid black' : 'none' }}></LockIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
        </Box>
+       
        <List sx={{ bgcolor: '#ABC8B2', mb:"20px" ,
-            overflow: 'auto'}}id = "list" >
-           {
-           <MapList  style ={{ borderColor:'#e1ed05'} } >111</MapList>               
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map1</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-
-           <div className="underscore"></div>
-           {
-           <MapList></MapList>
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map2</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-           <div className="underscore"></div>
-           {
-           <MapList></MapList>               
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map3</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-           <div className="underscore"></div>
-           {
-           <MapList></MapList>               
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map4</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-           <div className="underscore"></div>
-       </List>
+            overflow: 'auto'}}>  
+            {listCard}
+        </List>
+        <MUIDeleteModal/>
        </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>Map1 <IconButton ><EditIcon style={{fontSize: '2rem'}}></EditIcon></IconButton>
        </div>
@@ -106,8 +173,16 @@ const HomeScreen = () => {
        </div>
       
        <div id = "function-bar" class="element-with-stroke">
-           <Button className='button'
-                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>select File</Button>
+       <input
+                    type="file"
+                    id="fileInput"
+                    style={{ display: 'none' }}
+                    onChange={handleFileInputChange}
+                />
+           <Button className='button' id="Select-File-Button"
+                    disabled={selectedFile!=null}
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   onClick={handleSelectFileButton}>select File</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Fork</Button>
            <Button className='button'
@@ -118,8 +193,16 @@ const HomeScreen = () => {
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Publish</Button>
            <Button className='button' 
-                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Delete</Button>
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   onClick={handleDeleteButton}>Delete</Button>
+                    {selectedFile!=null && (
+                    <div>
+                        <p>Selected File: {selectedFile.name}</p >
+                        <button onClick={handleCancelClick}>Cancel</button>
+                    </div>
+                )}
        </div></List>
+      
        </div>)
 }
 
