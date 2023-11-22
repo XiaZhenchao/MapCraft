@@ -27,7 +27,7 @@ export default function MUIForgotPasswordErrorModal() {
     };
 
     return (
-        <Modal open={auth.user === null}>
+        <Modal open={auth.user === null} className='forgot-password-modal'>
             <Box sx={modalStyle}>
                 <Alert severity="warning">
                     <AlertTitle>Warning</AlertTitle>
