@@ -15,13 +15,17 @@ export const AuthActionType = {
     LOGIN_USER_ERROR: "LOGIN_USER_ERROR",
     REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
     FORGOT_PASSWORD: "FORGOT_PASSWORD",
-    RESET_PASSWORD: "RESET_PASSWORD"
+    RESET_PASSWORD: "RESET_PASSWORD",
+    FORGOT_PASSWORD_ERROR: "FORGOT_PASSWORD_ERROR",
+    RESET_PASSWORD_ERROR: "RESET_PASSWORD_ERROR"
 }
 
 const CurrentModal = {
     NONE : "NONE",
     LOGIN_USER_ERROR: "LOGIN_USER_ERROR",
-    REGISTER_USER_ERROR: "REGISTER_USER_ERROR"
+    REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
+    RESET_PASSWORD_ERROR: "RESET_PASSWORD_ERROR",
+    FORGOT_PASSWORD_ERROR: "FORGOT_PASSWORD_ERROR",
 }
 
 function AuthContextProvider(props) {
@@ -101,6 +105,24 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: null,
                     loggedIn: false
+                })
+                
+            }
+            case AuthActionType.FORGOT_PASSWORD_ERROR: {
+                return setAuth({
+                    currentModal : CurrentModal.FORGOT_PASSWORD_ERROR,
+                    user: null,
+                    loggedIn: false,
+                    message: payload.errorMessage
+                })
+                
+            }
+            case AuthActionType.RESET_PASSWORD_ERROR: {
+                return setAuth({
+                    currentModal : CurrentModal.RESET_PASSWORD_ERROR,
+                    user: null,
+                    loggedIn: false,
+                    message: payload.errorMessage
                 })
                 
             }
@@ -200,6 +222,13 @@ function AuthContextProvider(props) {
         return auth.currentModal === CurrentModal.REGISTER_USER_ERROR;
     }
 
+    auth.isForgotPasswordModalOpen = () => {
+        return auth.currentModal === CurrentModal.FORGOT_PASSWORD_ERROR;
+    }
+
+    auth.isResetPasswordModalOpen = () => {
+        return auth.currentModal === CurrentModal.RESET_PASSWORD_ERROR;
+    }
     auth.hideModals = () => {
         authReducer({
             type: AuthActionType.HIDE_MODALS,
@@ -215,8 +244,14 @@ function AuthContextProvider(props) {
             console.log("forgotPassword555");
             return response; // Return the entire response object to be handled in the component
         } catch (error) {
-            console.error("Error in forgotPassword:", error);
-            throw error; // Re-throw the error to be caught in the component
+            const message = error.response.data.errorMessage;
+            console.log (message);
+            authReducer({
+                type: AuthActionType.FORGOT_PASSWORD_ERROR,
+                payload: {
+                    errorMessage: message
+                }
+            })
         }
     };
 
@@ -226,10 +261,17 @@ function AuthContextProvider(props) {
             console.log("resetPassword333");
             const response = await api.resetPassword(newPassword, verifyNewPassword, resetToken);
             console.log("resetPassword555");
-            return response; // Return the entire response object to be handled in the component
+            history.push("/login/");
+            //return response; // Return the entire response object to be handled in the component
         } catch (error) {
-            console.error("Error in resetPassword:", error);
-            throw error; // Re-throw the error to be caught in the component
+            const message = error.response.data.errorMessage;
+            console.log (message);
+            authReducer({
+                type: AuthActionType.RESET_PASSWORD_ERROR,
+                payload: {
+                    errorMessage: message
+                }
+            })
         }
     };
 

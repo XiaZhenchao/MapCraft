@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 // import { useState } from 'react';
+import MUIResetPasswordErrorModal from './MUIResetPasswordErrorModal';
 import axios from 'axios'; 
 
 export default function ResetPassword() {
@@ -24,6 +25,13 @@ export default function ResetPassword() {
             setResetToken(token);
         }
     }, [location]);
+
+    let modalJSX = "";
+    
+    if (auth.isResetPasswordModalOpen()) {
+        modalJSX = <MUIResetPasswordErrorModal />;
+    }
+
 
     const handleSubmitNewPasswordButton = async (event) => {
         event.preventDefault();
@@ -107,7 +115,7 @@ export default function ResetPassword() {
           </div>
           <Copyright sx={{ mt: 5 }} />
                 </Box>
-               
+                { modalJSX }
             </Grid>
             
                
