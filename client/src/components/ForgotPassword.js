@@ -11,11 +11,11 @@ import axios from 'axios';
 export default function ForgotPassword() {
     const { auth } = useContext(AuthContext);
     const [email, setEmail] = useState('');
-    const [verificationCode, setVerificationCode] = useState('');
+    // const [verificationCode, setVerificationCode] = useState('');
 
-    const handleVerifyCodeButton = (event) =>{
-        console.log("handleVerifyCodeButton clicked");
-    }
+    // const handleVerifyCodeButton = (event) =>{
+    //     console.log("handleVerifyCodeButton clicked");
+    // }
 
     const handleSendLinkButton = async (event) => {
         event.preventDefault();
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
                             type="Input Email Address"
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                    <TextField
+                    {/* <TextField
                             style={{
                                 width: '60%', 
                                 margin: '1.0rem auto', // Center the TextField using margin
@@ -106,9 +106,9 @@ export default function ForgotPassword() {
                             type="Input  Verification Code"
                             
                             
-                        />
+                        /> */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '90%' }}>
-            <Button
+            {/* <Button
               type="submit"
               id = "VerifyCodeButton"
               variant="contained"
@@ -116,7 +116,7 @@ export default function ForgotPassword() {
             }} onClick={handleVerifyCodeButton}
             >
               Verify Code
-            </Button>
+            </Button> */}
             <Button
               type="submit"
               id = "SendLinkButton"

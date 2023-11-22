@@ -51,8 +51,7 @@ function authManager() {
         }, process.env.JWT_SECRET);
     }
     forgotPassword = (req, res, next) => {
-        // Logic for handling password reset functionality
-        // For example, generating reset tokens, sending reset emails, etc.
+
         console.log("auth-index.js")
     };
 

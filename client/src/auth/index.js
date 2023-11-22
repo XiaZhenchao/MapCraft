@@ -14,7 +14,8 @@ export const AuthActionType = {
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER_ERROR: "LOGIN_USER_ERROR",
     REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
-    FORGOT_PASSWORD: "FORGOT_PASSWORD"
+    FORGOT_PASSWORD: "FORGOT_PASSWORD",
+    RESET_PASSWORD: "RESET_PASSWORD"
 }
 
 const CurrentModal = {
@@ -89,6 +90,14 @@ function AuthContextProvider(props) {
                 });
             }
             case AuthActionType.FORGOT_PASSWORD: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false
+                })
+                
+            }
+
+            case AuthActionType.RESET_PASSWORD: {
                 return setAuth({
                     user: null,
                     loggedIn: false
@@ -211,11 +220,11 @@ function AuthContextProvider(props) {
         }
     };
 
-    auth.resetPassword = async function(newPassword, verifyNewPassword) {
+    auth.resetPassword = async function(newPassword, verifyNewPassword, resetToken) {
         console.log("resetPassword222");
         try {
             console.log("resetPassword333");
-            const response = await api.forgotPassword(newPassword, verifyNewPassword);
+            const response = await api.resetPassword(newPassword, verifyNewPassword, resetToken);
             console.log("resetPassword555");
             return response; // Return the entire response object to be handled in the component
         } catch (error) {

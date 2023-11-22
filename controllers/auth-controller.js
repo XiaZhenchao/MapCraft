@@ -245,6 +245,53 @@ forgotPassword = async (req, res) => {
     }
 }
 
+resetPassword = async (req, res) => {
+    console.log("resetPassword in auth controller1")
+    console.log("Request body: ", req.body)
+    try {
+        const { resetToken, newPassword, verifyNewPassword } = req.body;
+        console.log("resetToken: "+ resetToken);
+        console.log("newPassword: "+ newPassword);
+        console.log("confirmPassword: "+ verifyNewPassword);
+        console.log("resetPassword in auth controller2")
+        if (!newPassword || !verifyNewPassword) {
+            console.log("resetPassword in auth controller3")
+            return res.status(400).json({ errorMessage: "Please enter all required fields." });
+        }
+
+        if (newPassword !== verifyNewPassword) {
+            console.log("resetPassword in auth controller4")
+            return res.status(400).json({ errorMessage: "Passwords do not match." });
+        }
+
+        const user = await User.findOne({ 
+            resetPasswordToken: resetToken,
+            resetPasswordExpires: { $gt: Date.now() } // Check if token is not expired
+        });
+        console.log("resetPassword in auth controller5");
+        if (!user) {
+            console.log("resetPassword in auth controller6");
+            return res.status(400).json({ errorMessage: "Invalid or expired password reset token." });
+        }
+
+        // Hash new password
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update user with new password
+        user.passwordHash = passwordHash;
+        user.resetPasswordToken = undefined; // Clear reset token
+        user.resetPasswordExpires = undefined; // Clear token expiry
+
+        await user.save();
+        console.log("resetPassword in auth controller7");
+        res.status(200).json({ success: true, message: "Password successfully reset." });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ errorMessage: "Internal server error." });
+    }
+}
+
 
 
 module.exports = {
@@ -253,4 +300,5 @@ module.exports = {
     loginUser,
     logoutUser,
     forgotPassword,
+    resetPassword
 }

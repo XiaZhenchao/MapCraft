@@ -1,17 +1,29 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import AuthContext from '../auth'
 import Copyright from './Copyright'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+// import { useState } from 'react';
 import axios from 'axios'; 
 
 export default function ResetPassword() {
     const { auth } = useContext(AuthContext);
     const [newPassword, setNewPassword] = useState('');
     const [verifyNewPassword, setVerifyNewPassword] = useState('');
+    const [resetToken, setResetToken] = useState('');
+    const location = useLocation(); 
+
+    useEffect(() => {
+        // Extract the reset token from the URL
+        const query = new URLSearchParams(location.search);
+        const token = query.get('token');
+        if (token) {
+            setResetToken(token);
+        }
+    }, [location]);
 
     const handleSubmitNewPasswordButton = async (event) => {
         event.preventDefault();
@@ -20,7 +32,7 @@ export default function ResetPassword() {
         console.log("verifyNewPassword: " + verifyNewPassword);
 
         try {
-            const response = await auth.resetPassword(newPassword, verifyNewPassword);
+            const response = await auth.resetPassword(newPassword, verifyNewPassword,resetToken);
             if (response && response.status === 200) {
                 console.log('Password reset done!');
                 // Handle success message or UI update after sending reset email

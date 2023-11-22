@@ -58,17 +58,21 @@ export const forgotPassword = (email) => {
         });
 };
 
-export const resetPassword = (email) => {
+export const resetPassword = (newPassword, verifyNewPassword, resetToken) => {
     console.log("resetPassword444");
-    return api.put(`/reset-password`, { email: email })
-        .then(response => {
-            console.log("Response data: ", response.data);
-            return response.data; // Returning the data from the resolved Promise
-        })
-        .catch(error => {
-            console.error("Error in resetPassword:", error);
-            throw error;
-        });
+    return api.put(`/reset-password/`, {
+        newPassword: newPassword,
+        verifyNewPassword: verifyNewPassword,
+        resetToken: resetToken // Include the resetToken here
+    })
+    .then(response => {
+        console.log("Response data: ", response.data);
+        return response.data; // Returning the data from the resolved Promise
+    })
+    .catch(error => {
+        console.error("Error in resetPassword:", error);
+        throw error;
+    });
 };
 
 const apis = {
@@ -76,7 +80,8 @@ const apis = {
     registerUser,
     loginUser,
     logoutUser,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 }
 
 export default apis
