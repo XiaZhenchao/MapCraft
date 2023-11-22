@@ -203,6 +203,7 @@ forgotPassword = async (req, res) => {
         // SAVE USER WITH RESET TOKEN INFO
         await existingUser.save();
 
+        const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
         // SEND PASSWORD RESET EMAIL
         var transporter = nodeMailer.createTransport({
             service:'gmail',
@@ -223,7 +224,7 @@ forgotPassword = async (req, res) => {
             from: 'MapCraftTeam <dr.huanian@gmail.com>',
             to: email,
             subject: 'this is resend link',
-            text: 'please click the link to reset your password'
+            text: `Click the link to reset your password: ${resetLink}`
         }
 
         transporter.sendMail(mailOptions, function(error, info) {
