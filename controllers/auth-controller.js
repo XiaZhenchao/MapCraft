@@ -264,6 +264,9 @@ resetPassword = async (req, res) => {
             return res.status(400).json({ errorMessage: "Passwords do not match." });
         }
 
+        if (newPassword.length < 8 || verifyNewPassword.length < 8) {
+            return res.status(400).json({ errorMessage: "Passwords must be at least 8 characters long." });
+          }
         const user = await User.findOne({ 
             resetPasswordToken: resetToken,
             resetPasswordExpires: { $gt: Date.now() } // Check if token is not expired
