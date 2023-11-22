@@ -18,7 +18,26 @@ export default function ResetPassword() {
         console.log("handleSubmitNewPasswordButton clicked");
         console.log("newPassword: " + newPassword);
         console.log("verifyNewPassword: " + verifyNewPassword);
+
+        try {
+            const response = await auth.resetPassword(newPassword, verifyNewPassword);
+            if (response && response.status === 200) {
+                console.log('Password reset done!');
+                // Handle success message or UI update after sending reset email
+            } else if (response && response.data && response.data.errorMessage) {
+                console.error('Error:', response.data.errorMessage);
+                // Handle error response from the backend
+            } else {
+                console.error('Unexpected response structure:', response);
+                // Handle unexpected response structure
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle any network or unexpected errors
+        }
     };
+
+    
     
     return (
         <div>

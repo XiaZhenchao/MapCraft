@@ -211,6 +211,18 @@ function AuthContextProvider(props) {
         }
     };
 
+    auth.resetPassword = async function(newPassword, verifyNewPassword) {
+        console.log("resetPassword222");
+        try {
+            console.log("resetPassword333");
+            const response = await api.forgotPassword(newPassword, verifyNewPassword);
+            console.log("resetPassword555");
+            return response; // Return the entire response object to be handled in the component
+        } catch (error) {
+            console.error("Error in resetPassword:", error);
+            throw error; // Re-throw the error to be caught in the component
+        }
+    };
 
 
 
