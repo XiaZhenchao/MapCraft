@@ -2,7 +2,7 @@ const auth = require('../auth')
 const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 const nodeMailer = require('nodemailer');
-
+const crypto = require('crypto');
 getLoggedIn = async (req, res) => {
     try {
         let userId = auth.verifyUser(req);
@@ -64,35 +64,7 @@ loginUser = async (req, res) => {
         }
 
         // LOGIN THE USER
-        var transporter = nodeMailer.createTransport({
-            service:'gmail',
-            port:465,
-            secure: true,
-            logger:true,
-            debug: true,
-            secureConnection: false,
-            auth: {
-                user: 'dr.huanian@gmail.com',
-                pass: 'wmhj yexy ttgj zinj'
-            },
-            tls:{
-                rejectUnAuthorized: true
-            }
-        });
-        var mailOptions = {
-            from: 'MapCraftTeam <dr.huanian@gmail.com>',
-            to: 'a1149934007@gmail.com',
-            subject: 'this is resend link',
-            text: 'please click the link to reset your password'
-        }
-
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
+       
         const token = auth.signToken(existingUser._id);
         console.log(token);
 
@@ -197,9 +169,87 @@ registerUser = async (req, res) => {
     }
 }
 
+
+forgotPassword = async (req, res) => {
+    console.log("forgotPassword111");
+    try {
+        const { email } = req.body;
+        console.log("forgotPassword777")
+        console.log("email: "+ email)
+        console.log("forgotPassword888")
+        if (!email) {
+            console.log("forgotPassword999")
+            return res
+                .status(400)
+                .json({ errorMessage: "Please provide your email address." });
+        }
+
+        const existingUser = await User.findOne({ email });
+
+        if (!existingUser) {
+            console.log("forgotPassword101010")
+            return res
+                .status(404)
+                .json({
+                    errorMessage: "User with this email address does not exist."
+                })
+        }
+
+        // GENERATE RESET TOKEN
+        const resetToken = crypto.randomBytes(20).toString('hex'); // Generate a unique reset token
+        existingUser.resetPasswordToken = resetToken; // Store token in user document
+        existingUser.resetPasswordExpires = Date.now() + 3600000; // Token expiration time (1 hour)
+
+        // SAVE USER WITH RESET TOKEN INFO
+        await existingUser.save();
+
+        // SEND PASSWORD RESET EMAIL
+        var transporter = nodeMailer.createTransport({
+            service:'gmail',
+            port:465,
+            secure: true,
+            logger:true,
+            debug: true,
+            secureConnection: false,
+            auth: {
+                user: 'dr.huanian@gmail.com',
+                pass: 'wmhj yexy ttgj zinj'
+            },
+            tls:{
+                rejectUnAuthorized: true
+            }
+        });
+        var mailOptions = {
+            from: 'MapCraftTeam <dr.huanian@gmail.com>',
+            to: email,
+            subject: 'this is resend link',
+            text: 'please click the link to reset your password'
+        }
+
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+                return res.status(500).json({ errorMessage: "Failed to send reset email." });
+            } else {
+                console.log('Password reset email sent: ' + info.response);
+                return res.status(200).json({
+                    success: true,
+                    message: 'Password reset instructions sent to your email.'
+                });
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ errorMessage: "Internal server error." });
+    }
+}
+
+
+
 module.exports = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    forgotPassword,
 }

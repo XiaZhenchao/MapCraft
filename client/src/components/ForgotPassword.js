@@ -6,46 +6,65 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
-
+import axios from 'axios'; 
 
 export default function ForgotPassword() {
     const { auth } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
 
-    // var transporter = nodeMailer.createTransport({
-    //     server: 'gmail',
-    //     port:465,
-    //     auth: {
-    //         user: 'mapcraftoffical@gmail.com',
-    //         pass: 'SBUcse416!'
-    //     }
-    // });
-
-
     const handleVerifyCodeButton = (event) =>{
         console.log("handleVerifyCodeButton clicked");
     }
 
-    const handleSendLinkButton = (event) =>{
+    const handleSendLinkButton = async (event) => {
         event.preventDefault();
         console.log("handleSendLinkButton clicked");
-        console.log("email: "+ email);
-        // var mailOptions = {
-        //     from: 'MapCraftTeam <mapcraftoffical@gmail.com>',
-        //     to: email,
-        //     subject: 'this is resend link',
-        //     text: 'please click the link to reset your password'
-        // }
+        console.log("email: " + email);
+    
+        try {
+            const response = await auth.forgotPassword(email);
+            if (response && response.status === 200) {
+                console.log('Password reset instructions sent to your email!');
+                // Handle success message or UI update after sending reset email
+            } else if (response && response.data && response.data.errorMessage) {
+                console.error('Error:', response.data.errorMessage);
+                // Handle error response from the backend
+            } else {
+                console.error('Unexpected response structure:', response);
+                // Handle unexpected response structure
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle any network or unexpected errors
+        }
+    };
 
-        // transporter.sendMail(mailOptions, function(error, info){
-        //     if (error) {
-        //       console.log(error);
-        //     } else {
-        //       console.log('Email sent: ' + info.response);
-        //     }
-        //   });
-    }
+
+    // const handleSendLinkButton = async (event) => {
+    //     event.preventDefault();
+    //     console.log("handleSendLinkButton clicked");
+    //     console.log("email: " + email);
+    
+    //     try {
+    //         const response = await auth.forgotPassword(email);
+    //         if (response && response.data && response.data.success) {
+    //             console.log('Password reset instructions sent to your email!');
+    //             // Handle success message or UI update after sending reset email
+    //         } else if (response && response.data && response.data.errorMessage) {
+    //             console.error('Error:', response.data.errorMessage);
+    //             // Handle error response from the backend
+    //         } else {
+    //             console.error('Unexpected response structure:', response);
+    //             // Handle unexpected response structure
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         // Handle any network or unexpected errors
+    //     }
+    // };
+
+
     
     
     return (

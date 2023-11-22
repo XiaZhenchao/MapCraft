@@ -8,6 +8,9 @@ const UserSchema = new Schema(
         lastName: { type: String, required: true },
         email: { type: String, required: true },
         passwordHash: { type: String, required: true },
+        resetPasswordToken: { type: String },
+        resetPasswordExpires: { type: Date },
+        resetTokenUsed: { type: Boolean, default: false }
     },
     { timestamps: true },
 )

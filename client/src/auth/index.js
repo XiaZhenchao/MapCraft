@@ -13,7 +13,8 @@ export const AuthActionType = {
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER_ERROR: "LOGIN_USER_ERROR",
-    REGISTER_USER_ERROR: "REGISTER_USER_ERROR"
+    REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
+    FORGOT_PASSWORD: "FORGOT_PASSWORD"
 }
 
 const CurrentModal = {
@@ -86,6 +87,13 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false
                 });
+            }
+            case AuthActionType.FORGOT_PASSWORD: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false
+                })
+                
             }
 
             default:
@@ -189,6 +197,22 @@ function AuthContextProvider(props) {
             payload: {}
         });    
     }
+
+    auth.forgotPassword = async function(email) {
+        console.log("forgotPassword222");
+        try {
+            console.log("forgotPassword333");
+            const response = await api.forgotPassword(email);
+            console.log("forgotPassword555");
+            return response; // Return the entire response object to be handled in the component
+        } catch (error) {
+            console.error("Error in forgotPassword:", error);
+            throw error; // Re-throw the error to be caught in the component
+        }
+    };
+
+
+
 
 
     return (

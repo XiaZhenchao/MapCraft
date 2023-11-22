@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import AuthContext from '../auth'
 
 import Copyright from './Copyright'
-
+import axios from 'axios'; 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -18,11 +18,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import MUILoginErrorModal from './MUILoginErrorModal';
 import ForgotPassword from './ForgotPassword';
-
 export default function LoginScreen() {
     const { auth } = useContext(AuthContext);
 
     let modalJSX = "";
+    
     if (auth.isLoginModalOpen()) {
         modalJSX = <MUILoginErrorModal />;
     }
@@ -37,6 +37,29 @@ export default function LoginScreen() {
         );
 
     };
+    // const handleSubmit = async (event) => {
+    //     console.log("submit!@");
+    //     event.preventDefault();
+    //     const formData = new FormData(event.currentTarget);
+    //     try {
+    //         const response = await axios.post('/auth/login', {
+    //             email: formData.get('email'), // Corrected property name
+    //             password: formData.get('password') // Corrected property name
+    //         });
+    
+    //         // Handle the response here
+    //         console.log(response.data); // Example: Log the response data
+    
+    //         // If the login is successful, you might want to update the authentication context
+    //         // auth.loginUser(formData.get('email'), formData.get('password'));
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         // Handle errors here
+    //     }
+    // };
+    
+
+
 
     return (
         <Grid >
