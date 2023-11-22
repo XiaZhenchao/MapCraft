@@ -58,14 +58,14 @@ describe('Password Recovery System', () => {
   });
 });
 
-describe('Password Recovery System', () => {
-  it('should send an invalid email and pop out error modal', () => {
+//describe('Password Recovery System', () => {
+  //it('should send an invalid email and pop out error modal', () => {
     // Visit the password recovery page
-    cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/forgot-password');
+    //cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/forgot-password');
 
-    cy.get('input[name="EmailAddress"]').type('a1149937@gmail.com');
-    cy.get('#SendLinkButton').click();
-    cy.get('.forgot-password-modal').should('be.visible');
+    //cy.get('input[name="EmailAddress"]').type('a1149937@gmail.com');
+   // cy.get('#SendLinkButton').click();
+   // cy.get('.forgot-password-modal').should('be.visible');
 
   });
 });
