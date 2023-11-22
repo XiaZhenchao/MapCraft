@@ -242,7 +242,8 @@ function AuthContextProvider(props) {
             console.log("forgotPassword333");
             const response = await api.forgotPassword(email);
             console.log("forgotPassword555");
-            return response; // Return the entire response object to be handled in the component
+           // return response; // Return the entire response object to be handled in the component
+           history.push("/login/");
         } catch (error) {
             const message = error.response.data.errorMessage;
             console.log (message);
