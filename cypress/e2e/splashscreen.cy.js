@@ -67,5 +67,5 @@ describe('Password Recovery System', () => {
    // cy.get('#SendLinkButton').click();
    // cy.get('.forgot-password-modal').should('be.visible');
 
-  });
+ // });
 });
