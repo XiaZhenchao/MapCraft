@@ -39,6 +39,6 @@ jobs:
     - name: Build
       run: npm run build --if-present
       
-    # - name: Cypress Run
-    #   run: npx cypress run cypress/e2e/splashscreen
+    - name: Cypress Run
+      run: npx cypress run cypress/e2e/splashscreen
 
