@@ -251,7 +251,7 @@ body {
 #container{
   /* background: url(MapContainer.png);
   background-size: cover; */
-  background-color: #e1e4cb;
+  background-color: lightgray;
   position: absolute;
   width: 77%;
   height: 82%;
@@ -259,7 +259,12 @@ body {
   left: 14%;
   border-radius: 10px;
   overflow: scroll;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 #big-container{
   /* background: url(MapContainer.png);
@@ -337,26 +342,35 @@ body {
   margin: 0.5rem;
 }
 
-.map-card {
-  /* image 2 */
-
-  /* position: absolute;
-  width: 197px;
-  height: 104px;
-  left: 126px;
-  top: 194px; */
-  
+.map-card:hover{
   background: url(exampleMap.jpg);
   background-size: cover;
   border-radius: 20px;
   border: 1px solid ; 
   padding: 10px;
   background-color: #e1e4cb;
-  left:0%;
+  left:2%;
   height: 150px;
   width: 40%;
-  cursor: pointer
+  cursor: pointer;
+  margin-bottom: 2%;
 }
+
+.map-card-unhover{
+  background: url(exampleMap.jpg);
+  background-size: cover;
+  border-radius: 20px;
+  border: 1px solid ; 
+  padding: 10px;
+  background-color: #e1e4cb;
+  border-color: dimgray;
+  left:2%;
+  height: 150px;
+  width: 40%;
+  cursor: pointer;
+  margin-bottom: 2%;
+}
+
 .element-with-stroke {
   border: 1px solid #000000; /* 2px width solid black border */
   padding: 10px; /* Optional: Add padding to give space between content and border */
@@ -461,6 +475,7 @@ body {
 .dialog-header {
   font-size: 24pt;
 }
+
 
 #close-modal-button {
   font-size: 20pt;

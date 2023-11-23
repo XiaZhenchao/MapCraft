@@ -18,24 +18,35 @@ import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import MUIDeleteModal from './MUIDeleteModal.js';
+import TextField from '@mui/material/TextField';
 
 /*
    This React component lists all the top5 lists in the UI.
   
    @author McKilla Gorilla
 */
-const HomeScreen = (props) => {
+const HomeScreen = () => {
    const { store } = useContext(GlobalStoreContext);
    const { auth } = useContext(AuthContext);
-
    const [selectedFile, setSelectedFile] = useState(null);
    const [map, setMap] = useState(null);
    const history = useHistory();
    const [isBorderVisible, setIsBorderVisible] = useState(false);
-   const { idNamePairs, selected } = props;
    const [fileExtension, setFileExtension] = useState(null);
    const [rendering, setRendering] = useState(false);
-  
+   const [editActive, setEditActive] = useState(false);
+   const [text, setText] = useState("");
+   const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        store.loadIdNamePairs();
+    }, []);
+
+    useEffect(() => {
+        if (store.currentMap !== null) {
+          loadMap();
+        }
+      }, []);
 
     const handleFileInputChange = () => {
         const fileInput = document.getElementById('fileInput');
@@ -48,13 +59,13 @@ const HomeScreen = (props) => {
                 setSelectedFile( selectedFile );
                 const uploadButton = document.getElementById('Select-File-Button');
                 uploadButton.disabled = true;
-                //this.loadMap(selectedFile);
+                loadMap();
                 setFileExtension( fileExtension );
             } else if (fileExtension === 'zip') {
                 setSelectedFile( selectedFile );
                 const uploadButton = document.getElementById('Select-File-Button');
                 uploadButton.disabled = true;
-                //this.loadMap(selectedFile);
+                loadMap();
                 setFileExtension( fileExtension );
             }
             else {
@@ -67,11 +78,9 @@ const HomeScreen = (props) => {
         }
     };
    
-const handleCancelClick = () => {
+    const handleCancelClick = () => {
         const fileInput = document.getElementById('fileInput');
         fileInput.value = '';
-        // const container = document.getElementById('Container');
-        // container.innerHTML = '';
         
         if(map!=null){
             setMap(null) // Remove the old map
@@ -82,25 +91,23 @@ const handleCancelClick = () => {
         handleFileInputChange();
     };
 
-  useEffect(() => {
-        store.loadIdNamePairs();
-    }, []);
-  useEffect(() => {
-    // Load the map when the component mounts
-    loadMap();
-  }, []); // The empty dependency array ensures it runs once on mount
+ 
 
   const loadMap = () => {
     try {
-      const mapInstance = L.map('container').setView([0, 0], 5);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
-      }).addTo(mapInstance);
-      setMap(mapInstance);
+        if (!map) {
+            const mapInstance = L.map('container').setView([0, 0], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
+            }).addTo(mapInstance);
+            setMap(mapInstance);
+        }
+
     } catch (error) {
       console.error('Error loading map:', error);
     }
   };
+
    const handleEditButton = () => {
        history.push("/edit/");
    }
@@ -125,6 +132,40 @@ const handleCancelClick = () => {
         fileInput.click();
     };
 
+    function handleEditNameClick(event) {
+        event.stopPropagation();
+        toggleEdit();
+    }
+
+    function toggleEdit() {
+        let newActive = !editActive;
+        if (newActive) {
+            store.setMapNameEditActive();
+        }
+        setEditActive(newActive);
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            //let id = event.target.id.substring("Map-".length);
+            store.changeMapName(store.currentMap._id, text);
+            toggleEdit();
+        }
+    }
+    function handleUpdateText(event) {
+        setText(event.target.value);
+    }
+
+    function handleToogleopen(event){
+        // if (store.currentList != null){setOpen(!open);}
+        setOpen(!open);
+     }
+
+    let selectClass = "unselected-map-card";
+    if (store.currentMap) {
+        selectClass = "selected-map-card";
+    }
+
 
    let listCard = "";
     if (store) {
@@ -132,7 +173,6 @@ const handleCancelClick = () => {
         <div>
             {
                 store.idNamePairs.filter((pair) => (pair.authorName == auth.user.firstName+" "+auth.user.lastName)).map((pair) => (
-                
                     <MapList
                         key={pair._id}
                         idNamePair={pair}
@@ -158,19 +198,39 @@ const handleCancelClick = () => {
            <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
        </Box>
        
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px" ,
-            overflow: 'auto'}}>  
+       <List sx={{ bgcolor: '#ABC8B2', mb:"20px",
+            overflow: 'scroll'}}>  
             {listCard}
         </List>
         <MUIDeleteModal/>
        </div>
-       <div id = "map-name" style={{fontSize: '2rem'}}>Map1 <IconButton ><EditIcon style={{fontSize: '2rem'}}></EditIcon></IconButton>
+       <div id = "map-name" style={{fontSize: '2rem'}}>
+       {editActive ? (
+        <TextField
+          type="text"
+          onKeyPress={handleKeyPress}
+          onChange={handleUpdateText}
+          autoFocus
+        />
+       ) : (
+        <>
+          {store.currentMap != null? store.currentmapName: "" }
+          <IconButton onClick={handleEditNameClick}>
+            <EditIcon style={{ fontSize: '2rem' }}></EditIcon>
+          </IconButton>
+        </>
+       )}
        </div>
        <Box  id = "export-close"><ExitToAppIcon style={{fontSize: '2rem'}}></ExitToAppIcon><CloseIcon style={{fontSize: '2rem'}}></CloseIcon></Box>
        <List id = "Mapview" >
+        {store.currentMap == null? (
        <div id = "container" class="element-with-stroke">
-      
-       </div>
+        No Map selected, please select a map or click on  to start a new map editor.
+       </div> ):(
+        <div id = "container" class="element-with-stroke">
+            {loadMap()}
+        </div>
+        )}
       
        <div id = "function-bar" class="element-with-stroke">
        <input

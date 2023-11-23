@@ -19,24 +19,18 @@ function MapList(props) {
 
     const handleSelectMap = (event, id) => {
         console.log("handleLoadList for " + id);
-        store.selectMap(id);
-
+        store.currentmapName = idNamePair.name;
+        store.selectMap(id); 
     }
 
-    
-
-    let selectClass = "unselected-list-card";
-    if (selected) {
-        selectClass = "selected-list-card";
-    }
    
     let cardElement =
     <ListItem
     id={idNamePair._id}
     key={idNamePair._id}
     sx={{ marginTop: '10px', display: 'flex', p: 1 }}
-    style={{ width: '29%', fontSize: '32pt', borderRadius: '25px', border: '1px', backgroundColor: '#e1e4cb' }}
-    className={"map-card"}
+    style={{ width: '29%', left: '30px', fontSize: '32pt', borderRadius: '25px', border: '1px', backgroundColor: '#e1e4cb' }}
+    className={store.currentMap != null && store.currentMap._id == idNamePair._id ? 'map-card-unhover' : 'map-card'}
     onClick={(event) => {
         //handleLoadList(event, idNamePair._id)
         handleMapSelect(event)

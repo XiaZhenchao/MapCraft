@@ -47,7 +47,8 @@ function GlobalStoreContextProvider(props) {
         mapIdMarkedForDeletion: null,
         mapMarkedForDeletion: null,
         isEdition: false,
-        isDeleting: false
+        isDeleting: false,
+        currentmapName: ""
     });
     const history = useHistory();
 
@@ -71,7 +72,8 @@ function GlobalStoreContextProvider(props) {
                     mapCounter: store.mapCounter,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -83,7 +85,8 @@ function GlobalStoreContextProvider(props) {
                     mapCounter: store.mapCounter,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null
+                    mapMarkedForDeletion: null,
+                    currentmapName: ""
                 })
             }
             // CREATE A NEW LIST
@@ -92,10 +95,11 @@ function GlobalStoreContextProvider(props) {
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentMap: payload,
-                    mapCounter: store.mapCounter + 1,
+                    mapCounter: payload.mapCounter,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName
                 })
             }
             // GET ALL THE MAPS SO WE CAN PRESENT THEM
@@ -107,7 +111,8 @@ function GlobalStoreContextProvider(props) {
                     mapCounter: store.mapCounter,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null
+                    mapMarkedForDeletion: null,
+                    currentmapName: ""
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -120,6 +125,7 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: payload.id,
                     mapMarkedForDeletion: payload.map,
+                    currentmapName: ""
                 });
             }
             // UPDATE A LIST
@@ -131,21 +137,23 @@ function GlobalStoreContextProvider(props) {
                     mapCounter: store.mapCounter,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName
                 });
             }
 
             
             // START EDITING A LIST NAME
-            case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
+            case GlobalStoreActionType.SET_MAP_NAME_EDIT_ACTIVE: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentMap: payload,
+                    currentMap: store.currentMap,
                     mapCounter: store.mapCounter,
                     mapNameActive: true,
                     mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName
                 });
             }
            
@@ -159,7 +167,8 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
                     isEdition: payload.isEdition,
-                    isDeleting: payload.isDeleting
+                    isDeleting: payload.isDeleting,
+                    currentmapName: store.currentmapName
                 });
             }
             default:
@@ -187,6 +196,7 @@ function GlobalStoreContextProvider(props) {
     store.createNewMap = async function () {
         let newMapName = "Map" + store.mapCounter;
         let username = auth.user.firstName+" " + auth.user.lastName;
+        const counter = store.mapCounter + 1;
         const response = await api.createMap(newMapName, auth.user.email, username);
         console.log("createNewMap response: " + response);
         store.loadIdNamePairs();
@@ -195,7 +205,10 @@ function GlobalStoreContextProvider(props) {
             let newMap = response.data.map;
             storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_MAP,
-                payload: newMap,
+                payload: {
+                    map: newMap,
+                    mapCounter: counter,
+                }
             }
             );
 
@@ -281,6 +294,38 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
 
+    store.changeMapName = function (id, newName) {
+        // GET THE LIST
+        async function asyncChangeMapName(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                map.name = newName;
+                async function updateMap(map) {
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.CHANGE_MAP_NAME,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                        map: map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncChangeMapName(id);
+    }
+
     store.hideModals = () => {
         storeReducer({
             type: GlobalStoreActionType.HIDE_MODALS,
@@ -295,6 +340,14 @@ function GlobalStoreContextProvider(props) {
     store.isEditMapName = () => {
         return store.mapNameActive === true || store.isDeleteMapModalOpen() === true;
     }
+
+    store.setMapNameEditActive = function () {
+        storeReducer({
+            type: GlobalStoreActionType.SET_MAP_NAME_EDIT_ACTIVE,
+            payload: null
+        });
+    }
+
 
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
