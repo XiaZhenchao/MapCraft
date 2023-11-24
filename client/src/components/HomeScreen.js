@@ -37,16 +37,26 @@ const HomeScreen = () => {
    const [editActive, setEditActive] = useState(false);
    const [text, setText] = useState("");
    const [open, setOpen] = useState(false);
-
+    const [current, setcurrent] = useState(null)
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
 
     useEffect(() => {
-        if (store.currentMap !== null) {
-          loadMap();
+        if (store.currentMap != null) {
+            if (current == null){
+                setcurrent(store.currentMap)
+                loadMap();
+            }
+            else{
+                if (current!=store.currentMap){
+                    map.remove(); 
+                    setMap(null);
+                }
+                loadMap();
+            }
         }
-      }, []);
+      }, [store.currentMap]);
 
     const handleFileInputChange = () => {
         const fileInput = document.getElementById('fileInput');
@@ -92,17 +102,14 @@ const HomeScreen = () => {
     };
 
  
-
+    
   const loadMap = () => {
     try {
-        if (!map) {
             const mapInstance = L.map('container').setView([0, 0], 5);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
             }).addTo(mapInstance);
             setMap(mapInstance);
-        }
-
     } catch (error) {
       console.error('Error loading map:', error);
     }
@@ -124,6 +131,14 @@ const HomeScreen = () => {
    }
    const handlePrivate=()=>{
         setIsBorderVisible(!isBorderVisible);
+   }
+
+   const handleCloseButton =() =>{
+        store.closeCurrentMap();
+        setcurrent(null);
+        map.remove(); 
+        setMap(null);
+        
    }
 
    const handleSelectFileButton = () => {
@@ -221,16 +236,19 @@ const HomeScreen = () => {
         </>
        )}
        </div>
-       <Box  id = "export-close"><ExitToAppIcon style={{fontSize: '2rem'}}></ExitToAppIcon><CloseIcon style={{fontSize: '2rem'}}></CloseIcon></Box>
+       <Box  id = "export-close">
+        <IconButton>
+            <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
+        </IconButton>
+        <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
+        </CloseIcon>
+        </IconButton>
+        </Box>
        <List id = "Mapview" >
         {store.currentMap == null? (
        <div id = "container" class="element-with-stroke">
         No Map selected, please select a map or click on  to start a new map editor.
-       </div> ):(
-        <div id = "container" class="element-with-stroke">
-            {loadMap()}
-        </div>
-        )}
+       </div> ):<div id = "container" class="element-with-stroke"></div>}
       
        <div id = "function-bar" class="element-with-stroke">
        <input
