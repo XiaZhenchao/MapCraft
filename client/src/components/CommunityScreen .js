@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import AppBanner from './AppBanner';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import MapList from './MapList.js';
-import LockIcon from '@mui/icons-material/Lock';
 import SortIcon from '@mui/icons-material/Sort';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
@@ -27,8 +27,8 @@ import Face4Icon from '@mui/icons-material/Face4';
 */
 const CommunityScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-    let appBanner = <AppBanner />
-
+    const { auth } = useContext(AuthContext);
+    const [current, setcurrent] = useState(null)
     const [isExpanded, setIsExpanded] = useState(false);
     const [buttonText, setButtonText] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
@@ -40,17 +40,35 @@ const CommunityScreen = () => {
     loadMap();
   }, []); // The empty dependency array ensures it runs once on mount
 
+  useEffect(() => {
+    if (store.currentMap != null) {
+        if (current == null){
+            setcurrent(store.currentMap)
+            loadMap();
+        }
+        else{
+            if (current!=store.currentMap){
+                map.remove(); 
+                setMap(null);
+            }
+            loadMap();
+        }
+    }
+  }, [store.currentMap]);
+
   const loadMap = () => {
     try {
-      const mapInstance = L.map('community-container').setView([0, 0], 5);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
-      }).addTo(mapInstance);
-      setMap(mapInstance);
+            const mapInstance = L.map('community-container').setView([0, 0], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
+            }).addTo(mapInstance);
+            setMap(mapInstance);
     } catch (error) {
       console.error('Error loading map:', error);
     }
   };
+
+
    const handleEditButton = () => {
        history.push("/edit/");
    }
@@ -61,6 +79,35 @@ const CommunityScreen = () => {
    const handleselect = (value) => {
     setButtonText(value)
     setIsExpanded(!isExpanded);
+   }
+
+   const handleCloseButton =() =>{
+    store.closeCurrentMap();
+    setcurrent(null);
+    map.remove(); 
+    setMap(null);
+    
+}
+
+   let listCard = "";
+   if (store) {
+       listCard = 
+       <div>
+           {
+               store.idNamePairs.filter((pair) => (pair.authorName == auth.user.firstName+" "+auth.user.lastName)).map((pair) => (
+                   <MapList
+                       key={pair._id}
+                       idNamePair={pair}
+                       publish = {pair.publishStatus}
+                       publishDate = {pair.publishDate}
+                       likes = {pair.likes}
+                       disLikes = {pair.disLikes}
+                   />
+               ))
+           }
+       
+       </div>
+
    }
 
   
@@ -79,40 +126,28 @@ const CommunityScreen = () => {
         
       )}
        </Box>
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px" ,
-            overflow: 'auto'}}id = "list" >
-       {
-           <MapList  style ={{ borderColor:'#e1ed05'} } >111</MapList>               
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map1</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-
-           <div className="underscore"></div>
-           {
-           <MapList></MapList>
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map2</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-           <div className="underscore"></div>
-           {
-           <MapList></MapList>               
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map3</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-           <div className="underscore"></div>
-           {
-           <MapList></MapList>               
-           }
-           <Box id = "map-info"><div>created at</div><div>Map name: Map4</div></Box>
-           <Box id = "map-info"><div>2023/11/14</div><div>by Jeff</div></Box>
-           <div className="underscore"></div>
-       </List>
+       <List sx={{ bgcolor: '#ABC8B2', mb:"20px",
+            overflow: 'scroll'}}>  
+            {listCard}
+        </List>
        </div>
-       <div id = "map-name" style={{fontSize: '2rem'}}>Map1 <IconButton ><EditIcon style={{fontSize: '2rem'}}></EditIcon></IconButton>
+       <div id = "map-name" style={{fontSize: '2rem'}}>
+          {store.currentMap != null? store.currentmapName: "" }       
        </div>
-       <Box  id = "export-close"><ExitToAppIcon style={{fontSize: '2rem'}}></ExitToAppIcon><CloseIcon style={{fontSize: '2rem'}}></CloseIcon></Box>
-       <List id = "Mapview" >
-       <div id = "big-container" class="element-with-stroke">
+       <Box  id = "export-close">
+        <IconButton>
+            <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
+        </IconButton>
+        <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
+        </CloseIcon>
+        </IconButton>
+        </Box>
+       
+        <List id = "Mapview" >
+        {store.currentMap == null? (
+       <div id = "container" class="element-with-stroke">
+        No Map selected, please select a map or click on  to start a new map editor.
+       </div> ):<div id = "big-container" class="element-with-stroke">
        <div id = "community-container"></div>
        <div id = "report"><Box sx={{  alignItems: 'center'}}>Report<Button id = "report-box" ></Button></Box></div>
         
@@ -128,6 +163,7 @@ const CommunityScreen = () => {
             </div>
         </div>
         </div>
+        }
         </List>
        </div>)
 }
