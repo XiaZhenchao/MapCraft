@@ -82,7 +82,7 @@ export default function ResetPassword() {
                             required
                             name="Reset Your New Password"
                             label="Reset Your New Password"
-                            type="Reset Your New Password"
+                            type="password"
                             onChange={(e) => setNewPassword(e.target.value)}
                            
                         />
@@ -96,7 +96,7 @@ export default function ResetPassword() {
                             required
                             name="Confirm Your New Password"
                             label="Confirm Your New Password"
-                            type="Confirm Your New Password"
+                            type="password"
                             onChange={(e) => setVerifyNewPassword(e.target.value)}
                             
                             
