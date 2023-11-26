@@ -170,7 +170,7 @@ updateMapById = async (req, res) => {
 
                     list.name = body.map.name;
                     list.songs = body.map.songs;
-                    list.publish = body.map.publish;
+                    list.publishStatus = body.map.publishStatus;
                     list.publishDate = body.map.publishDate;
                     list.likes = body.map.likes;
                     list.disLikes = body.map.disLikes;
