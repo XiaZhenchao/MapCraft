@@ -3,6 +3,7 @@ const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 const nodeMailer = require('nodemailer');
 const crypto = require('crypto');
+const { resolve } = require('path');
 getLoggedIn = async (req, res) => {
     try {
         let userId = auth.verifyUser(req);
@@ -22,7 +23,7 @@ getLoggedIn = async (req, res) => {
             user: {
                 firstName: loggedInUser.firstName,
                 lastName: loggedInUser.lastName,
-                email: loggedInUser.email
+                email: loggedInUser.email,
             }
         })
     } catch (err) {
@@ -36,7 +37,7 @@ loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (!email || !password ) {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
@@ -44,6 +45,7 @@ loginUser = async (req, res) => {
 
         const existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
+        console.log("existingUserrole: " + existingUser.role);
         if (!existingUser) {
             return res
                 .status(401)
@@ -77,7 +79,8 @@ loginUser = async (req, res) => {
             user: {
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,  
-                email: existingUser.email              
+                email: existingUser.email,
+                role: existingUser.role            
             }
         })
 
@@ -98,9 +101,9 @@ logoutUser = async (req, res) => {
 
 registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, passwordVerify } = req.body;
-        console.log("create user: " + firstName + " " + lastName + " " + email + " " + password + " " + passwordVerify);
-        if (!firstName || !lastName || !email || !password || !passwordVerify) {
+        const { firstName, lastName, email, password, passwordVerify, role} = req.body;
+        console.log("create user: " + firstName + " " + lastName + " " + email + " " + password + " " + passwordVerify + " " + role);
+        if (!firstName || !lastName || !email || !password || !passwordVerify || !role) {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
@@ -139,7 +142,7 @@ registerUser = async (req, res) => {
         console.log("passwordHash: " + passwordHash);
 
         const newUser = new User({
-            firstName, lastName, email, passwordHash
+            firstName, lastName, email, passwordHash, role
         });
         const savedUser = await newUser.save();
         console.log("new user saved: " + savedUser._id);
@@ -157,7 +160,8 @@ registerUser = async (req, res) => {
             user: {
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,  
-                email: savedUser.email              
+                email: savedUser.email,
+                role: savedUser.role             
             }
         })
 

@@ -135,6 +135,7 @@ function AuthContextProvider(props) {
     auth.getLoggedIn = async function () {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
+            // console.log("auth in response.data.user: "+ response.data.user.role)
             authReducer({
                 type: AuthActionType.SET_LOGGED_IN,
                 payload: {
@@ -143,6 +144,7 @@ function AuthContextProvider(props) {
                 }
             });
         }
+        
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
@@ -170,28 +172,46 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(email, password) {
-        try {
-           const response = await api.loginUser(email, password);
-           if (response.status === 200) {
-               authReducer({
-                   type: AuthActionType.LOGIN_USER,
-                   payload: {
-                       user: response.data.user
-                   }
-               })
-               history.push("/");
-           } 
-        } catch (error) {
-            const message = error.response.data.errorMessage;
-            console.log (message);
+    try {
+        const response = await api.loginUser(email, password);
+        if (response.status === 200) {
             authReducer({
-                type: AuthActionType.LOGIN_USER_ERROR,
+                type: AuthActionType.LOGIN_USER,
                 payload: {
-                    errorMessage: message
+                    user: response.data.user
                 }
-            })
-        }
+            });
+            
+            if(auth.user)
+            {
+                console.log("exist!")
+            }else{
+                console.log("not exist!")
+            }
+            const role = auth.checkUserRole();
+            console.log("role!: "+ role);
+            history.push("/");
+        } 
+    } catch (error) {
+        const message = error.response.data.errorMessage;
+        console.log (message);
+        authReducer({
+            type: AuthActionType.LOGIN_USER_ERROR,
+            payload: {
+                errorMessage: message
+            }
+        });
     }
+}
+
+auth.checkUserRole = () => {
+    if (auth.user) {
+        console.log("auth.user exist");
+        return auth.user.role === 'user' ? 'user' : 'admin';
+    }
+    console.log("auth.user not exist");
+    return null;
+}
 
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
@@ -229,6 +249,8 @@ function AuthContextProvider(props) {
     auth.isResetPasswordModalOpen = () => {
         return auth.currentModal === CurrentModal.RESET_PASSWORD_ERROR;
     }
+
+
     auth.hideModals = () => {
         authReducer({
             type: AuthActionType.HIDE_MODALS,

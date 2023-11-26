@@ -40,6 +40,18 @@ const HomeScreen = () => {
    const [open, setOpen] = useState(false);
     const [current, setcurrent] = useState(null)
     useEffect(() => {
+        // console.log("auth.user in home: "+auth.user.email);
+        // console.log("auth.user in home: "+auth.user.lastName);
+        // console.log("auth.user in home: "+auth.user.firstName);
+        // console.log("auth.user in home: "+auth.user.role);
+        if(auth.user)
+        {
+                if(auth.user.role == "admin")
+            {
+                history.push("/admin-home/")
+            }
+        }
+        // const role = auth.user.role
         store.loadIdNamePairs();
     }, []);
 
