@@ -32,6 +32,7 @@ const HomeScreen = () => {
    const [map, setMap] = useState(null);
    const history = useHistory();
    const [isBorderVisible, setIsBorderVisible] = useState(false);
+   const [publicList, setPublicList]=useState(false);
    const [fileExtension, setFileExtension] = useState(null);
    const [rendering, setRendering] = useState(false);
    const [editActive, setEditActive] = useState(false);
@@ -122,15 +123,23 @@ const HomeScreen = () => {
         store.createNewMap();
    }
 
+   const handlePublishButton = () =>{
+        store.publishMap(store.currentMap._id);
+        console.log("publish done")
+   }
+
    const handleDeleteButton =()=>{
         store.markMapForDeletion(store.currentMap._id);
    }
 
    const handlePublic =()=>{
         setIsBorderVisible(!isBorderVisible);
+        setPublicList(true);
+
    }
    const handlePrivate=()=>{
         setIsBorderVisible(!isBorderVisible);
+        setPublicList(false);
    }
 
    const handleCloseButton =() =>{
@@ -183,11 +192,14 @@ const HomeScreen = () => {
 
 
    let listCard = "";
-    if (store) {
+    //load only public map
+    if (store && publicList) {
+        console.log("public list")
         listCard = 
         <div>
             {
-                store.idNamePairs.filter((pair) => (pair.authorName == auth.user.firstName+" "+auth.user.lastName)).map((pair) => (
+                store.idNamePairs.filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
+                .filter((pair) => pair.publishStatus === true).map((pair) => (
                     <MapList
                         key={pair._id}
                         idNamePair={pair}
@@ -199,6 +211,29 @@ const HomeScreen = () => {
                 ))
             }
         
+        </div>
+
+    }
+    //load only private map
+    else {
+        console.log("private list")
+        listCard = 
+        <div>
+            {
+                store.idNamePairs
+                .filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
+                .filter((pair) => pair.publishStatus === false)
+                    .map((pair) => (
+                        <MapList
+                            key={pair._id}
+                            idNamePair={pair}
+                            publish={pair.publishStatus}
+                            publishDate={pair.publishDate}
+                            likes={pair.likes}
+                            disLikes={pair.disLikes}
+                        />
+                    ))
+            }
         </div>
 
     }
@@ -269,7 +304,8 @@ const HomeScreen = () => {
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Render</Button>
            <Button className='button'
-                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Publish</Button>
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   onClick = {handlePublishButton}>Publish</Button>
            <Button className='button' 
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    onClick={handleDeleteButton}>Delete</Button>

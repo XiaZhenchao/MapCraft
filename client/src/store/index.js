@@ -259,6 +259,40 @@ function GlobalStoreContextProvider(props) {
         }
         asyncSetSelectedMap(id);
     }
+
+    //handle publish for designated map
+    store.publishMap = function (id) {
+        // get the id of unpublished map and publish it
+        async function asyncPublishMap(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                //record the publish date and make it state to true
+                map.publishStatus=true;
+                map.publishDate=new Date();
+                async function updateMap(map) {
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncPublishMap(id);
+    }
+
+
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,
