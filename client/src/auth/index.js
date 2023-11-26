@@ -170,28 +170,34 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(email, password) {
-        try {
-           const response = await api.loginUser(email, password);
-           if (response.status === 200) {
-               authReducer({
-                   type: AuthActionType.LOGIN_USER,
-                   payload: {
-                       user: response.data.user
-                   }
-               })
-               history.push("/");
-           } 
-        } catch (error) {
-            const message = error.response.data.errorMessage;
-            console.log (message);
+    try {
+        const response = await api.loginUser(email, password);
+        if (response.status === 200) {
             authReducer({
-                type: AuthActionType.LOGIN_USER_ERROR,
+                type: AuthActionType.LOGIN_USER,
                 payload: {
-                    errorMessage: message
+                    user: response.data.user
                 }
-            })
-        }
+            });
+            history.push("/");
+            // const role = auth.checkUserRole(); // Invoke the function to get the role
+            // if (role === "user" || role === null) {
+            //     history.push("/");
+            // } else {
+            //     history.push("/admin-home/");
+            // }
+        } 
+    } catch (error) {
+        const message = error.response.data.errorMessage;
+        console.log (message);
+        authReducer({
+            type: AuthActionType.LOGIN_USER_ERROR,
+            payload: {
+                errorMessage: message
+            }
+        });
     }
+}
 
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
@@ -229,6 +235,15 @@ function AuthContextProvider(props) {
     auth.isResetPasswordModalOpen = () => {
         return auth.currentModal === CurrentModal.RESET_PASSWORD_ERROR;
     }
+
+    auth.checkUserRole = () => {
+        if (auth.user) {
+            return auth.user.role === 'user' ? 'user' : 'admin';
+        }
+        return null;
+    }
+
+
     auth.hideModals = () => {
         authReducer({
             type: AuthActionType.HIDE_MODALS,
