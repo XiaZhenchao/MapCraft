@@ -135,6 +135,7 @@ function AuthContextProvider(props) {
     auth.getLoggedIn = async function () {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
+            // console.log("auth in response.data.user: "+ response.data.user.role)
             authReducer({
                 type: AuthActionType.SET_LOGGED_IN,
                 payload: {
@@ -143,6 +144,7 @@ function AuthContextProvider(props) {
                 }
             });
         }
+        
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
@@ -179,13 +181,16 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             });
+            
+            if(auth.user)
+            {
+                console.log("exist!")
+            }else{
+                console.log("not exist!")
+            }
+            const role = auth.checkUserRole();
+            console.log("role!: "+ role);
             history.push("/");
-            // const role = auth.checkUserRole(); // Invoke the function to get the role
-            // if (role === "user" || role === null) {
-            //     history.push("/");
-            // } else {
-            //     history.push("/admin-home/");
-            // }
         } 
     } catch (error) {
         const message = error.response.data.errorMessage;
@@ -197,6 +202,15 @@ function AuthContextProvider(props) {
             }
         });
     }
+}
+
+auth.checkUserRole = () => {
+    if (auth.user) {
+        console.log("auth.user exist");
+        return auth.user.role === 'user' ? 'user' : 'admin';
+    }
+    console.log("auth.user not exist");
+    return null;
 }
 
     auth.logoutUser = async function() {
@@ -234,13 +248,6 @@ function AuthContextProvider(props) {
 
     auth.isResetPasswordModalOpen = () => {
         return auth.currentModal === CurrentModal.RESET_PASSWORD_ERROR;
-    }
-
-    auth.checkUserRole = () => {
-        if (auth.user) {
-            return auth.user.role === 'user' ? 'user' : 'admin';
-        }
-        return null;
     }
 
 

@@ -64,7 +64,7 @@ export default function AppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/community/'>Continue As Guest</Link></MenuItem>
             <MenuItem onClick={handleSetting}><Link to='/setting/'>Setting</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/admin-home/'>Continue As Admin </Link></MenuItem>
+            {/* <MenuItem onClick={handleMenuClose}><Link to='/admin-home/'>Continue As Admin </Link></MenuItem> */}
         </Menu>
     );
     const loggedInMenu = 

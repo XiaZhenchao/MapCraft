@@ -34,32 +34,13 @@ export default function LoginScreen() {
             formData.get('email'),
             formData.get('password')
         );
-
+        
     };
 
     // const handleAdminCheckBox = (event) =>{
 
     // };
-    // const handleSubmit = async (event) => {
-    //     console.log("submit!@");
-    //     event.preventDefault();
-    //     const formData = new FormData(event.currentTarget);
-    //     try {
-    //         const response = await axios.post('/auth/login', {
-    //             email: formData.get('email'), // Corrected property name
-    //             password: formData.get('password') // Corrected property name
-    //         });
-    
-    //         // Handle the response here
-    //         console.log(response.data); // Example: Log the response data
-    
-    //         // If the login is successful, you might want to update the authentication context
-    //         // auth.loginUser(formData.get('email'), formData.get('password'));
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //         // Handle errors here
-    //     }
-    // };
+
     
 
 

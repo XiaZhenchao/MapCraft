@@ -10,7 +10,6 @@ const UserSchema = new Schema(
         passwordHash: { type: String, required: true },
         maplist: [{type: ObjectId, ref: 'Map'}],
         role: { type: String, required: true},
-    
         resetPasswordToken: { type: String },
         resetPasswordExpires: { type: Date },
         resetTokenUsed: { type: Boolean, default: false }

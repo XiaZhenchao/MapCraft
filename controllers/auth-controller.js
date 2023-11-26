@@ -3,6 +3,7 @@ const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 const nodeMailer = require('nodemailer');
 const crypto = require('crypto');
+const { resolve } = require('path');
 getLoggedIn = async (req, res) => {
     try {
         let userId = auth.verifyUser(req);
@@ -36,7 +37,7 @@ loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (!email || !password ) {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
@@ -44,6 +45,7 @@ loginUser = async (req, res) => {
 
         const existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
+        console.log("existingUserrole: " + existingUser.role);
         if (!existingUser) {
             return res
                 .status(401)
@@ -77,7 +79,8 @@ loginUser = async (req, res) => {
             user: {
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,  
-                email: existingUser.email              
+                email: existingUser.email,
+                role: existingUser.role            
             }
         })
 
