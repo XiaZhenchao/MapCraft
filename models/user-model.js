@@ -9,7 +9,7 @@ const UserSchema = new Schema(
         email: { type: String, required: true },
         passwordHash: { type: String, required: true },
         maplist: [{type: ObjectId, ref: 'Map'}],
-        // role: { type: String, required: false},
+        role: { type: String, required: true},
     
         resetPasswordToken: { type: String },
         resetPasswordExpires: { type: Date },

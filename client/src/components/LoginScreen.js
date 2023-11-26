@@ -10,7 +10,6 @@ import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
-
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Paper from '@mui/material/Paper';
@@ -37,6 +36,10 @@ export default function LoginScreen() {
         );
 
     };
+
+    // const handleAdminCheckBox = (event) =>{
+
+    // };
     // const handleSubmit = async (event) => {
     //     console.log("submit!@");
     //     event.preventDefault();
@@ -114,8 +117,16 @@ export default function LoginScreen() {
                             >
                             Sign In
                             </Button>
+  
                         </Grid>
                         
+                        {/* <Grid container justifyContent="center" alignItems="center">
+                            <Checkbox>
+                                onChange={(event) => handleAdminCheckBox(event)}
+                            </Checkbox>
+                            <div>Check if you are admin</div>    
+                        </Grid>   */}
+
                         <Grid container justifyContent="center" alignItems="center">
                              <Link to = "/forgot-password" variant="body2">
                                 Forgot password?
