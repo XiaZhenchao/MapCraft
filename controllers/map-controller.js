@@ -152,6 +152,9 @@ updateMapById = async (req, res) => {
     const body = req.body
     console.log("updateMap: " + JSON.stringify(body));
     console.log("req.body.name: " + req.body.name);
+    console.log("req.body.map.name: " + req.body.map.name);
+    console.log("req.body.map: " + req.body.map);
+    console.log("req.body.map.comment: " + req.body.map.commentObject);
 
     if (!body) {
         return res.status(400).json({
@@ -169,7 +172,6 @@ updateMapById = async (req, res) => {
         }
 
                     list.name = body.map.name;
-                    list.songs = body.map.songs;
                     list.publishStatus = body.map.publishStatus;
                     list.publishDate = body.map.publishDate;
                     list.likes = body.map.likes;

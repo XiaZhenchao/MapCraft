@@ -491,6 +491,14 @@ body {
 }
 
 
+/* #CommentCards{
+  overflow: scroll;
+  background-color: #6495ED;
+  margin-top: 2%;
+  height: 60vh;
+} */
+
+
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-dialog {

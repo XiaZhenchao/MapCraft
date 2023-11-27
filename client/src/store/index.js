@@ -293,10 +293,43 @@ function GlobalStoreContextProvider(props) {
     }
 
 
-    // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
-    // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
-    // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,
-    // showDeleteListModal, and hideDeleteListModal
+    store.setComment = function (id, comment, username) {
+        async function asyncSetComment(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                
+                const singleComment = {
+                    userName: username,
+                    comment: comment,
+                  };
+                  map.commentObject.push(singleComment);
+                //map.commentObject.push({username,comment});
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncSetComment(id);
+    }
+
+
     store.markMapForDeletion = function (id) {
         async function getMapToDelete(id) {
             let response = await api.getMapById(id);

@@ -19,7 +19,8 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import FaceIcon from '@mui/icons-material/Face';
 import Face4Icon from '@mui/icons-material/Face4';
-
+import CommentCard from './CommentCard.js';
+import TextField from '@mui/material/TextField';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -48,6 +49,7 @@ const CommunityScreen = () => {
         }
         else{
             if (current!=store.currentMap){
+               
                 map.remove(); 
                 setMap(null);
             }
@@ -68,6 +70,12 @@ const CommunityScreen = () => {
     }
   };
 
+   const handleCommentInput = (event) =>{
+    if(event.keyCode == 13){
+        let temp = event.target.value
+        store.setComment(store.currentMap._id,temp,auth.user.firstName+" "+auth.user.lastName)
+    }
+   }
 
    const handleEditButton = () => {
        history.push("/edit/");
@@ -149,19 +157,46 @@ const CommunityScreen = () => {
         No Map selected, please select a map or click on  to start a new map editor.
        </div> ):<div id = "big-container" class="element-with-stroke">
        <div id = "community-container"></div>
+       
        <div id = "report"><Box sx={{  alignItems: 'center'}}>Report<Button id = "report-box" ></Button></Box></div>
-        
-       <div id = "comment">
-            <div>&nbsp;&nbsp;<Face4Icon></Face4Icon> Add Comment...</div>
-            <span>___________________________________________________________________________</span>
-            <div>&nbsp;&nbsp;<FaceIcon></FaceIcon>@Jack 6 months ago</div>&nbsp;&nbsp;
-            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is a really great idea!</div>
-            <div>
-            &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<IconButton><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>
-             <IconButton><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>
-                <Button id = "report-box"></Button>
-            </div>
-        </div>
+       <div>
+       <div>
+       <div>
+    <Box>
+        <TextField
+            id="filled-basic"
+            label="Add Comment"
+            variant="filled"
+            style={{
+                width: '100%',
+                backgroundColor: '#FFFFFF',
+                borderRadius: '15px',
+                marginTop: '2%',
+                padding: '1%',
+            }}
+            onKeyDown={handleCommentInput}
+        />
+    </Box>
+    <div id="CommentCards" style={{ overflow: 'scroll', backgroundColor: '#6495ED', marginTop: '2%', height: '60vh' }}>
+        <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '60%' }}>
+            {store.currentMap && store.currentMap.commentObj && store.currentMap.commentObj.length > 0 ? (
+                store.currentMap.commentObj.map((commentObj, index) => (
+                    <CommentCard
+                        key={index}
+                        username={commentObj.username}
+                        comment={commentObj.comment}
+                    />
+                ))
+            ) : (
+                <p>No comments available</p>
+            )}
+        </Box>
+         <p>No comments available</p>
+    </div>
+</div>
+</div>
+               </div>
+               
         </div>
         }
         </List>
