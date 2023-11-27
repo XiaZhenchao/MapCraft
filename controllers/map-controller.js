@@ -70,21 +70,25 @@ deleteMap = async (req, res) => {
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     Map.findOneAndDelete({ _id: req.params.id }, () => {
+                        // Remove the map ID from the user's maplist
+                        user.maplist = user.maplist.filter(mapId => mapId.toString() !== req.params.id);
+                        // Save the updated user
+                        user.save();
                         return res.status(200).json({success: true});
                     }).catch(err => console.log(err))
                 }
                 else {
                     console.log("incorrect user!");
-                    return res.status(400).json({ 
-                        errorMessage: "authentication error" 
+                    return res.status(400).json({
+                        errorMessage: "authentication error"
                     });
                 }
             });
         }
         asyncFindUser(map);
     })
-}
-
+ }
+ 
 getMapById = async (req, res) => {
     // console.log("Find Playlist with id: " + JSON.stringify(req.params.id));
 

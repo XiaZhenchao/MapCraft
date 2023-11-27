@@ -75,6 +75,17 @@ export const resetPassword = (newPassword, verifyNewPassword, resetToken) => {
         throw error;
     });
 };
+export const banUserByEmail = (email) => {
+    return api.post('/banUser', { email })
+      .then(response => {
+        console.log("User banned successfully");
+        return response.data; // Return the data from the resolved Promise
+      })
+      .catch(error => {
+        console.error("Error banning user by email:", error);
+        throw error;
+      });
+  };
 
 const apis = {
     getLoggedIn,
@@ -82,7 +93,8 @@ const apis = {
     loginUser,
     logoutUser,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    banUserByEmail,
 }
 
 export default apis

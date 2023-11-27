@@ -19,8 +19,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import FaceIcon from '@mui/icons-material/Face';
 import Face4Icon from '@mui/icons-material/Face4';
-import CommentCard from './CommentCard.js';
-import TextField from '@mui/material/TextField';
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -89,6 +88,11 @@ const CommunityScreen = () => {
     setIsExpanded(!isExpanded);
    }
 
+   const handleBanUserButton = () =>{
+    const ownerEmail=store.currentMap.ownerEmail;
+    auth.banUserByEmail(ownerEmail);
+   }
+
    const handleCloseButton =() =>{
     store.closeCurrentMap();
     setcurrent(null);
@@ -102,7 +106,7 @@ const CommunityScreen = () => {
        listCard = 
        <div>
            {
-               store.idNamePairs.filter((pair) => (pair.authorName == auth.user.firstName+" "+auth.user.lastName)).map((pair) => (
+               store.idNamePairs.filter((pair) => pair.publishStatus === true).map((pair) => (
                    <MapList
                        key={pair._id}
                        idNamePair={pair}
@@ -143,6 +147,11 @@ const CommunityScreen = () => {
           {store.currentMap != null? store.currentmapName: "" }       
        </div>
        <Box  id = "export-close">
+       {auth.user.role === "admin" && <IconButton onClick={handleBanUserButton}>
+                        <PersonOffIcon style={{ fontSize: '1.5rem', color: 'red' }} />
+
+                    </IconButton>
+        }
         <IconButton>
             <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
         </IconButton>

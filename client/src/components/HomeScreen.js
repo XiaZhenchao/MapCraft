@@ -19,6 +19,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import MUIDeleteModal from './MUIDeleteModal.js';
 import TextField from '@mui/material/TextField';
+import toGeoJSON from 'togeojson';
+import * as shapefile from 'shapefile';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -49,6 +51,9 @@ const HomeScreen = () => {
                 if(auth.user.role == "admin")
             {
                 history.push("/admin-home/")
+            }
+            else if(auth.user.role == "banned"){
+                auth.logoutUser();
             }
         }
         // const role = auth.user.role
@@ -100,6 +105,106 @@ const HomeScreen = () => {
             uploadButton.disabled = false;
         }
     };
+
+    const handleRenderButtonClick = () => {
+    setRendering( rendering );
+    if(fileExtension==="json"){
+        renderGeoJSON();
+        setRendering( rendering );
+    }
+    if(fileExtension==="kml"){
+        renderKMLFile();
+        setRendering( rendering );
+    }
+    if(fileExtension==="shp"){
+       renderShpFile();
+       setRendering( rendering );
+    }
+};
+
+
+const renderShpFile = () => {
+    const reader = new FileReader();// FileReader class for reading file
+    if (map) {// if map variable from state exists(load map function excute successfully)
+      const thisMap = map;//assgin map variable from state
+      reader.onload = async (e) => {// event handler for FileReader
+        try {
+            const arrayBuffer = e.target.result; // FileReader result is an ArrayBuffer
+            const geojsonData = await shapefile.read(arrayBuffer);
+  
+          const geojsonLayer = L.geoJSON(geojsonData).addTo(thisMap);//adds the geojason layer to the leaft map.
+  
+          thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
+        } catch (error) {
+          console.error('Error rendering Shapefile:', error);
+        }
+      };
+  
+      reader.readAsArrayBuffer(selectedFile);//used to read the contents of the specified file
+    }
+  };
+
+
+  const renderGeoJSON = () => {
+    const reader = new FileReader();// FileReader class for reading file
+    if (map) {// if map variable from state exists(load map function excute successfully)
+        const thisMap = map;//assgin map variable from state
+        reader.onload = (e) => {// event handler for FileReader
+            try {
+                const geojsonData = JSON.parse(e.target.result); //Parse the data of GeoJSON file
+                const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
+                    onEachFeature : onEachFeature //calls oneachFeature function
+                }).addTo(thisMap); //adds the geojason layer to the leaft map.
+
+            function onEachFeature(feature, layer) { //onEachFeature function
+                let featureArray = []; //create an empty array to store all the features
+                 if (feature.properties) {
+                    for (let i in feature.properties) { //for loop to loop the feature
+                        featureArray.push(i + ": " + feature.properties[i]);//put the feature into the arrayls
+                    }
+
+                    layer.bindTooltip(featureArray.join("<br />"));
+                }
+            }
+
+            thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
+            }
+            catch (error) {
+                console.error('Error rendering GeoJSON:', error);
+            }
+        }
+
+    reader.readAsText(selectedFile);//used to read the contents of the specified file
+    };
+}
+
+
+const renderKMLFile = () => {
+    const reader = new FileReader(); // FileReader class for reading file
+    if (map) {// if map variable from state exists(load map function excute successfully)
+        const thisMap = map; //assgin map variable from state
+        reader.onload = (e) => { // event handler for FileReader
+        const kmlContent = e.target.result; 
+        const geojson = toGeoJSON.kml(new DOMParser().parseFromString(kmlContent, 'text/xml')); //Parse the data from KML file into GeoJSON type
+        const geojsonLayer = L.geoJSON(geojson, {
+            onEachFeature : onEachFeature
+         }).addTo(thisMap);
+
+         function onEachFeature(feature, layer) {
+            let featureArray = [];
+             if (feature.properties) {
+                for (let i in feature.properties) {
+                    featureArray.push(i + ": " + feature.properties[i]);
+                }
+
+                layer.bindTooltip(featureArray.join("<br />"));
+             }
+         }
+         thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
+         }
+    reader.readAsText(selectedFile); //intiate the selected file
+    }
+}
    
     const handleCancelClick = () => {
         const fileInput = document.getElementById('fileInput');
@@ -314,7 +419,8 @@ const HomeScreen = () => {
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    onClick={handleEditButton}>Edit</Button>
            <Button className='button'
-                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Render</Button>
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   onClick={handleRenderButtonClick}>Render</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    onClick = {handlePublishButton}>Publish</Button>

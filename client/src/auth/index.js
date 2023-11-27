@@ -17,7 +17,8 @@ export const AuthActionType = {
     FORGOT_PASSWORD: "FORGOT_PASSWORD",
     RESET_PASSWORD: "RESET_PASSWORD",
     FORGOT_PASSWORD_ERROR: "FORGOT_PASSWORD_ERROR",
-    RESET_PASSWORD_ERROR: "RESET_PASSWORD_ERROR"
+    RESET_PASSWORD_ERROR: "RESET_PASSWORD_ERROR",
+    BAN_USER: "BAN_USER",
 }
 
 const CurrentModal = {
@@ -123,6 +124,14 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     message: payload.errorMessage
+                })
+                
+            }
+
+            case AuthActionType.BAN_USER: {
+                return setAuth({
+                    user: null, //payload.user,
+                    loggedIn: false,
                 })
                 
             }
@@ -298,7 +307,17 @@ auth.checkUserRole = () => {
         }
     };
 
-
+    auth.banUserByEmail = async function (email) {
+        const response = await api.banUserByEmail(email);  // You'll need to implement this API call
+        if (response.status === 200) {
+            authReducer({
+                type: AuthActionType.BAN_USER,
+                payload: {
+                    //user: response.data.user
+                }
+            });
+            console.log("User has been banned.");
+        }};
 
 
     return (
