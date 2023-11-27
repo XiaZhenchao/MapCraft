@@ -19,9 +19,10 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import FaceIcon from '@mui/icons-material/Face';
 import Face4Icon from '@mui/icons-material/Face4';
+import PersonOffIcon from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
-import CommentCard from './CommentCard.js'
-import PersonOffIcon from '@mui/icons-material/PersonOff';
+import CommentCard from './CommentCard.js';
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -162,56 +163,53 @@ const CommunityScreen = () => {
         </IconButton>
         </Box>
        
-        <List id = "Mapview" >
+        <Box id = "Mapview" style={{ maxHeight: '800px', overflowY: 'auto' }} >
         {store.currentMap == null? (
-       <div id = "container" class="element-with-stroke">
+       <div id = "container_another" class="element-with-stroke">
         No Map selected, please select a map or click on  to start a new map editor.
        </div> ):<div id = "big-container" class="element-with-stroke">
        <div id = "community-container"></div>
-       
-       <div id = "report"><Box sx={{  alignItems: 'center'}}>Report<Button id = "report-box" ></Button></Box></div>
-       <div>
-       <div>
-       <div>
-    <Box>
-        <TextField
+        </div>
+       }
+
+        <div id="CommentCards">
+        <Box>
+            <div><Box>{auth.user.firstName + " " + auth.user.lastName} :</Box>
+            <TextField
             id="filled-basic"
             label="Add Comment"
             variant="filled"
             style={{
-                width: '100%',
-                backgroundColor: '#FFFFFF',
+                width: '98%',
+                backgroundColor: 'transparent',
                 borderRadius: '15px',
-                marginTop: '2%',
+                marginTop: '0%',
                 padding: '1%',
             }}
             onKeyDown={handleCommentInput}
-        />
+        /></div>
+        
     </Box>
-    <div id="CommentCards" style={{ overflow: 'scroll', backgroundColor: '#6495ED', marginTop: '2%', height: '60vh' }}>
-        <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '60%' }}>
-            {store.currentMap && store.currentMap.commentObj && store.currentMap.commentObj.length > 0 ? (
-                store.currentMap.commentObj.map((commentObj, index) => (
-                    <CommentCard
-                        key={index}
-                        username={commentObj.username}
-                        comment={commentObj.comment}
-                    />
-                ))
-            ) : (
-                <p>No comments available</p>
-            )}
-        </Box>
-         <p>No comments available</p>
-    </div>
-</div>
-</div>
-               </div>
-               
+
+            <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
+                {store.currentMap && store.currentMap.commentObj && store.currentMap.commentObj.length > 0 ? (
+                    store.currentMap.commentObj.map((commentObj, index) => (
+                        <CommentCard
+                            key={index}
+                            username={commentObj.username}
+                            comment={commentObj.comment}
+                        />
+                    ))
+                ) : (
+                    <p>No comments available</p>
+                )}
+            </Box>
+            <p>No comments available</p>
         </div>
-        }
-        </List>
-       </div>)
+
+
+       </Box>
+    </div>)
 }
 
 export default CommunityScreen;
