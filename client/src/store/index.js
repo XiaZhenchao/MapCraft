@@ -93,9 +93,9 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CREATE_NEW_MAP: {                
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentMap: payload,
-                    mapCounter: payload.mapCounter,
+                    idNamePairs: payload.idNamePairs,
+                    currentMap: payload.map,
+                    mapCounter: store.mapCounter+1,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
@@ -196,24 +196,28 @@ function GlobalStoreContextProvider(props) {
     store.createNewMap = async function () {
         let newMapName = "Map" + store.mapCounter;
         let username = auth.user.firstName+" " + auth.user.lastName;
-        const counter = store.mapCounter + 1;
         const response = await api.createMap(newMapName, auth.user.email, username);
         console.log("createNewMap response: " + response);
-        store.loadIdNamePairs();
+        // store.loadIdNamePairs();
         if (response.status === 201) {
             //tps.clearAllTransactions();
             let newMap = response.data.map;
-            storeReducer({
-                type: GlobalStoreActionType.CREATE_NEW_MAP,
-                payload: {
-                    map: newMap,
-                    mapCounter: counter,
+            async function asyncLoadIdNamePairs() {
+                const response = await api.getMapPairs();
+                if (response.data.success) {
+                    let array = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.CREATE_NEW_MAP,
+                        payload: {
+                            map: newMap,
+                            idNamePairs: array
+                        }
+                    });
                 }
-            }
-            );
-
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            //history.push("/map/" + newMap._id);
+                else{
+                    console.log("API FAILED TO GET THE MAP PAIRS");
+                }
+            }asyncLoadIdNamePairs();
         }
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
