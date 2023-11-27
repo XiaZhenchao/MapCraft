@@ -94,7 +94,7 @@ const CommunityScreen = () => {
        listCard = 
        <div>
            {
-               store.idNamePairs.filter((pair) => (pair.authorName == auth.user.firstName+" "+auth.user.lastName)).map((pair) => (
+               store.idNamePairs.filter((pair) => pair.publishStatus === true).map((pair) => (
                    <MapList
                        key={pair._id}
                        idNamePair={pair}
