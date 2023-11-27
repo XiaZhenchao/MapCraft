@@ -141,10 +141,12 @@ const CommunityScreen = () => {
         
       )}
        </Box>
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px",
-            overflow: 'scroll'}}>  
+       <div style={{ width: '29%', overflow: 'scroll' }}>
+        <List sx={{ bgcolor: '#ABC8B2', mb:"20px"}}>  
             {listCard}
         </List>
+       </div>
+       
        </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>
           {store.currentMap != null? store.currentmapName: "" }       
@@ -163,7 +165,7 @@ const CommunityScreen = () => {
         </IconButton>
         </Box>
        
-        <Box id = "Mapview" style={{ maxHeight: '800px', overflowY: 'auto' }} >
+        <Box id = "Mapview" style={{ maxHeight: '800px', maxWidth: '780px', overflowY: 'auto' }} >
         {store.currentMap == null? (
        <div id = "container_another" class="element-with-stroke">
         No Map selected, please select a map or click on  to start a new map editor.
@@ -174,7 +176,8 @@ const CommunityScreen = () => {
 
         <div id="CommentCards">
         <Box>
-            <div><Box>{auth.user.firstName + " " + auth.user.lastName} :</Box>
+            <br></br>
+            <div><Box> {auth.user.firstName + " " + auth.user.lastName} :</Box>
             <TextField
             id="filled-basic"
             label="Add Comment"

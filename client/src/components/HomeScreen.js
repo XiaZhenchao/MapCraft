@@ -365,10 +365,11 @@ const renderKMLFile = () => {
            <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
        </Box>
        
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px",
-            overflow: 'scroll'}}>  
+       <div style={{ width: '29%', overflow: 'scroll' }}>
+        <List sx={{ bgcolor: '#ABC8B2', mb:"20px"}}>  
             {listCard}
         </List>
+       </div>
         <MUIDeleteModal/>
        </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>
