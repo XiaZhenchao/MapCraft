@@ -68,7 +68,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentMAP: null,
+                    currentMap: null,
                     mapCounter: store.mapCounter,
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,

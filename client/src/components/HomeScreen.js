@@ -52,6 +52,9 @@ const HomeScreen = () => {
             {
                 history.push("/admin-home/")
             }
+            else if(auth.user.role == "banned"){
+                auth.logoutUser();
+            }
         }
         // const role = auth.user.role
         store.loadIdNamePairs();

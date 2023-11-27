@@ -299,6 +299,27 @@ resetPassword = async (req, res) => {
     }
 }
 
+banUserByEmail = async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      // Find the user by email
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      // Update user role to 'banned'
+      user.role = 'banned';
+      await user.save();
+  
+      res.status(200).json({ success: true, message: 'User banned successfully' });
+    } catch (error) {
+      console.error('Error banning user by email:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
 
 
 module.exports = {
@@ -307,5 +328,6 @@ module.exports = {
     loginUser,
     logoutUser,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    banUserByEmail
 }

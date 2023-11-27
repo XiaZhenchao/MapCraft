@@ -9,5 +9,6 @@ router.get('/logout', AuthController.logoutUser)
 router.get('/loggedIn', AuthController.getLoggedIn)
 router.post('/forgot-password', AuthController.forgotPassword);
 router.put('/reset-password', AuthController.resetPassword)
+router.post('/banUser', AuthController.banUserByEmail);
 
 module.exports = router
