@@ -29,7 +29,7 @@ function MapList(props) {
     id={idNamePair._id}
     key={idNamePair._id}
     sx={{ marginTop: '10px', display: 'flex', p: 1 }}
-    style={{ width: '29%', left: '30px', fontSize: '32pt', borderRadius: '25px', border: '1px', backgroundColor: '#e1e4cb' }}
+    style={{ width: '90%', left: '30px', fontSize: '32pt', borderRadius: '25px', border: '1px', backgroundColor: '#e1e4cb' }}
     className={store.currentMap != null && store.currentMap._id == idNamePair._id ? 'map-card-unhover' : 'map-card'}
     onClick={(event) => {
         //handleLoadList(event, idNamePair._id)

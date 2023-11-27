@@ -19,7 +19,9 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import FaceIcon from '@mui/icons-material/Face';
 import Face4Icon from '@mui/icons-material/Face4';
-import PersonOffIcon from '@mui/icons-material/PersonOff';
+import PersonOffIcon from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import CommentCard from './CommentCard.js';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -49,6 +51,7 @@ const CommunityScreen = () => {
         }
         else{
             if (current!=store.currentMap){
+               
                 map.remove(); 
                 setMap(null);
             }
@@ -69,6 +72,12 @@ const CommunityScreen = () => {
     }
   };
 
+   const handleCommentInput = (event) =>{
+    if(event.keyCode == 13){
+        let temp = event.target.value
+        store.setComment(store.currentMap._id,temp,auth.user.firstName+" "+auth.user.lastName)
+    }
+   }
 
    const handleEditButton = () => {
        history.push("/edit/");
@@ -132,10 +141,12 @@ const CommunityScreen = () => {
         
       )}
        </Box>
-       <List sx={{ bgcolor: '#ABC8B2', mb:"20px",
-            overflow: 'scroll'}}>  
+       <div style={{ width: '29%', overflow: 'scroll' }}>
+        <List sx={{ bgcolor: '#ABC8B2', mb:"20px"}}>  
             {listCard}
         </List>
+       </div>
+       
        </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>
           {store.currentMap != null? store.currentmapName: "" }       
@@ -154,29 +165,54 @@ const CommunityScreen = () => {
         </IconButton>
         </Box>
        
-        <List id = "Mapview" >
+        <Box id = "Mapview" style={{ maxHeight: '800px', maxWidth: '780px', overflowY: 'auto' }} >
         {store.currentMap == null? (
-       <div id = "container" class="element-with-stroke">
+       <div id = "container_another" class="element-with-stroke">
         No Map selected, please select a map or click on  to start a new map editor.
        </div> ):<div id = "big-container" class="element-with-stroke">
        <div id = "community-container"></div>
-       <div id = "report"><Box sx={{  alignItems: 'center'}}>Report<Button id = "report-box" ></Button></Box></div>
+        </div>
+       }
+
+        <div id="CommentCards">
+        <Box>
+            <br></br>
+            <div><Box> {auth.user.firstName + " " + auth.user.lastName} :</Box>
+            <TextField
+            id="filled-basic"
+            label="Add Comment"
+            variant="filled"
+            style={{
+                width: '98%',
+                backgroundColor: 'transparent',
+                borderRadius: '15px',
+                marginTop: '0%',
+                padding: '1%',
+            }}
+            onKeyDown={handleCommentInput}
+        /></div>
         
-       <div id = "comment">
-            <div>&nbsp;&nbsp;<Face4Icon></Face4Icon> Add Comment...</div>
-            <span>___________________________________________________________________________</span>
-            <div>&nbsp;&nbsp;<FaceIcon></FaceIcon>@Jack 6 months ago</div>&nbsp;&nbsp;
-            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is a really great idea!</div>
-            <div>
-            &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<IconButton><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>
-             <IconButton><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>
-                <Button id = "report-box"></Button>
-            </div>
+    </Box>
+
+            <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
+                {store.currentMap && store.currentMap.commentObj && store.currentMap.commentObj.length > 0 ? (
+                    store.currentMap.commentObj.map((commentObj, index) => (
+                        <CommentCard
+                            key={index}
+                            username={commentObj.username}
+                            comment={commentObj.comment}
+                        />
+                    ))
+                ) : (
+                    <p>No comments available</p>
+                )}
+            </Box>
+            <p>No comments available</p>
         </div>
-        </div>
-        }
-        </List>
-       </div>)
+
+
+       </Box>
+    </div>)
 }
 
 export default CommunityScreen;
