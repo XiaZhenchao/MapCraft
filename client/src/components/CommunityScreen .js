@@ -19,7 +19,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import FaceIcon from '@mui/icons-material/Face';
 import Face4Icon from '@mui/icons-material/Face4';
-import PersonOffIcon from '@mui/material/MenuItem';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 import TextField from '@mui/material/TextField';
 import CommentCard from './CommentCard.js';
 import MUIBanUserSuccessModal from './MUIBanUserSuccessModal.js';
@@ -172,7 +172,7 @@ const CommunityScreen = () => {
        </div>
        <Box  id = "export-close">
        {auth.user.role === "admin" && <IconButton onClick={handleBanUserButton}>
-                        <PersonOffIcon style={{ fontSize: '1.5rem', color: 'red' }} />
+                        <PersonOffIcon style={{ fontSize: '1.5rem', color: 'red'}} />
 
                     </IconButton>
         }
