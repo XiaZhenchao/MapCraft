@@ -177,6 +177,8 @@ const CommunityScreen = () => {
         </div>
        }
 
+{store.currentMap != null? ( 
+
         <div id="CommentCards">
         <Box>
             <br></br>
@@ -186,32 +188,42 @@ const CommunityScreen = () => {
             label="Add Comment"
             variant="filled"
             style={{
-                width: '98%',
+                width: '100%',
                 backgroundColor: 'transparent',
                 borderRadius: '15px',
                 marginTop: '0%',
-                padding: '1%',
             }}
             onKeyDown={handleCommentInput}
         /></div>
-        
-    </Box>
+        </Box>
 
             <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
-                {store.currentMap && store.currentMap.commentObj && store.currentMap.commentObj.length > 0 ? (
-                    store.currentMap.commentObj.map((commentObj, index) => (
-                        <CommentCard
-                            key={index}
-                            username={commentObj.username}
-                            comment={commentObj.comment}
-                        />
-                    ))
-                ) : (
-                    <p>No comments available</p>
-                )}
+            {store.currentMap ? 
+                <p>Current Map: {JSON.stringify(store.currentMap.commentObject[0].comment)}</p> :
+                <p>No current map available</p>
+        }
+
+        {/* {store.idNamePairs.map(pair => (
+            <CommentCard
+                key={pair._id}
+                username={pair.commentObj[0].username}
+                comment={pair.commentObj[0].comment}
+            />
+        ))}
+                 */}
+                {/* {store.currentMap ? (
+                store.currentMap.commentObj.map((commentObj, index) => (
+                    <CommentCard
+                        key={index}
+                        username={commentObj.username}
+                        comment={commentObj.comment}
+                    />
+                ))
+            ) : (
+                <p>Current Map: {JSON.stringify(store.currentMap.commentObject[0].comment)}</p>
+            )} */}
             </Box>
-            <p>No comments available</p>
-        </div>
+        </div> ): " "}
 
 
        </Box>
