@@ -22,6 +22,7 @@ import Face4Icon from '@mui/icons-material/Face4';
 import PersonOffIcon from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import CommentCard from './CommentCard.js';
+import MUIBanUserSuccessModal from './MUIBanUserSuccessModal.js';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -36,6 +37,7 @@ const CommunityScreen = () => {
     const [buttonText, setButtonText] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [map, setMap] = useState(null);
+    const [banUserSuccessModal, setBanUserSuccessModal] = useState(false);
     const history = useHistory();
 
   useEffect(() => {
@@ -94,6 +96,7 @@ const CommunityScreen = () => {
    const handleBanUserButton = () =>{
     const ownerEmail=store.currentMap.ownerEmail;
     auth.banUserByEmail(ownerEmail);
+    setBanUserSuccessModal(true);
    }
 
    const handleCloseButton =() =>{
@@ -212,6 +215,7 @@ const CommunityScreen = () => {
 
 
        </Box>
+       <MUIBanUserSuccessModal open={banUserSuccessModal} handleClose={setBanUserSuccessModal} />
     </div>)
 }
 
