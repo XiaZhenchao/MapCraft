@@ -128,6 +128,22 @@ const CommunityScreen = () => {
 
    }
 
+   let commentCard = "";
+    if (store.currentMap) {
+        commentCard = store.currentMap.commentObject.map(Pair => 
+            (
+            <div id = 'comment-list'>
+            <div>@{Pair.userName}: </div>
+            <div className='space'>{Pair.comment}</div>
+            <IconButton><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>
+             <IconButton><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>
+                <Button id = "report-box"></Button>
+            </div>
+            ))
+        console.log(commentCard);
+    }
+
+
   
    return (
        <div >
@@ -177,56 +193,36 @@ const CommunityScreen = () => {
         </div>
        }
 
-{store.currentMap != null? ( 
+    {store.currentMap != null? ( 
 
-        <div id="CommentCards">
-        <Box>
-            <br></br>
-            <div><Box> {auth.user.firstName + " " + auth.user.lastName} :</Box>
-            <TextField
-            id="filled-basic"
-            label="Add Comment"
-            variant="filled"
-            style={{
-                width: '100%',
-                backgroundColor: 'transparent',
-                borderRadius: '15px',
-                marginTop: '0%',
-            }}
-            onKeyDown={handleCommentInput}
-        /></div>
-        </Box>
+    <div id="CommentCards">
+    <Box>
+        <br></br>
+        <div><Box style={{ marginLeft: '10px' }}> {auth.user.firstName + " " + auth.user.lastName} :</Box>
+        <TextField
+        id="filled-basic"
+        label="Add Comment"
+        variant="filled"
+        style={{
+            width: '100%',
+            backgroundColor: 'transparent',
+            borderRadius: '15px',
+            marginTop: '0%',
+        }}
+        onKeyDown={handleCommentInput}
+    /></div>
+    </Box>
 
-            <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
-            {store.currentMap ? 
-                <p>Current Map: {JSON.stringify(store.currentMap.commentObject[0].comment)}</p> :
-                <p>No current map available</p>
+        <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
+        {store.currentMap ? 
+            <p>{commentCard}</p> :
+            <p>No current map available</p>
         }
-
-        {/* {store.idNamePairs.map(pair => (
-            <CommentCard
-                key={pair._id}
-                username={pair.commentObj[0].username}
-                comment={pair.commentObj[0].comment}
-            />
-        ))}
-                 */}
-                {/* {store.currentMap ? (
-                store.currentMap.commentObj.map((commentObj, index) => (
-                    <CommentCard
-                        key={index}
-                        username={commentObj.username}
-                        comment={commentObj.comment}
-                    />
-                ))
-            ) : (
-                <p>Current Map: {JSON.stringify(store.currentMap.commentObject[0].comment)}</p>
-            )} */}
-            </Box>
-        </div> ): " "}
+        </Box>
+    </div> ): " "}
 
 
-       </Box>
+    </Box>
        <MUIBanUserSuccessModal open={banUserSuccessModal} handleClose={setBanUserSuccessModal} />
     </div>)
 }

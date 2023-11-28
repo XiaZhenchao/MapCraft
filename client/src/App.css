@@ -507,7 +507,7 @@ body {
 }
 
 
- #CommentCards{
+#CommentCards{
   overflow: scroll;
   background-color:  #e1e4cb;
   margin-top: 70%;
@@ -515,6 +515,21 @@ body {
   height: 20vh;
   width: 80%;
   border-radius: 10px;
+}
+
+#comment-list{
+  background-color: #ABC8B2;
+  margin-top: 2%;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  margin-left: 4%;
+  height: 10vh;
+  width: 230%;
+  border-radius: 10px;
+}
+
+.space {
+  margin-left: 40px;
 }
 
 /* ANIMATIONS
