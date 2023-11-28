@@ -21,6 +21,7 @@ import MUIDeleteModal from './MUIDeleteModal.js';
 import TextField from '@mui/material/TextField';
 import toGeoJSON from 'togeojson';
 import * as shapefile from 'shapefile';
+import MUIBanUserLoginModal from './MUIBanUserLoginModal.js';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -41,11 +42,8 @@ const HomeScreen = () => {
    const [text, setText] = useState("");
    const [open, setOpen] = useState(false);
     const [current, setcurrent] = useState(null)
+    const [openBanUserLoginModal, setOpenBanUserLoginModal] = useState(false);
     useEffect(() => {
-        // console.log("auth.user in home: "+auth.user.email);
-        // console.log("auth.user in home: "+auth.user.lastName);
-        // console.log("auth.user in home: "+auth.user.firstName);
-        // console.log("auth.user in home: "+auth.user.role);
         if(auth.user)
         {
                 if(auth.user.role == "admin")
@@ -53,7 +51,7 @@ const HomeScreen = () => {
                 history.push("/admin-home/")
             }
             else if(auth.user.role == "banned"){
-                auth.logoutUser();
+                handleBanUserLoginModal();
             }
         }
         // const role = auth.user.role
@@ -302,6 +300,11 @@ const renderKMLFile = () => {
         setOpen(!open);
      }
 
+    function handleBanUserLoginModal() {
+        // Handle the logic to show the ban user modal
+        setOpenBanUserLoginModal(true);
+    }
+
     let selectClass = "unselected-map-card";
     if (store.currentMap) {
         selectClass = "selected-map-card";
@@ -371,6 +374,7 @@ const renderKMLFile = () => {
         </List>
        </div>
         <MUIDeleteModal/>
+        <MUIBanUserLoginModal open={openBanUserLoginModal} handleClose={handleBanUserLoginModal} />
        </div>
        <div id = "map-name" style={{fontSize: '2rem'}}>
        {editActive ? (
@@ -435,7 +439,6 @@ const renderKMLFile = () => {
                     </div>
                 )}
        </div></List>
-      
        </div>)
 }
 
