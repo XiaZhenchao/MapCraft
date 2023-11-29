@@ -43,6 +43,7 @@ const CommunityScreen = () => {
   useEffect(() => {
     // Load the map when the component mounts
     loadMap();
+    store.loadIdNamePairs();
   }, []); // The empty dependency array ensures it runs once on mount
 
   useEffect(() => {
@@ -196,6 +197,7 @@ const CommunityScreen = () => {
     {store.currentMap != null? ( 
 
     <div id="CommentCards">
+        {auth.user!=null?(
     <Box>
         <br></br>
         <div><Box style={{ marginLeft: '10px' }}> {auth.user.firstName + " " + auth.user.lastName} :</Box>
@@ -211,7 +213,7 @@ const CommunityScreen = () => {
         }}
         onKeyDown={handleCommentInput}
     /></div>
-    </Box>
+    </Box>):null}
 
         <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
         {store.currentMap ? 
