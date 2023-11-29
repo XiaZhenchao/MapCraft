@@ -19,7 +19,8 @@ describe("Test application", () => {
         lastName: 'test41212336',
         email: 'test43243123246@gmail.com',
         password: 'testtest46',
-        passwordVerify: 'testtest46'
+        passwordVerify: 'testtest46',
+        role: 'user'
       });
     expect(res.statusCode).toBe(200);
   });
