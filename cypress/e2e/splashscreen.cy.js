@@ -2,6 +2,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return false;
 });
 
+//redeploy
 // describe('SplashScreen', () => {
 //   it('the SplashScreen contains the correct UI element', () => {
 //     cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/')
