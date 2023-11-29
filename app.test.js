@@ -73,4 +73,19 @@ describe("Test application", () => {
         expect(res.statusCode).toBe(200);
         // Add assertions based on your application's response
       });
+
+    test('Publish map', async () => {
+        // Ensure that a map ID is available for deletion
+        if (!authToken || !mapId) {
+          // Handle cases where either authToken or mapId is not available
+          return;
+        }
+    
+        const res = await request(app)
+          .put(`/auth/map/${mapId}`) // Replace with the endpoint to delete a map
+          .set('Authorization', `Bearer ${authToken}`);
+    
+        expect(res.statusCode).toBe(200);
+        // Add assertions based on your application's response
+      });
   });
