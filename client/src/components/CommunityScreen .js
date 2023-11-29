@@ -171,11 +171,11 @@ const CommunityScreen = () => {
           {store.currentMap != null? store.currentmapName: "" }       
        </div>
        <Box  id = "export-close">
-       {auth.user.role === "admin" && <IconButton onClick={handleBanUserButton}>
+       {auth.user!=null?(auth.user.role === "admin" && <IconButton onClick={handleBanUserButton}>
                         <PersonOffIcon style={{ fontSize: '1.5rem', color: 'red'}} />
 
-                    </IconButton>
-        }
+                    </IconButton>):null
+        }  
         <IconButton>
             <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
         </IconButton>
