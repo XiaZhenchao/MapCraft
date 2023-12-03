@@ -40,7 +40,7 @@ export const createMap = (newMapName, userEmail, username) => {
         commentObject: [],
         banned: false,
         editStatus: false,
-        mapTemplate:""
+        //mapTemplate:""
 
         //source: "",
     })
