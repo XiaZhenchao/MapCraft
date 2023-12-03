@@ -27,9 +27,14 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
   };
 
   const handleConfirmClick = () => {
-    // Pass both selected file and map type back to the HomeScreen component
-    onConfirm({ file: selectedFile, mapType });
-    handleClose()
+    if (mapType && selectedFile) {
+        // Pass both selected file and map type back to the HomeScreen component
+        onConfirm({ file: selectedFile, mapType });
+        handleClose();
+      } else {
+        // Show an alert if the condition is not met
+        alert('Please select a map type and choose a file before confirming.');
+      }
   };
 
   const handleCancelClick = () => {
@@ -46,7 +51,7 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: 2,
   };
 
   return (
