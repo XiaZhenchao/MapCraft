@@ -14,6 +14,7 @@ import AdminHome from './AdminHome'
 import AdminCommunity from './AdminCommunity'
 import AdminBanner from './AdminBanner'
 import MUIDeleteModal from './MUIDeleteModal.js';
+import MapTemplateModal from './MapTemplateModal.js'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -36,5 +37,6 @@ export {
     AdminHome,
     AdminCommunity,
     AdminBanner,
-    MUIDeleteModal
+    MUIDeleteModal,
+    MapTemplateModal
     }

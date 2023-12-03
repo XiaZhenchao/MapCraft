@@ -22,6 +22,7 @@ import TextField from '@mui/material/TextField';
 import toGeoJSON from 'togeojson';
 import * as shapefile from 'shapefile';
 import MUIBanUserLoginModal from './MUIBanUserLoginModal.js';
+import MapTemplateModal from './MapTemplateModal.js';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -43,6 +44,8 @@ const HomeScreen = () => {
    const [open, setOpen] = useState(false);
     const [current, setcurrent] = useState(null)
     const [openBanUserLoginModal, setOpenBanUserLoginModal] = useState(false);
+    const [MapTemplateModalStatus, setMapTemplateModalStatus] = useState(false);
+
     useEffect(() => {
         if(auth.user)
         {
@@ -73,36 +76,6 @@ const HomeScreen = () => {
             }
         }
       }, [store.currentMap]);
-
-    const handleFileInputChange = () => {
-        const fileInput = document.getElementById('fileInput');
-        const selectedFile = fileInput.files[0];
-        if (selectedFile) {
-            const fileName = selectedFile.name;
-            const fileExtension = fileName.split('.').pop().toLowerCase();
-
-            if (fileExtension === 'shp' || fileExtension === 'json' || fileExtension === 'kml'){
-                setSelectedFile( selectedFile );
-                const uploadButton = document.getElementById('Select-File-Button');
-                uploadButton.disabled = true;
-                loadMap();
-                setFileExtension( fileExtension );
-            } else if (fileExtension === 'zip') {
-                setSelectedFile( selectedFile );
-                const uploadButton = document.getElementById('Select-File-Button');
-                uploadButton.disabled = true;
-                loadMap();
-                setFileExtension( fileExtension );
-            }
-            else {
-                alert('Please select a valid SHP, GeoJSON, or KML file.');
-            }
-        } else {
-                setSelectedFile( null );
-            const uploadButton = document.getElementById('Select-File-Button');
-            uploadButton.disabled = false;
-        }
-    };
 
     const handleRenderButtonClick = () => {
     setRendering( rendering );
@@ -204,18 +177,18 @@ const renderKMLFile = () => {
     }
 }
    
-    const handleCancelClick = () => {
-        const fileInput = document.getElementById('fileInput');
-        fileInput.value = '';
+    // const handleCancelClick = () => {
+    //     const fileInput = document.getElementById('fileInput');
+    //     fileInput.value = '';
         
-        if(map!=null){
-            setMap(null) // Remove the old map
-        }       
+    //     if(map!=null){
+    //         setMap(null) // Remove the old map
+    //     }       
 
-        setSelectedFile(null)
-        setRendering(false)
-        handleFileInputChange();
-    };
+    //     setSelectedFile(null)
+    //     setRendering(false)
+    //     handleFileInputChange();
+    // };
 
  
     
@@ -266,10 +239,40 @@ const renderKMLFile = () => {
    }
 
    const handleSelectFileButton = () => {
-        const fileInput = document.getElementById('fileInput');
-        fileInput.accept = '.zip,.shp,.json,.kml,.dbf';
-        fileInput.click();
+        setMapTemplateModalStatus(true);
     };
+
+    const handleMapTemplateModalConfirm = ({ file, mapType }) => {
+        // Handle the selected file and map type in your HomeScreen component
+        console.log('Selected File:', file);
+        console.log('Map Type:', mapType);
+        // Add your logic here to handle the data as needed
+        if (file) {
+            const fileName = file.name;
+            const fileExtension = fileName.split('.').pop().toLowerCase();
+
+            if (fileExtension === 'shp' || fileExtension === 'json' || fileExtension === 'kml'){
+                setSelectedFile( file );
+                const uploadButton = document.getElementById('Select-File-Button');
+                uploadButton.disabled = true;
+                loadMap();
+                setFileExtension( fileExtension );
+            } else if (fileExtension === 'zip') {
+                setSelectedFile( file );
+                const uploadButton = document.getElementById('Select-File-Button');
+                uploadButton.disabled = true;
+                loadMap();
+                setFileExtension( fileExtension );
+            }
+            else {
+                alert('Please select a valid SHP, GeoJSON, or KML file.');
+            }
+        } else {
+                setSelectedFile( null );
+            const uploadButton = document.getElementById('Select-File-Button');
+            uploadButton.disabled = false;
+        }
+      };
 
     function handleEditNameClick(event) {
         event.stopPropagation();
@@ -408,12 +411,6 @@ const renderKMLFile = () => {
        </div> ):<div id = "container" class="element-with-stroke"></div>}
       
        <div id = "function-bar" class="element-with-stroke">
-       <input
-                    type="file"
-                    id="fileInput"
-                    style={{ display: 'none' }}
-                    onChange={handleFileInputChange}
-                />
            <Button className='button' id="Select-File-Button"
                     disabled={selectedFile!=null}
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
@@ -432,13 +429,14 @@ const renderKMLFile = () => {
            <Button className='button' 
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    onClick={handleDeleteButton}>Delete</Button>
-                    {selectedFile!=null && (
+                    {/* {selectedFile!=null && (
                     <div>
                         <p>Selected File: {selectedFile.name}</p >
                         <button onClick={handleCancelClick}>Cancel</button>
                     </div>
-                )}
+                )} */}
        </div></List>
+       <MapTemplateModal open={MapTemplateModalStatus} handleClose={setMapTemplateModalStatus} onConfirm={handleMapTemplateModalConfirm} />
        </div>)
 }
 

@@ -20,6 +20,8 @@ const MapCraftSchema = new Schema(
         banned: {type: Boolean, required: true},
         editStatus: {type: Boolean, required: true},
         //source: {type: String, required: true}
+        //dot density map, symbol map, choropleth map, heat map, flow map
+        mapTemplate:{type:String, required:true}
 
     },
     { timestamps: true },
