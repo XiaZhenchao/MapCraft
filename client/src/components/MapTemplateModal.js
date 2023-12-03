@@ -4,6 +4,8 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
   // store the type of map
@@ -42,16 +44,21 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
     handleClose()
   };
 
+  const handleUnselectFile = () => {
+    // Pass both selected file and map type back to the HomeScreen component
+    setSelectedFile(false);
+  };
+
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 470,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
-    p: 2,
+    p: 4,
   };
 
   return (
@@ -72,7 +79,7 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
             />
             Dot Density Map
           </label>
-        <label>
+        <label style={{ marginLeft: '20px' }}>
           <input
             type="radio"
             name="mapType"
@@ -82,7 +89,7 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           />
           Symbol Map
         </label>
-        <label>
+        <label style={{ marginLeft: '20px' }}>
           <input
             type="radio"
             name="mapType"
@@ -102,7 +109,7 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           />
           Heat Map
         </label>
-        <label>
+        <label style={{ marginLeft: '30px' }}>
           <input
             type="radio"
             name="mapType"
@@ -112,22 +119,28 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           />
           Flow Map
         </label>
+        <br></br>
         <input
           type="file"
           id="fileInput"
           style={{ display: 'none' }}
           onChange={handleFileInputChange}
         />
-        <br />
+          <br />
+        <label class="drop-container" >
+        <span class="drop-title">Drop files here</span>
+        or
         <Button onClick={handleSelectFileClick}>Select File</Button>
         <br />
+        </label>
         {selectedFile!=null && (
-                    <div>
-                        <p>Selected File: {selectedFile.name}</p >
-                    </div>
-                )}
+        <div>
+            <p>Selected File: {selectedFile.name} <IconButton  onClick={handleUnselectFile}><CloseIcon></CloseIcon></IconButton></p >
+        </div>
+        )}
+        <br />
         <Button onClick={handleConfirmClick}>Confirm</Button>
-        <Button onClick={handleCancelClick}>Cancel</Button>
+        <Button style={{  marginLeft: '180px' }} onClick={handleCancelClick}>Cancel</Button>
         </Alert>
       </Box>
     </Modal>

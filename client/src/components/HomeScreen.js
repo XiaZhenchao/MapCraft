@@ -33,6 +33,7 @@ const HomeScreen = () => {
    const { store } = useContext(GlobalStoreContext);
    const { auth } = useContext(AuthContext);
    const [selectedFile, setSelectedFile] = useState(null);
+   const [mapType, setMapType] = useState('');
    const [map, setMap] = useState(null);
    const history = useHistory();
    const [isBorderVisible, setIsBorderVisible] = useState(false);
@@ -246,6 +247,8 @@ const renderKMLFile = () => {
         // Handle the selected file and map type in your HomeScreen component
         console.log('Selected File:', file);
         console.log('Map Type:', mapType);
+        //save the mapType state
+        setMapType(mapType)
         // Add your logic here to handle the data as needed
         if (file) {
             const fileName = file.name;
