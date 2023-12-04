@@ -40,7 +40,7 @@ export const createMap = (newMapName, userEmail, username) => {
         commentObject: [],
         banned: false,
         editStatus: false,
-        //mapTemplate:""
+        mapTemplate:"null",
         mapObjects:{ "type": "FeatureCollection",
         "features": []},
     })
@@ -54,14 +54,6 @@ export const updateMapById = (id, map) => {
         map : map
     })
 }
-export const storeGeoFile = (id, geojsonData) => {
-    return api.post(`/map/${id}`, {
-        // SPECIFY THE PAYLOAD
-        mapId: id,
-        selectedFile: geojsonData
-        
-    })
-}
 
 const apis = {
     createMap,
@@ -69,7 +61,6 @@ const apis = {
     getMapById,
     getMapPairs,
     updateMapById,
-    storeGeoFile
 }
 
 export default apis

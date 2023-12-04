@@ -135,6 +135,8 @@ const renderShpFile = () => {
                    // chunks.push(chunk);
                    // offset += CHUNK_SIZE;
                 //}
+                console.log("home screen storefile");
+                console.log("storefile check1: "+ store.currentMap._id)
                 store.storeFile(store.currentMap._id, geojsonData);
                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
                     onEachFeature : onEachFeature //calls oneachFeature function

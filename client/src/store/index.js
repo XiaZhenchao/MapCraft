@@ -341,15 +341,64 @@ function GlobalStoreContextProvider(props) {
     //     }
     //     asyncStoreFile(id, geojsonChunks);
     // }
+    
+
+    // store.storeFile = function (id, geojsonData) {
+    //     async function asyncStoreFile(id, geojsonData) {
+    //         //for (let i = 0; i < geojsonChunks.length; i++) {
+    //             let response = await api.storeGeoFile(id, geojsonData);
+    //        // }
+    //     }
+    //     asyncStoreFile(id, geojsonData);
+    // }
+
+    // store.storeFile = function (id, geojsonData) {
+    //     async function asyncStoreFile(id, geojsonData) {
+    //         //for (let i = 0; i < geojsonChunks.length; i++) {
+    //             let response = await api.getMapById(id);
+    //             if (response.data.success) {
+    //                 let map = response.data.map;
+    //             }
+    //             map.mapObjects = geojsonData;
+
+    //             const updatedMap = await updateMapById(id, map);
+    //        // }
+    //     }
+    //     asyncStoreFile(id, geojsonData);
+    // }
 
     store.storeFile = function (id, geojsonData) {
         async function asyncStoreFile(id, geojsonData) {
-            //for (let i = 0; i < geojsonChunks.length; i++) {
-                let response = await api.storeGeoFile(id, geojsonData);
-           // }
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                
+                map.mapObjects = geojsonData;
+
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
         }
         asyncStoreFile(id, geojsonData);
     }
+
 
 
     store.markMapForDeletion = function (id) {
