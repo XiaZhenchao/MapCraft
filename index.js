@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4000;
 const app = express()
 
 // SETUP THE MIDDLEWARE
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({limit: '200mb', extended: true, parameterLimit:5000000 }))
 app.use(cors({
     origin: ["https://mapcraft-55160ee4aae1.herokuapp.com", "https://mapcraft-55160ee4aae1.herokuapp.com/auth","http://localhost:3000"],
     credentials: true
@@ -22,7 +22,7 @@ app.use(cors({
 //    origin: ["http://localhost:3000"],
 //      credentials: true
 //  }))
-app.use(express.json())
+app.use(express.json({limit: '200mb'}))
 app.use(cookieParser())
 
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE

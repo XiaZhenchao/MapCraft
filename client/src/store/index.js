@@ -333,13 +333,22 @@ function GlobalStoreContextProvider(props) {
         asyncSetComment(id);
     }
 
-    store.storeFile = function (id, geojsonChunks) {
-        async function asyncStoreFile(id, geojsonChunks) {
-            for (let i = 0; i < geojsonChunks.length; i++) {
-                let response = await api.storeGeoFile(id, geojsonChunks[i]);
-            }
+    // store.storeFile = function (id, geojsonChunks) {
+    //     async function asyncStoreFile(id, geojsonChunks) {
+    //         for (let i = 0; i < geojsonChunks.length; i++) {
+    //             let response = await api.storeGeoFile(id, geojsonChunks[i]);
+    //         }
+    //     }
+    //     asyncStoreFile(id, geojsonChunks);
+    // }
+
+    store.storeFile = function (id, geojsonData) {
+        async function asyncStoreFile(id, geojsonData) {
+            //for (let i = 0; i < geojsonChunks.length; i++) {
+                let response = await api.storeGeoFile(id, geojsonData);
+           // }
         }
-        asyncStoreFile(id, geojsonChunks);
+        asyncStoreFile(id, geojsonData);
     }
 
 

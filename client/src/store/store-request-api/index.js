@@ -57,6 +57,7 @@ export const updateMapById = (id, map) => {
 export const storeGeoFile = (id, geojsonData) => {
     return api.post(`/map/${id}`, {
         // SPECIFY THE PAYLOAD
+        mapId: id,
         selectedFile: geojsonData
         
     })

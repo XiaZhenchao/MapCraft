@@ -124,17 +124,17 @@ const renderShpFile = () => {
         reader.onload = (e) => {// event handler for FileReader
             try {
                 const geojsonData = JSON.parse(e.target.result); //Parse the data of GeoJSON file
-                const CHUNK_SIZE = 256 * 256; 
-                const jsonString = JSON.stringify(geojsonData);
-                const chunks = [];
-                let offset = 0;
+                //const CHUNK_SIZE = 256 * 256; 
+                //const jsonString = JSON.stringify(geojsonData);
+                //const chunks = [];
+                //let offset = 0;
 
-                while (offset < jsonString.length) {
-                    const chunk = jsonString.slice(offset, offset + CHUNK_SIZE);
-                    chunks.push(chunk);
-                    offset += CHUNK_SIZE;
-                }
-                store.storeFile(store.currentMap._id, chunks);
+               // while (offset < jsonString.length) {
+                   // const chunk = jsonString.slice(offset, offset + CHUNK_SIZE);
+                   // chunks.push(chunk);
+                   // offset += CHUNK_SIZE;
+                //}
+                store.storeFile(store.currentMap._id, geojsonData);
                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
                     onEachFeature : onEachFeature //calls oneachFeature function
                 }).addTo(thisMap); //adds the geojason layer to the leaft map.

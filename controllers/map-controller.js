@@ -211,7 +211,8 @@ updateMapById = async (req, res) => {
     }
 
     storeGeoFile = async (req, res) => {
-        const { mapId } = req.params;
+        console.log(req);
+        const { mapId } = req.body;
         const { selectedFile } = req.body;
         const collection = db.collection("DataMap");
         await collection.insertOne({ mapId, selectedFile });
