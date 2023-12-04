@@ -41,8 +41,8 @@ export const createMap = (newMapName, userEmail, username) => {
         banned: false,
         editStatus: false,
         //mapTemplate:""
-
-        //source: "",
+        mapObjects:{ "type": "FeatureCollection",
+        "features": []},
     })
 }
 export const deleteMapById = (id) => api.delete(`/map/${id}`)

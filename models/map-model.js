@@ -22,6 +22,7 @@ const MapCraftSchema = new Schema(
         //source: {type: String, required: true}
         //dot density map, symbol map, choropleth map, heat map, flow map
         //mapTemplate:{type:String, required:true}
+        mapObjects:{type:Object,required:true}
 
     },
     { timestamps: true },
