@@ -125,7 +125,9 @@ getMapPairs = async (req, res) => {
                             editStatus: map.editStatus,
                             //source: map.source,
                             renderStatus: map.renderStatus,
-                            ownerEmail: map.ownerEmail
+                            ownerEmail: map.ownerEmail,
+                            mapTemplate:map.mapTemplate
+
                                
                         };
                         pairs.push(pair);
@@ -188,6 +190,8 @@ updateMapById = async (req, res) => {
                     list.source = body.map.source,
                     list.renderStatus = body.map.renderStatus,
                     list.ownerEmail = body.map.ownerEmail
+                    list.mapTemplate=body.map.mapTemplate
+
 
                     
                     list
