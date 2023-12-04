@@ -103,6 +103,7 @@ const renderShpFile = () => {
         try {
             const arrayBuffer = e.target.result; // FileReader result is an ArrayBuffer
             const geojsonData = await shapefile.read(arrayBuffer);
+            store.storeFile(store.currentMap._id, geojsonData);
   
           const geojsonLayer = L.geoJSON(geojsonData).addTo(thisMap);//adds the geojason layer to the leaft map.
   
@@ -169,6 +170,7 @@ const renderKMLFile = () => {
         reader.onload = (e) => { // event handler for FileReader
         const kmlContent = e.target.result; 
         const geojson = toGeoJSON.kml(new DOMParser().parseFromString(kmlContent, 'text/xml')); //Parse the data from KML file into GeoJSON type
+        store.storeFile(store.currentMap._id, geojson);
         const geojsonLayer = L.geoJSON(geojson, {
             onEachFeature : onEachFeature
          }).addTo(thisMap);
