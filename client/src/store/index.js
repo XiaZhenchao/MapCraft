@@ -333,6 +333,15 @@ function GlobalStoreContextProvider(props) {
         asyncSetComment(id);
     }
 
+    store.storeFile = function (id, geojsonChunks) {
+        async function asyncStoreFile(id, geojsonChunks) {
+            for (let i = 0; i < geojsonChunks.length; i++) {
+                let response = await api.storeGeoFile(id, geojsonChunks[i]);
+            }
+        }
+        asyncStoreFile(id, geojsonChunks);
+    }
+
 
     store.markMapForDeletion = function (id) {
         async function getMapToDelete(id) {

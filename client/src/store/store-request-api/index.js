@@ -54,13 +54,21 @@ export const updateMapById = (id, map) => {
         map : map
     })
 }
+export const storeGeoFile = (id, geojsonData) => {
+    return api.post(`/map/${id}`, {
+        // SPECIFY THE PAYLOAD
+        selectedFile: geojsonData
+        
+    })
+}
 
 const apis = {
     createMap,
     deleteMapById,
     getMapById,
     getMapPairs,
-    updateMapById
+    updateMapById,
+    storeGeoFile
 }
 
 export default apis

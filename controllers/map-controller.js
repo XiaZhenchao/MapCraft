@@ -1,5 +1,6 @@
 const Map = require('../models/map-model')
 const User = require('../models/user-model');
+const db = require('../db')
 /*
     This is our back-end API. It provides all the data services
     our database needs. Note that this file contains the controller
@@ -209,6 +210,14 @@ updateMapById = async (req, res) => {
                     });
     }
 
+    storeGeoFile = async (req, res) => {
+        const { mapId } = req.params;
+        const { selectedFile } = req.body;
+        const collection = db.collection("DataMap");
+        await collection.insertOne({ mapId, selectedFile });
+        res.status(200).json({ success: true, message: 'GeoJSON data stored successfully' });
+    }
+
 
 module.exports = {
     createMap,
@@ -216,5 +225,6 @@ module.exports = {
     getMapById,
     getMapPairs,
     getMapList,
-    updateMapById
+    updateMapById,
+    storeGeoFile
 }
