@@ -257,10 +257,7 @@ const HomeScreen = () => {
     }
 
     function handleForkButton(){
-        console.log("fork button clicked")
-        console.log("fork event.target.value: "+ store.currentMap._id)
-        store.forkMap(store.currentMap._id)
-        
+        store.forkMap(store.currentMap._id)    
     }
 
     let selectClass = "unselected-map-card";

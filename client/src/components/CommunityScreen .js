@@ -107,6 +107,9 @@ const CommunityScreen = () => {
     setMap(null);
     
 }
+function handleForkButton(){
+    store.forkMap(store.currentMap._id)    
+}
 
    let listCard = "";
    if (store) {
@@ -194,7 +197,14 @@ const CommunityScreen = () => {
         </div>
        }
 
+<div id = "function-bar" class="element-with-stroke">
+           <Button className='button'
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   onClick={handleForkButton}>Fork</Button>  
+</div>
+
     {store.currentMap != null? ( 
+        
 
     <div id="CommentCards">
         {auth.user!=null?(

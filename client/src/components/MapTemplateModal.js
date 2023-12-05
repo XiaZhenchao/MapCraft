@@ -49,6 +49,12 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
     setSelectedFile(false);
   };
 
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0]; // Retrieve the dropped file
+    setSelectedFile(file);
+  };
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -119,6 +125,17 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           />
           Flow Map
         </label>
+
+        <label style={{ marginLeft: '30px' }}>
+          <input
+            type="radio"
+            name="mapType"
+            value="RegularMap"
+            checked={mapType === 'flowMap'}
+            onChange={handleMapTypeChange}
+          />
+          no specific map
+        </label>
         <br></br>
         <input
           type="file"
@@ -127,9 +144,31 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           onChange={handleFileInputChange}
         />
           <br />
-        <label class="drop-container" >
-        <span class="drop-title">Drop files here</span>
-        or
+          <div
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+            style={{
+              border: '2px dashed #000',
+              padding: '20px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              marginTop: '20px',
+            }}
+          >
+            <span>
+              Drop files here
+            </span>
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            style={{ display: 'none' }}
+            onChange={handleFileInputChange}
+          />
+          <br />
+          <label>
+            {/* <span className="drop-title">
+            </span> */}
         <Button onClick={handleSelectFileClick}>Select File</Button>
         <br />
         </label>
