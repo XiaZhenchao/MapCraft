@@ -23,7 +23,8 @@ export const GlobalStoreActionType = {
     MARK_MAP_FOR_DELETION: "MARK_MAP_FOR_DELETION",
     SET_CURRENT_MAP: "SET_CURRENT_MAP",
     SET_MAP_NAME_EDIT_ACTIVE: "SET_MAP_NAME_EDIT_ACTIVE",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    STORE_FILE: "STORE_FILE"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -168,6 +169,19 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     isEdition: payload.isEdition,
                     isDeleting: payload.isDeleting,
+                    currentmapName: store.currentmapName
+                });
+            }
+
+            case GlobalStoreActionType.STORE_FILE: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentMap: payload.map,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
                     currentmapName: store.currentmapName
                 });
             }
@@ -333,40 +347,6 @@ function GlobalStoreContextProvider(props) {
         asyncSetComment(id);
     }
 
-    // store.storeFile = function (id, geojsonChunks) {
-    //     async function asyncStoreFile(id, geojsonChunks) {
-    //         for (let i = 0; i < geojsonChunks.length; i++) {
-    //             let response = await api.storeGeoFile(id, geojsonChunks[i]);
-    //         }
-    //     }
-    //     asyncStoreFile(id, geojsonChunks);
-    // }
-    
-
-    // store.storeFile = function (id, geojsonData) {
-    //     async function asyncStoreFile(id, geojsonData) {
-    //         //for (let i = 0; i < geojsonChunks.length; i++) {
-    //             let response = await api.storeGeoFile(id, geojsonData);
-    //        // }
-    //     }
-    //     asyncStoreFile(id, geojsonData);
-    // }
-
-    // store.storeFile = function (id, geojsonData) {
-    //     async function asyncStoreFile(id, geojsonData) {
-    //         //for (let i = 0; i < geojsonChunks.length; i++) {
-    //             let response = await api.getMapById(id);
-    //             if (response.data.success) {
-    //                 let map = response.data.map;
-    //             }
-    //             map.mapObjects = geojsonData;
-
-    //             const updatedMap = await updateMapById(id, map);
-    //        // }
-    //     }
-    //     asyncStoreFile(id, geojsonData);
-    // }
-
     store.storeFile = function (id, geojsonData) {
         async function asyncStoreFile(id, geojsonData) {
             let response = await api.getMapById(id);
@@ -385,8 +365,11 @@ function GlobalStoreContextProvider(props) {
                             if (response.data.success) {
                                 let pairsArray = response.data.idNamePairs;
                                 storeReducer({
-                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                                    payload: pairsArray
+                                    type: GlobalStoreActionType.STORE_FILE,
+                                    payload: {
+                                        idNamePairs:pairsArray,
+                                        map:map
+                                    }
                                 });
                             }
                         }
@@ -398,8 +381,6 @@ function GlobalStoreContextProvider(props) {
         }
         asyncStoreFile(id, geojsonData);
     }
-
-
 
     store.markMapForDeletion = function (id) {
         async function getMapToDelete(id) {
