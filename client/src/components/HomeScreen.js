@@ -178,7 +178,7 @@ const HomeScreen = () => {
                     try {
                         const arrayBuffer = e.target.result; // FileReader result is an ArrayBuffer
                         const geojsonData = await shapefile.read(arrayBuffer);
-                        store.storeFile(store.currentMap._id, geojsonData)
+                        store.storeFile(store.currentMap._id, geojsonData,mapType)
                     } catch (error) {
                       console.error('Error storing Shapefile:', error);
                     }
@@ -191,7 +191,7 @@ const HomeScreen = () => {
                     try {
                         const geojsonData = JSON.parse(e.target.result); //Parse the data of GeoJSON file
                         console.log("home screen storefile");
-                        store.storeFile(store.currentMap._id, geojsonData)
+                        store.storeFile(store.currentMap._id, geojsonData,mapType)
                         //console.log("right after storefile")
                     }
                     catch (error) {
@@ -207,7 +207,7 @@ const HomeScreen = () => {
                 reader.onload = (e) => { // event handler for FileReader
                     const kmlContent = e.target.result; 
                     const geojsonData = toGeoJSON.kml(new DOMParser().parseFromString(kmlContent, 'text/xml')); //Parse the data from KML file into GeoJSON type
-                    store.storeFile(store.currentMap._id, geojsonData)
+                    store.storeFile(store.currentMap._id, geojsonData,mapType)
                 }
                 reader.readAsText(file); //intiate the selected file
                 //const uploadButton = document.getElementById('Select-File-Button');

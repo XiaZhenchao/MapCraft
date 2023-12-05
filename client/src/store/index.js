@@ -347,14 +347,14 @@ function GlobalStoreContextProvider(props) {
         asyncSetComment(id);
     }
 
-    store.storeFile = function (id, geojsonData) {
-        async function asyncStoreFile(id, geojsonData) {
+    store.storeFile = function (id, geojsonData,mapType) {
+        async function asyncStoreFile(id, geojsonData,mapType) {
             let response = await api.getMapById(id);
             if (response.data.success) {
                 let map = response.data.map;
                 
                 map.mapObjects = geojsonData;
-
+                map.mapTemplate = mapType;
                 async function updateMap(map) {
                     console.log("map._id: "+map._id);
                     console.log("id: "+id);
@@ -379,7 +379,7 @@ function GlobalStoreContextProvider(props) {
                 updateMap(map);
             }
         }
-        asyncStoreFile(id, geojsonData);
+        asyncStoreFile(id, geojsonData,mapType);
     }
 
     store.markMapForDeletion = function (id) {
