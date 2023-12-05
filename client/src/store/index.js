@@ -113,7 +113,9 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: ""
+                    currentmapName: "",
+                    // mapTemplate:store.mapTemplate,
+                    // mapObjects:store.mapObjects
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -227,6 +229,7 @@ function GlobalStoreContextProvider(props) {
                             idNamePairs: array
                         }
                     });
+                    return newMap._id;
                 }
                 else{
                     console.log("API FAILED TO GET THE MAP PAIRS");
@@ -309,6 +312,86 @@ function GlobalStoreContextProvider(props) {
         }
         asyncPublishMap(id);
     }
+
+    store.forkMap = function (id) {
+        async function asyncForkMap(id) {
+            let newId="1"
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let mapToCopy = response.data.map;
+                async function createForkedMap() {
+                    // let createNewMapResponse = await store.createNewMap();
+                    let newMapName = "Map" + store.mapCounter;
+                    let username = auth.user.firstName + " " + auth.user.lastName;
+                    try {
+                        const response = await api.createMap(newMapName, auth.user.email, username);
+                        console.log("createNewMap response: ", response);
+                        if (response.status === 201) {
+                            let newMap = response.data.map;
+                            newId = newMap._id;
+                            console.log("newId: "+ newId)
+                            const idNamePairsResponse = await api.getMapPairs();
+                            if (idNamePairsResponse.data.success) {
+                                let array = idNamePairsResponse.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.CREATE_NEW_MAP,
+                                    payload: {
+                                        map: newMap,
+                                        idNamePairs: array
+                                    }
+                                });
+                            } else {
+                                console.log("API FAILED TO GET THE MAP PAIRS");
+                                // Handle the failure case here
+                            }
+                        } else {
+                            console.log("API FAILED TO CREATE A NEW MAP");
+                            // Handle the failure case here
+                        }
+                    } catch (error) {
+                        console.error("Error creating a new map: ", error);
+                        // Handle errors here
+                    }
+                    console.log("newId: "+ newId)
+
+
+
+
+                    let newresponese = await api.getMapById(newId);
+                    if (newresponese.data.success) {
+                        let newMap = newresponese.data.map;
+                        newMap.mapTemplate = mapToCopy.mapTemplate;
+                        console.log("newMap.mapTemplate: "+ newMap.mapTemplate)
+                        newMap.mapObjects = mapToCopy.mapObjects;
+                        console.log("newMap.mapObjects: "+ newMap.mapObjects)
+                        async function updateMap(newMap) {
+                            response = await api.updateMapById(newId, newMap);
+                            if (response.data.success) {
+                                async function getMapPairs(newMap) {
+                                    response = await api.getMapPairs();
+                                    if (response.data.success) {
+                                        let pairsArray = response.data.idNamePairs;
+                                        storeReducer({
+                                            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                            payload: pairsArray
+                                        });
+                                    }
+                                }
+                                getMapPairs(newMap);
+                            }
+                        }
+                        updateMap(newMap);
+                    }
+
+                }
+                createForkedMap();
+            } else {
+                console.log("Failed to retrieve the map to fork.");
+            }
+        }
+        asyncForkMap(id);
+
+    };
 
 
     store.setComment = function (id, comment, username) {

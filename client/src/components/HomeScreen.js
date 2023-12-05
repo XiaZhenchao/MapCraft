@@ -256,6 +256,13 @@ const HomeScreen = () => {
         setOpenBanUserLoginModal(true);
     }
 
+    function handleForkButton(){
+        console.log("fork button clicked")
+        console.log("fork event.target.value: "+ store.currentMap._id)
+        store.forkMap(store.currentMap._id)
+        
+    }
+
     let selectClass = "unselected-map-card";
     if (store.currentMap) {
         selectClass = "selected-map-card";
@@ -363,7 +370,8 @@ const HomeScreen = () => {
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    onClick={handleSelectFileButton}>select File</Button>
            <Button className='button'
-                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Fork</Button>
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   onClick={handleForkButton}>Fork</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    onClick={handleEditButton}>Edit</Button>
