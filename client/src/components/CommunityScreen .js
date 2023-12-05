@@ -108,7 +108,8 @@ const CommunityScreen = () => {
     
 }
 function handleForkButton(){
-    store.forkMap(store.currentMap._id)    
+    store.forkMap(store.currentMap._id)   
+    history.push("/") 
 }
 
    let listCard = "";
@@ -197,11 +198,12 @@ function handleForkButton(){
         </div>
        }
 
-<div id = "function-bar" class="element-with-stroke">
-           <Button className='button'
+            <div id = "function-bar" class="element-with-stroke">
+                <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={store.currentMap == null}
                    onClick={handleForkButton}>Fork</Button>  
-</div>
+            </div>
 
     {store.currentMap != null? ( 
         

@@ -365,21 +365,27 @@ const HomeScreen = () => {
        <div id = "function-bar" class="element-with-stroke">
            <Button className='button' id="Select-File-Button"
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap|| store.currentMap.mapTemplate != "null"}
                    onClick={handleSelectFileButton}>select File</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleForkButton}>Fork</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleEditButton}>Edit</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleRenderButtonClick}>Render</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick = {handlePublishButton}>Publish</Button>
            <Button className='button' 
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleDeleteButton}>Delete</Button>
        </div></List>
        <MapTemplateModal open={MapTemplateModalStatus} handleClose={setMapTemplateModalStatus} onConfirm={handleMapTemplateModalConfirm} />
