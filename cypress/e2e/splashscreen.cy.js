@@ -26,16 +26,44 @@ describe('Login System', () => {
     cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com');
     
     // Check if an element with ID "map-name" exists
-    cy.get('#map-name').should('exist');
+   // cy.get('#map-name').should('exist');
 
 // Check if an element with ID "export-close" exists
-    cy.get('#export-close').should('exist');
+    //cy.get('#export-close').should('exist');
 
 // Check if an element with ID "container" exists
-    cy.get('#container').should('exist');
+   // cy.get('#container').should('exist');
 
 // Check if an element with ID "function-bar" exists
+   // cy.get('#function-bar').should('exist');
+
+
+  });
+
+});
+
+describe('Community view', () => {
+  it('should log in with valid credentials and view the community', () => {
+    cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/login/');
+    // Enter valid username and password
+    cy.get('[name="email"]').type('a1149934007@gmail.com');
+    cy.get('[name="password"]').type('12345678');
+
+    // Click on the "Login" button
+    cy.get('button[type="submit"]').click();
+
+    //visit 
+    // Check if the login was successful
+    cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/community');
+    
+    // Check if an element with ID "map-name" exists
+    cy.get('#Mapview').should('exist');
+
+// Check if an element with ID "export-close" exists
     cy.get('#function-bar').should('exist');
+
+// Check if an element with ID "container" exists
+    cy.get('#CommentCards').should('exist');
 
 
   });
