@@ -23,8 +23,6 @@ import toGeoJSON from 'togeojson';
 import * as shapefile from 'shapefile';
 import MUIBanUserLoginModal from './MUIBanUserLoginModal.js';
 import MapTemplateModal from './MapTemplateModal.js';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -48,8 +46,6 @@ const HomeScreen = () => {
     const [current, setcurrent] = useState(null)
     const [openBanUserLoginModal, setOpenBanUserLoginModal] = useState(false);
     const [MapTemplateModalStatus, setMapTemplateModalStatus] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
         if(auth.user)
@@ -84,41 +80,7 @@ const HomeScreen = () => {
 
     const handleRenderButtonClick = () => {
         renderGeoJSON();
-        setRendering( rendering );
-    }
-    if(fileExtension==="kml"){
-        renderKMLFile();
-        setRendering( rendering );
-    }
-    if(fileExtension==="shp"){
-       renderShpFile();
-       setRendering( rendering );
-    }
-};
-
-
-const renderShpFile = () => {
-    const reader = new FileReader();// FileReader class for reading file
-    if (map) {// if map variable from state exists(load map function excute successfully)
-      const thisMap = map;//assgin map variable from state
-      reader.onload = async (e) => {// event handler for FileReader
-        try {
-            const arrayBuffer = e.target.result; // FileReader result is an ArrayBuffer
-            const geojsonData = await shapefile.read(arrayBuffer);
-            store.storeFile(store.currentMap._id, geojsonData);
-  
-          const geojsonLayer = L.geoJSON(geojsonData).addTo(thisMap);//adds the geojason layer to the leaft map.
-  
-          thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
-        } catch (error) {
-          console.error('Error rendering Shapefile:', error);
-        }
-      };
-  
-      reader.readAsArrayBuffer(selectedFile);//used to read the contents of the specified file
-    }
-  };
-
+    };
 
   const renderGeoJSON = () => {
     if (map) {// if map variable from stat e exists(load map function excute successfully)
@@ -198,23 +160,6 @@ const renderShpFile = () => {
    const handleSelectFileButton = () => {
         setMapTemplateModalStatus(true);
     };
-
-
-    const handleselectasc = (value) => {
-        store.sortCreationDatesAsc();
-       }
-    
-       const handleselectdesc = (value) => {
-        store.sortCreationDatesDesc();
-       }
-    
-       const handleselectlikes = (value) => {
-        store.sortLikes();
-       }
-    
-       const handleselectdisLikes = (value) => {
-        store.sortDisLikes();
-       }
 
     const handleMapTemplateModalConfirm = ({ file, mapType }) => {
         // Handle the selected file and map type in your HomeScreen component
@@ -320,8 +265,7 @@ const renderShpFile = () => {
         selectClass = "selected-map-card";
     }
 
-
-   let listCard = "";
+    let listCard = "";
     //load only public map
     if (store && publicList) {
         if (store.searchText === ""){
@@ -410,31 +354,6 @@ const renderShpFile = () => {
         }
 
     }
-
-
-    const sortByMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleselectlikes}>Likes(High - Low)</MenuItem>
-            <MenuItem onClick={handleselectdisLikes}>Dislikes(High - Low)</MenuItem>
-            <MenuItem onClick={handleselectasc}>Creation Date(asc)</MenuItem>
-            <MenuItem onClick={handleselectdesc}>Creation Date(desc)</MenuItem>
-        </Menu>
-    )
-
-
   
    return (
        <div >
@@ -443,7 +362,7 @@ const renderShpFile = () => {
            <IconButton style = {{color:'black'}}> <AddCircleIcon onClick={handleAdd} style={{fontSize: '2rem'}}></AddCircleIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <PublishedWithChangesIcon onClick={handlePublic} style={{ fontSize: '2rem',border: isBorderVisible ? '2px solid black' : 'none' }}></PublishedWithChangesIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <LockIcon onClick={handlePrivate} style={{ fontSize: '2rem',border: !isBorderVisible ? '2px solid black' : 'none' }}></LockIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <IconButton onClick={handleProfileMenuOpen} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>{sortByMenu}
+           <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
        </Box>
        
        <div style={{ width: '29%', overflow: 'scroll' }}>

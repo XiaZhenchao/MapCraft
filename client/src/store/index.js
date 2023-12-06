@@ -20,11 +20,16 @@ export const GlobalStoreActionType = {
     CLOSE_CURRENT_MAP: "CLOSE_CURRENT_MAP",
     CREATE_NEW_MAP: "CREATE_NEW_MAP",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
-    LOAD_COMMENT_PAIRS: "LOAD_COMMENT_PAIRS",
     MARK_MAP_FOR_DELETION: "MARK_MAP_FOR_DELETION",
     SET_CURRENT_MAP: "SET_CURRENT_MAP",
     SET_MAP_NAME_EDIT_ACTIVE: "SET_MAP_NAME_EDIT_ACTIVE",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    STORE_FILE: "STORE_FILE",
+    CREATE_NEW_COMMENT: "CREATE_NEW_COMMENT",
+    EDIT_COMMENT_LIKES: "EDIT_COMMENT_LIKES",
+    EDIT_LIKES: "EDIT_LIKES",
+    GET_TEXT: "GET_TEXT",
+
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -53,7 +58,6 @@ function GlobalStoreContextProvider(props) {
         currentComment: null,
         commentIdNamePairs: [],
         searchText: ""
-
     });
     const history = useHistory();
 
@@ -79,6 +83,7 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
                     currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
                     searchText: store.searchText
                 });
             }
@@ -97,6 +102,20 @@ function GlobalStoreContextProvider(props) {
                     searchText: store.searchText
                 })
             }
+            case GlobalStoreActionType.GET_TEXT: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: payload.searchText
+                })
+            }
             // CREATE A NEW LIST
             case GlobalStoreActionType.CREATE_NEW_MAP: {                
                 return setStore({
@@ -112,7 +131,23 @@ function GlobalStoreContextProvider(props) {
                     searchText: store.searchText
                 })
             }
-
+            // GET ALL THE MAPS SO WE CAN PRESENT THEM
+            case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload,
+                    currentMap: null,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: "",
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText,
+                    mapTemplate:store.mapTemplate,
+                    mapObjects:store.mapObjects
+                });
+            }
             case GlobalStoreActionType.CREATE_NEW_COMMENT: {                
                 return setStore({
                     currentModal : CurrentModal.NONE,
@@ -127,65 +162,6 @@ function GlobalStoreContextProvider(props) {
                     searchText: store.searchText
                 })
             }
-
-            case GlobalStoreActionType.EDIT_COMMENT_LIKES: {                
-                return setStore({
-                    currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentMap: store.currentMap,
-                    mapCounter: store.mapCounter,
-                    mapNameActive: false,
-                    mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName,
-                    commentIdNamePairs: payload.commentIdNamePairs,
-                    searchText: store.searchText
-                })
-            }
-
-            case GlobalStoreActionType.EDIT_LIKES: {                
-                return setStore({
-                    currentModal : CurrentModal.NONE,
-                    idNamePairs: payload.idNamePairs,
-                    currentMap: store.currentMap,
-                    mapCounter: store.mapCounter,
-                    mapNameActive: false,
-                    mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName,
-                    commentIdNamePairs: store.commentIdNamePairs,
-                    searchText: store.searchText
-                })
-            }
-
-            case GlobalStoreActionType.GET_TEXT: {                
-                return setStore({
-                    currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentMap: store.currentMap,
-                    mapCounter: store.mapCounter,
-                    mapNameActive: false,
-                    mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName,
-                    commentIdNamePairs: store.commentIdNamePairs,
-                    searchText: payload.searchText
-                })
-            }
-
-            // GET ALL THE MAPS SO WE CAN PRESENT THEM
-            case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
-                return setStore({
-                    currentModal : CurrentModal.NONE,
-                    idNamePairs: payload,
-                    currentMap: null,
-                    mapCounter: store.mapCounter,
-                    mapNameActive: false,
-                    mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null,
-                    currentmapName: ""
-                });
-            }
             // PREPARE TO DELETE A LIST
             case GlobalStoreActionType.MARK_MAP_FOR_DELETION: {
                 return setStore({
@@ -197,6 +173,8 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForDeletion: payload.id,
                     mapMarkedForDeletion: payload.map,
                     currentmapName: "",
+                    mapTemplate:store.mapTemplate,
+                    mapObjects:store.mapObjects,
                     commentIdNamePairs: store.commentIdNamePairs,
                     searchText: store.searchText
                 });
@@ -260,8 +238,38 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 });
+            }
+            case GlobalStoreActionType.EDIT_LIKES: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
+                })
+            }
+            case GlobalStoreActionType.EDIT_COMMENT_LIKES: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: payload.commentIdNamePairs,
+                    searchText: store.searchText
+                })
             }
             default:
                 return store;
@@ -289,7 +297,8 @@ function GlobalStoreContextProvider(props) {
         let newMapName = "Map" + store.mapCounter;
         let username = auth.user.firstName+" " + auth.user.lastName;
         const response = await api.createMap(newMapName, auth.user.email, username);
-
+        console.log("createNewMap response: " + response);
+        // store.loadIdNamePairs();
         if (response.status === 201) {
             //tps.clearAllTransactions();
             let newMap = response.data.map;
@@ -467,178 +476,74 @@ function GlobalStoreContextProvider(props) {
         asyncForkMap(id);
 
     };
-
-
-    /*store.setComment = function (id, comment, username) {
-        async function asyncSetComment(id) {
-            let response = await api.getMapById(id);
-            if (response.data.success) {
-                let map = response.data.map;
+    // store.setComment = function (id, comment, username) {
+    //     async function asyncSetComment(id) {
+    //         let response = await api.getMapById(id);
+    //         if (response.data.success) {
+    //             let map = response.data.map;
                 
-                const singleComment = {
-                    userName: username,
-                    comment: comment,
-                    like: 0,
-                    disLike: 0
-                  };
-                  map.commentObject.push(singleComment);
-                //map.commentObject.push({username,comment});
-                async function updateMap(map) {
-                    console.log("map._id: "+map._id);
-                    console.log("id: "+id);
-                    response = await api.updateMapById(map._id, map);
-                    if (response.data.success) {
-                        async function getMapPairs(map) {
-                            response = await api.getMapPairs();
-                            if (response.data.success) {
-                                let pairsArray = response.data.idNamePairs;
-                                storeReducer({
-                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                                    payload: pairsArray
-                                });
-                            }
-                        }
-                        getMapPairs(map);
-                    }
-                }
-                updateMap(map);
-            }
-        }
-        asyncSetComment(id);
-    }
-
-    // store.storeFile = function (id, geojsonChunks) {
-    //     async function asyncStoreFile(id, geojsonChunks) {
-    //         for (let i = 0; i < geojsonChunks.length; i++) {
-    //             let response = await api.storeGeoFile(id, geojsonChunks[i]);
+    //             const singleComment = {
+    //                 userName: username,
+    //                 comment: comment,
+    //               };
+    //               map.commentObject.push(singleComment);
+    //             //map.commentObject.push({username,comment});
+    //             async function updateMap(map) {
+    //                 console.log("map._id: "+map._id);
+    //                 console.log("id: "+id);
+    //                 response = await api.updateMapById(map._id, map);
+    //                 if (response.data.success) {
+    //                     async function getMapPairs(map) {
+    //                         response = await api.getMapPairs();
+    //                         if (response.data.success) {
+    //                             let pairsArray = response.data.idNamePairs;
+    //                             storeReducer({
+    //                                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+    //                                 payload: pairsArray
+    //                             });
+    //                         }
+    //                     }
+    //                     getMapPairs(map);
+    //                 }
+    //             }
+    //             updateMap(map);
     //         }
     //     }
-    //     asyncStoreFile(id, geojsonChunks);
+    //     asyncSetComment(id);
     // }
-
-    store.storeFile = function (id, geojsonData) {
-        async function asyncStoreFile(id, geojsonData) {
-            //for (let i = 0; i < geojsonChunks.length; i++) {
-                let response = await api.storeGeoFile(id, geojsonData);
-           // }
-        }
-        asyncStoreFile(id, geojsonData,mapType);
-    }
-
-    store.markMapForDeletion = function (id) {
-        async function getMapToDelete(id) {
-            let response = await api.getMapById(id);
-            if (response.data.success) {
-                let map = response.data.map;
-                storeReducer({
-                    type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
-                    payload: {id: id, map: map}
-                });
-            }
-        }
-        getMapToDelete(id);
-    }
-
-    store.deleteMap = function (id) {
-        async function processDelete(id) {
-            let response = await api.deleteMapById(id);
-            if (response.data.success) {
-                store.loadIdNamePairs();
-            }
-        }
-        processDelete(id);
-    }
-
-    store.deleteMarkedMap = function() {
-        store.deleteMap(store.mapIdMarkedForDeletion);
-        store.hideModals();
-    }
-
-    store.changeMapName = function (id, newName) {
-        // GET THE LIST
-        async function asyncChangeMapName(id) {
-            let response = await api.getMapById(id);
-            if (response.data.success) {
-                let map = response.data.map;
-                map.name = newName;
-                async function updateMap(map) {
-                    response = await api.updateMapById(map._id, map);
-                    if (response.data.success) {
-                        async function getMapPairs(map) {
-                            response = await api.getMapPairs();
-                            if (response.data.success) {
-                                let pairsArray = response.data.idNamePairs;
-                                storeReducer({
-                                    type: GlobalStoreActionType.CHANGE_MAP_NAME,
-                                    payload: {
-                                        idNamePairs: pairsArray,
-                                        map: map
-                                    }
-                                });
-                            }
+    store.setComment = async function (comment, username) {
+        let like = 0;
+        let disLike = 0;
+        const response = await api.createComment(comment, username, like, disLike, store.currentMap._id);
+        console.log("create Comment response: " + response);
+        if (response.status === 201) {
+            let newComment = response.data.comment;
+            async function asyncLoadIdNamePairs() {
+                const response = await api.getcommentPairs();
+                console.log("getcommentpairs response: " + response.data.idNamePairs);
+                console.log("comment pairs-------");
+                if (response.data.success) {
+                    console.log("response: " + response.data.success);
+                    let array = response.data.idNamePairs;
+                    console.log("array: " + array[0]);
+                    storeReducer({
+                        type: GlobalStoreActionType.CREATE_NEW_COMMENT,
+                        payload: {
+                            comment: newComment,
+                            commentIdNamePairs: array
                         }
-                        getMapPairs(map);
-                    }
+                    });
                 }
-                updateMap(map);
-            }
-        }
-        asyncChangeMapName(id);
-    }
-
-    store.hideModals = () => {
-        storeReducer({
-            type: GlobalStoreActionType.HIDE_MODALS,
-            payload: {isEdition: false, isDeleting: false}
-        });    
-    }
-
-    store.isDeleteMapModalOpen = () => {
-        return store.currentModal === CurrentModal.DELETE_MAP;
-    }
-
-    store.isEditMapName = () => {
-        return store.mapNameActive === true || store.isDeleteMapModalOpen() === true;
-    }
-
-    store.setMapNameEditActive = function () {
-        storeReducer({
-            type: GlobalStoreActionType.SET_MAP_NAME_EDIT_ACTIVE,
-            payload: null
-        });
-    }
-
-    store.increaseMapLikes = function (id) {
-        // GET THE LIST
-        async function asyncSetLikes(id) {
-            let response = await api.getMapById(id);
-            if (response.data.success) {
-                let map = response.data.map;
-                 map.likes = map.likes + 1;
-                 map.disLikes = map.disLikes;
-                async function updateMap(map) {
-                    response = await api.updateMapById(map._id, map);
-                    if (response.data.success) {
-                        async function getMapPairs() {
-                            response = await api.getMapPairs();
-                            if (response.data.success) {
-                                let pairsArray = response.data.idNamePairs;
-                                storeReducer({
-                                    type: GlobalStoreActionType.EDIT_LIKES,
-                                    payload: {
-                                        idNamePairs: pairsArray,
-                                    }
-                                });
-                            }
-                        }
-                        getMapPairs();
-                    }
+                else{
+                    console.log("API FAILED TO GET THE COMMENT PAIRS");
                 }
-                updateMap(map);
-            }
+            }asyncLoadIdNamePairs();
         }
-        asyncSetLikes(id);
+        else {
+            console.log("API FAILED TO CREATE A NEW COMMENT");
+        }
     }
+
 
     store.increaseMapDisLikes = function (id) {
         // GET THE LIST
@@ -741,37 +646,37 @@ function GlobalStoreContextProvider(props) {
     }
 
 
-    store.setComment = async function (comment, username) {
-        let like = 0;
-        let disLike = 0;
-        const response = await api.createComment(comment, username, like, disLike, store.currentMap._id);
-        console.log("create Comment response: " + response);
-        if (response.status === 201) {
-            let newComment = response.data.comment;
-            async function asyncLoadIdNamePairs() {
-                const response = await api.getcommentPairs();
-                console.log("getcommentpairs response: " + response.data.idNamePairs);
-                console.log("comment pairs-------");
-                if (response.data.success) {
-                    console.log("response: " + response.data.success);
-                    let array = response.data.idNamePairs;
-                    console.log("array: " + array[0]);
-                    storeReducer({
-                        type: GlobalStoreActionType.CREATE_NEW_COMMENT,
-                        payload: {
-                            comment: newComment,
-                            commentIdNamePairs: array
+
+    store.increaseMapLikes = function (id) {
+        // GET THE LIST
+        async function asyncSetLikes(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                 map.likes = map.likes + 1;
+                 map.disLikes = map.disLikes;
+                async function updateMap(map) {
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs() {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_LIKES,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                    }
+                                });
+                            }
                         }
-                    });
+                        getMapPairs();
+                    }
                 }
-                else{
-                    console.log("API FAILED TO GET THE COMMENT PAIRS");
-                }
-            }asyncLoadIdNamePairs();
+                updateMap(map);
+            }
         }
-        else {
-            console.log("API FAILED TO CREATE A NEW COMMENT");
-        }
+        asyncSetLikes(id);
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE COMMENTS
@@ -872,6 +777,127 @@ function GlobalStoreContextProvider(props) {
         });
 }
 
+
+
+    store.storeFile = function (id, geojsonData,mapType) {
+        async function asyncStoreFile(id, geojsonData,mapType) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                
+                map.mapObjects = geojsonData;
+                map.mapTemplate = mapType;
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.STORE_FILE,
+                                    payload: {
+                                        idNamePairs:pairsArray,
+                                        map:map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncStoreFile(id, geojsonData,mapType);
+    }
+
+    store.markMapForDeletion = function (id) {
+        async function getMapToDelete(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                storeReducer({
+                    type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+                    payload: {id: id, map: map}
+                });
+            }
+        }
+        getMapToDelete(id);
+    }
+
+    store.deleteMap = function (id) {
+        async function processDelete(id) {
+            let response = await api.deleteMapById(id);
+            if (response.data.success) {
+                store.loadIdNamePairs();
+            }
+        }
+        processDelete(id);
+    }
+
+    store.deleteMarkedMap = function() {
+        store.deleteMap(store.mapIdMarkedForDeletion);
+        store.hideModals();
+    }
+    // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
+    // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
+
+    store.changeMapName = function (id, newName) {
+        // GET THE LIST
+        async function asyncChangeMapName(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                map.name = newName;
+                async function updateMap(map) {
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.CHANGE_MAP_NAME,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                        map: map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncChangeMapName(id);
+    }
+
+    store.hideModals = () => {
+        storeReducer({
+            type: GlobalStoreActionType.HIDE_MODALS,
+            payload: {isEdition: false, isDeleting: false}
+        });    
+    }
+
+    store.isDeleteMapModalOpen = () => {
+        return store.currentModal === CurrentModal.DELETE_MAP;
+    }
+
+    store.isEditMapName = () => {
+        return store.mapNameActive === true || store.isDeleteMapModalOpen() === true;
+    }
+
+    store.setMapNameEditActive = function () {
+        storeReducer({
+            type: GlobalStoreActionType.SET_MAP_NAME_EDIT_ACTIVE,
+            payload: null
+        });
+    }
 
 
 

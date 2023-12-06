@@ -171,9 +171,9 @@ function handleForkButton(){
     }
 
     console.log("comment pairs-------");
-    store.commentIdNamePairs.forEach(item => {
-        console.log(item);
-      });
+    // store.commentIdNamePairs.forEach(item => {
+    //     console.log(item);
+    //   });
 
 
     /*let commentCard = "";
@@ -296,8 +296,8 @@ function handleForkButton(){
 
         <Box style={{ fontSize: '20px', marginTop: '3%', marginLeft: '2%', width: '40%' }}>
         {store.currentMap ? 
-            <p>{commentCard}</p> :
-            <p>No current map available</p>
+            <p>{commentCard}</p > :
+            <p>No current map available</p >
         }
         </Box>
     </div> ): " "}
