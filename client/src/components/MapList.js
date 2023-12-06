@@ -34,23 +34,29 @@ function MapList(props) {
 
    
     let cardElement =
+    <div>
     <ListItem
     id={idNamePair._id}
     key={idNamePair._id}
     sx={{ marginTop: '10px', display: 'flex', p: 1 }}
-    style={{ width: '90%', left: '30px', fontSize: '32pt', borderRadius: '25px', border: '1px', backgroundColor: '#e1e4cb' }}
+    style={{ width: '90%'}}
     className={store.currentMap != null && store.currentMap._id == idNamePair._id ? 'map-card-unhover' : 'map-card'}
+    //className= 'map-card-unhover'
     onClick={(event) => {
         //handleLoadList(event, idNamePair._id)
         handleMapSelect(event)
     }}
 >
-    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-    <IconButton onClick = {handleLikes}><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>{idNamePair.likes}
+    
+    
+    </ListItem>
+    <div className = {store.currentMap != null && store.currentMap._id == idNamePair._id ? 'info-card-unhover' : 'info-card'}>
+    Name: {idNamePair.name} 
+    <IconButton style = {{marginLeft: '90px'}} onClick = {handleLikes}><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>{idNamePair.likes}
     <IconButton onClick = {handleDisLikes}><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>{idNamePair.disLikes}
-    
-    
-</ListItem>
+    <div>Created Date: {idNamePair.createdAt}</div>
+    </div>
+    </div>
 
     
     return (

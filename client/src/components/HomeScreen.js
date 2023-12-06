@@ -110,19 +110,25 @@ const HomeScreen = () => {
                 const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
                 console.log(geojsonData)
                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
-                    onEachFeature : onEachFeature //calls oneachFeature function
+                    onEachFeature: function (feature, layer) {
+                        // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
+                        if (feature.properties && feature.properties.name_en) {
+                           layer.bindPopup(feature.properties.name_en);
+                        }
+                        
+                    },
                 }).addTo(thisMap); //adds the geojason layer to the leaft map.
 
-            function onEachFeature(feature, layer) { //onEachFeature function
-                let featureArray = []; //create an empty array to store all the features
-                 if (feature.properties) {
-                    for (let i in feature.properties) { //for loop to loop the feature
-                        featureArray.push(i + ": " + feature.properties[i]);//put the feature into the arrayls
-                    }
+            // function onEachFeature(feature, layer) { //onEachFeature function
+            //     let featureArray = []; //create an empty array to store all the features
+            //      if (feature.properties) {
+            //         for (let i in feature.properties) { //for loop to loop the feature
+            //             featureArray.push(i + ": " + feature.properties[i]);//put the feature into the arrayls
+            //         }
 
-                    layer.bindTooltip(featureArray.join("<br />"));
-                }
-            }
+            //         layer.bindTooltip(featureArray.join("<br />"));
+            //     }
+            // }
 
             thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
             }
@@ -330,6 +336,7 @@ const handleMenuClose = () => {
                             idNamePair={pair}
                             publish = {pair.publishStatus}
                             publishDate = {pair.publishDate}
+                            createDate = {pair.createDate}
                             likes = {pair.likes}
                             disLikes = {pair.disLikes}
                         />
@@ -348,6 +355,7 @@ const handleMenuClose = () => {
                             key={pair._id}
                             idNamePair={pair}
                             publish = {pair.publishStatus}
+                            createDate = {pair.createDate}
                             publishDate = {pair.publishDate}
                             likes = {pair.likes}
                             disLikes = {pair.disLikes}
@@ -374,6 +382,7 @@ const handleMenuClose = () => {
                                 key={pair._id}
                                 idNamePair={pair}
                                 publish={pair.publishStatus}
+                                createDate = {pair.createDate}
                                 publishDate={pair.publishDate}
                                 likes={pair.likes}
                                 disLikes={pair.disLikes}

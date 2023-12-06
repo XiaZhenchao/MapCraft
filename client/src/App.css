@@ -389,31 +389,46 @@ body {
   margin: 0.5rem;
 }
 
-.map-card:hover{
+.map-card{
   background: url(exampleMap.jpg);
   background-size: cover;
-  border-radius: 20px;
-  border: 1px solid ; 
   padding: 10px;
   background-color: #e1e4cb;
-  left:2%;
+  left:10%;
   height: 150px;
   width: 40%;
   cursor: pointer;
-  margin-bottom: 2%;
+  border-color: #000000;
 }
 
 .map-card-unhover{
   background: url(exampleMap.jpg);
   background-size: cover;
-  border-radius: 20px;
-  border: 1px solid ; 
+  border: 1px solid ;
   padding: 10px;
   background-color: #e1e4cb;
-  border-color: dimgray;
-  left:2%;
+  border-color: rgb(14, 13, 13);
+  left:10%;
   height: 150px;
   width: 40%;
+  cursor: pointer;
+}
+
+.info-card-unhover{
+  background-color:white;
+  border: 1px solid ; 
+  margin-left: 10%;
+  height: 70px;
+  width: 89.5%;
+  cursor: pointer;
+  margin-bottom: 2%;
+}
+
+.info-card{
+  background-color:white;
+  margin-left: 10%;
+  height: 70px;
+  width: 90%;
   cursor: pointer;
   margin-bottom: 2%;
 }
