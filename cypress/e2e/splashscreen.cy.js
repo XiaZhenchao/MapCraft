@@ -40,13 +40,6 @@ cy.get('#function-bar').should('exist');
   });
 
 });
-// describe('.MuiTypography-root', () => {
-//   it('check if the MUI typograph can be read or not ', () => {
-//     cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/')
-//     cy.get('.MuiTypography-root > a')
-//       .should("exist")
-//   })
-// })
 
 describe('Password Recovery System', () => {
   it('should send a password reset email', () => {
