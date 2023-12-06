@@ -83,8 +83,6 @@ const HomeScreen = () => {
       }, [store.currentMap]);
 
     const handleRenderButtonClick = () => {
-    setRendering( rendering );
-    if(fileExtension==="json"){
         renderGeoJSON();
         setRendering( rendering );
     }
@@ -96,15 +94,6 @@ const HomeScreen = () => {
        renderShpFile();
        setRendering( rendering );
     }
-};
-
-const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-};
-
-
-const handleMenuClose = () => {
-    setAnchorEl(null);
 };
 
 
@@ -132,23 +121,11 @@ const renderShpFile = () => {
 
 
   const renderGeoJSON = () => {
-    const reader = new FileReader();// FileReader class for reading file
-    if (map) {// if map variable from state exists(load map function excute successfully)
+    if (map) {// if map variable from stat e exists(load map function excute successfully)
         const thisMap = map;//assgin map variable from state
-        reader.onload = (e) => {// event handler for FileReader
             try {
-                const geojsonData = JSON.parse(e.target.result); //Parse the data of GeoJSON file
-                //const CHUNK_SIZE = 256 * 256; 
-                //const jsonString = JSON.stringify(geojsonData);
-                //const chunks = [];
-                //let offset = 0;
-
-               // while (offset < jsonString.length) {
-                   // const chunk = jsonString.slice(offset, offset + CHUNK_SIZE);
-                   // chunks.push(chunk);
-                   // offset += CHUNK_SIZE;
-                //}
-                store.storeFile(store.currentMap._id, geojsonData);
+                const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
+                console.log(geojsonData)
                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
                     onEachFeature : onEachFeature //calls oneachFeature function
                 }).addTo(thisMap); //adds the geojason layer to the leaft map.
@@ -168,56 +145,9 @@ const renderShpFile = () => {
             }
             catch (error) {
                 console.error('Error rendering GeoJSON:', error);
-            }
         }
-
-    reader.readAsText(selectedFile);//used to read the contents of the specified file
     };
 }
-
-
-const renderKMLFile = () => {
-    const reader = new FileReader(); // FileReader class for reading file
-    if (map) {// if map variable from state exists(load map function excute successfully)
-        const thisMap = map; //assgin map variable from state
-        reader.onload = (e) => { // event handler for FileReader
-        const kmlContent = e.target.result; 
-        const geojson = toGeoJSON.kml(new DOMParser().parseFromString(kmlContent, 'text/xml')); //Parse the data from KML file into GeoJSON type
-        store.storeFile(store.currentMap._id, geojson);
-        const geojsonLayer = L.geoJSON(geojson, {
-            onEachFeature : onEachFeature
-         }).addTo(thisMap);
-
-         function onEachFeature(feature, layer) {
-            let featureArray = [];
-             if (feature.properties) {
-                for (let i in feature.properties) {
-                    featureArray.push(i + ": " + feature.properties[i]);
-                }
-
-                layer.bindTooltip(featureArray.join("<br />"));
-             }
-         }
-         thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
-         }
-    reader.readAsText(selectedFile); //intiate the selected file
-    }
-}
-   
-    // const handleCancelClick = () => {
-    //     const fileInput = document.getElementById('fileInput');
-    //     fileInput.value = '';
-        
-    //     if(map!=null){
-    //         setMap(null) // Remove the old map
-    //     }       
-
-    //     setSelectedFile(null)
-    //     setRendering(false)
-    //     handleFileInputChange();
-    // };
-
- 
     
   const loadMap = () => {
     try {
@@ -292,31 +222,58 @@ const renderKMLFile = () => {
         console.log('Map Type:', mapType);
         //save the mapType state
         setMapType(mapType)
-        // Add your logic here to handle the data as needed
+        const reader = new FileReader();
         if (file) {
             const fileName = file.name;
             const fileExtension = fileName.split('.').pop().toLowerCase();
+            console.log("fileExtension is " + fileExtension)
 
-            if (fileExtension === 'shp' || fileExtension === 'json' || fileExtension === 'kml'){
-                setSelectedFile( file );
-                const uploadButton = document.getElementById('Select-File-Button');
-                uploadButton.disabled = true;
-                loadMap();
-                setFileExtension( fileExtension );
-            } else if (fileExtension === 'zip') {
-                setSelectedFile( file );
-                const uploadButton = document.getElementById('Select-File-Button');
-                uploadButton.disabled = true;
-                loadMap();
-                setFileExtension( fileExtension );
+            if (fileExtension === 'shp'){
+                reader.onload = async (e) => {// event handler for FileReader
+                    try {
+                        const arrayBuffer = e.target.result; // FileReader result is an ArrayBuffer
+                        const geojsonData = await shapefile.read(arrayBuffer);
+                        store.storeFile(store.currentMap._id, geojsonData,mapType)
+                    } catch (error) {
+                      console.error('Error storing Shapefile:', error);
+                    }
+                  };
+                reader.readAsArrayBuffer(file);//used to read the contents of the specified file
+                //const uploadButton = document.getElementById('Select-File-Button');
+                //uploadButton.disabled = true;
+            } else if (fileExtension === 'json') {
+                reader.onload = (e) => {// event handler for FileReader
+                    try {
+                        const geojsonData = JSON.parse(e.target.result); //Parse the data of GeoJSON file
+                        console.log("home screen storefile");
+                        store.storeFile(store.currentMap._id, geojsonData,mapType)
+                        //console.log("right after storefile")
+                    }
+                    catch (error) {
+                        console.error('Error storing GeoJSON:', error);
+                    }
+                }
+                reader.readAsText(file);
+                //const uploadButton = document.getElementById('Select-File-Button');
+                //uploadButton.disabled = true;
+                //loadMap();
+            }
+            else if (fileExtension === 'kml') {
+                reader.onload = (e) => { // event handler for FileReader
+                    const kmlContent = e.target.result; 
+                    const geojsonData = toGeoJSON.kml(new DOMParser().parseFromString(kmlContent, 'text/xml')); //Parse the data from KML file into GeoJSON type
+                    store.storeFile(store.currentMap._id, geojsonData,mapType)
+                }
+                reader.readAsText(file); //intiate the selected file
+                //const uploadButton = document.getElementById('Select-File-Button');
+                //uploadButton.disabled = true;
             }
             else {
                 alert('Please select a valid SHP, GeoJSON, or KML file.');
             }
         } else {
-                setSelectedFile( null );
-            const uploadButton = document.getElementById('Select-File-Button');
-            uploadButton.disabled = false;
+            //const uploadButton = document.getElementById('Select-File-Button');
+            //uploadButton.disabled = false;
         }
       };
 
@@ -352,6 +309,10 @@ const renderKMLFile = () => {
     function handleBanUserLoginModal() {
         // Handle the logic to show the ban user modal
         setOpenBanUserLoginModal(true);
+    }
+
+    function handleForkButton(){
+        store.forkMap(store.currentMap._id)    
     }
 
     let selectClass = "unselected-map-card";
@@ -526,29 +487,29 @@ const renderKMLFile = () => {
       
        <div id = "function-bar" class="element-with-stroke">
            <Button className='button' id="Select-File-Button"
-                    disabled={selectedFile!=null}
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap|| store.currentMap.mapTemplate != "null"}
                    onClick={handleSelectFileButton}>select File</Button>
            <Button className='button'
-                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}>Fork</Button>
+                   sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
+                   onClick={handleForkButton}>Fork</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleEditButton}>Edit</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleRenderButtonClick}>Render</Button>
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick = {handlePublishButton}>Publish</Button>
            <Button className='button' 
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
+                   disabled={!store.currentMap}
                    onClick={handleDeleteButton}>Delete</Button>
-                    {/* {selectedFile!=null && (
-                    <div>
-                        <p>Selected File: {selectedFile.name}</p >
-                        <button onClick={handleCancelClick}>Cancel</button>
-                    </div>
-                )} */}
        </div></List>
        <MapTemplateModal open={MapTemplateModalStatus} handleClose={setMapTemplateModalStatus} onConfirm={handleMapTemplateModalConfirm} />
        </div>)

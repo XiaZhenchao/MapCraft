@@ -72,14 +72,6 @@ export const updateMapById = (id, map) => {
         map : map
     })
 }
-export const storeGeoFile = (id, geojsonData) => {
-    return api.post(`/map/${id}`, {
-        // SPECIFY THE PAYLOAD
-        mapId: id,
-        selectedFile: geojsonData
-        
-    })
-}
 
 const apis = {
     createComment,
@@ -91,7 +83,6 @@ const apis = {
     getMapById,
     getMapPairs,
     updateMapById,
-    storeGeoFile
 }
 
 export default apis

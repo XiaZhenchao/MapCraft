@@ -9,7 +9,7 @@ const router = express.Router()
 const auth = require('../auth')
 
 router.post('/map', auth.verify, MapController.createMap)
-router.post('/map/:id', auth.verify, MapController.storeGeoFile)
+// router.post('/map/:id', auth.verify, MapController.storeGeoFile)
 router.delete('/map/:id', auth.verify, MapController.deleteMap)
 router.get('/map/:id', MapController.getMapById)
 router.get('/mapairs',  MapController.getMapPairs)
