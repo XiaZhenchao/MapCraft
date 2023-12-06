@@ -54,6 +54,7 @@ function MapList(props) {
     Name: {idNamePair.name} 
     <IconButton style = {{marginLeft: '90px'}} onClick = {handleLikes}><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>{idNamePair.likes}
     <IconButton onClick = {handleDisLikes}><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>{idNamePair.disLikes}
+    <div>Author: {idNamePair.authorName}</div>
     <div>Created Date: {idNamePair.createdAt}</div>
     </div>
     </div>
