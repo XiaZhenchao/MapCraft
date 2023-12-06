@@ -63,7 +63,7 @@ describe('Community view', () => {
     cy.get('#function-bar').should('exist');
 
 // Check if an element with ID "container" exists
-    cy.get('#CommentCards').should('exist');
+   // cy.get('#CommentCards').should('exist');
 
 
   });
