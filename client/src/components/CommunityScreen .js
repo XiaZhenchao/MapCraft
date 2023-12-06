@@ -36,7 +36,6 @@ const CommunityScreen = () => {
   useEffect(() => {
     // Load the map when the component mounts
     loadMap();
-    store.loadIdNamePairs();
     store.loadCommentPairs();
     //console.log(store.commentIdNamePairs);
     
@@ -173,28 +172,8 @@ function handleForkButton(){
     console.log("comment pairs-------");
     // store.commentIdNamePairs.forEach(item => {
     //     console.log(item);
-    //   });
+    //    });
 
-
-    /*let commentCard = "";
-     if (store.currentMap) {
-        console.log(
-            store.commentIdNamePairs
-              .filter((pair) => pair.mapId === store.currentMap._id)
-              .map((pair) => pair)
-          );
-         commentCard = store.commentIdNamePairs.filter((pair) => pair.mapId === store.currentMap._id).map((Pair) =>  
-             (
-             <div id = 'comment-list'>
-             <div>@{Pair.userName}: </div>
-             <div className='space'>{Pair.comment}</div>
-             <IconButton onClick = {handleCommentLikes}><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>
-              <IconButton onClick = {handleCommentDisLikes}><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>
-                 <Button id = "report-box"></Button>
-             </div>
-             ))
-         console.log(commentCard);
-     }*/
 
     let commentCard = "";
     if (store.currentMap) {

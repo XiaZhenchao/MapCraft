@@ -149,10 +149,53 @@ updateCommentById = async (req, res) => {
                     });
     }
 
+    deleteCommentById = async (req, res) => {
+        const body = req.body;
+        console.log(JSON.stringify(body));
+        console.log(req.body.id);
+        // Comment.findById({ _id: req.params.id }, (err, comment) => {
+        //     if (err) {
+        //         return res.status(404).json({
+        //             errorMessage: 'Comment not found!',
+        //         })
+        //     }
+    
+        //     // DOES THIS LIST BELONG TO THIS USER?
+        //     async function asyncFindMap() {
+        //         Map.findById({ _id: body.mapId }, (err, map) => {
+        //             if (map) {
+        //                 Comment.findOneAndDelete({ _id: req.params.id }, () => {
+        //                     // Remove the comment ID from the map's commentObject
+        //                     map.commentObject = map.commentObject.filter(id => id.toString() !== req.params.id);
+        //                     // Save the updated user
+        //                     map.save();
+        //                     return res.status(200).json({success: true});
+        //                 }).catch(err => console.log(err))
+        //             }
+        //             else {
+        //                 return res.status(400).json({
+        //                     errorMessage: "map found error"
+        //                 });
+        //             }
+        //         });
+        //     }
+        //     asyncFindMap();
+        // })
+
+        Comment.findOneAndDelete({ _id: req.params.id }, () => {
+            // Remove the map ID from the user's maplist
+           // user.maplist = user.maplist.filter(mapId => mapId.toString() !== req.params.id);
+            // Save the updated user
+           // user.save();
+            return res.status(200).json({success: true});
+        }).catch(err => console.log(err))
+    }
+
 
 module.exports = {
     createComment,
     getCommentById,
     getCommentPairs,
     updateCommentById,
+    deleteCommentById,
 }

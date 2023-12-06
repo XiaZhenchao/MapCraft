@@ -34,6 +34,7 @@ export const createComment = (comment_content,username, like, disLike, id) => {
     })
 }
 
+export const deleteCommentById = (id) => api.delete(`/comment/${id}`)
 export const getCommentById = (id) => api.get(`/comment/${id}`)
 export const getcommentPairs = () => api.get(`/commentpairs/`)
 export const updateCommentById = (id, comment) => {
@@ -75,6 +76,7 @@ export const updateMapById = (id, map) => {
 
 const apis = {
     createComment,
+    deleteCommentById,
     getCommentById,
     getcommentPairs,
     updateCommentById,

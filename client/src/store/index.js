@@ -29,6 +29,7 @@ export const GlobalStoreActionType = {
     EDIT_COMMENT_LIKES: "EDIT_COMMENT_LIKES",
     EDIT_LIKES: "EDIT_LIKES",
     GET_TEXT: "GET_TEXT",
+    LOAD_COMMENT_PAIRS: "LOAD_COMMENT_PAIRS",
 
 }
 
@@ -148,6 +149,23 @@ function GlobalStoreContextProvider(props) {
                     mapObjects:store.mapObjects
                 });
             }
+
+            case GlobalStoreActionType.LOAD_COMMENT_PAIRS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: "",
+                    commentIdNamePairs: payload,
+                    searchText: store.searchText,
+                    mapTemplate:store.mapTemplate,
+                    mapObjects:store.mapObjects
+                });
+            }
             case GlobalStoreActionType.CREATE_NEW_COMMENT: {                
                 return setStore({
                     currentModal : CurrentModal.NONE,
@@ -162,6 +180,22 @@ function GlobalStoreContextProvider(props) {
                     searchText: store.searchText
                 })
             }
+
+            case GlobalStoreActionType.DELETE_COMMENT: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter+1,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: payload.commentIdNamePairs,
+                    searchText: store.searchText
+                })
+            }
+
             // PREPARE TO DELETE A LIST
             case GlobalStoreActionType.MARK_MAP_FOR_DELETION: {
                 return setStore({
@@ -544,6 +578,32 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    store.deleteComment = async function (commentId) {
+        async function asyncDelete(commentId) {
+            const response = await api.deleteCommentById(commentId);
+            if (response.data.success) {
+                async function asyncLoadIdNamePairs() {
+                    const response = await api.getcommentPairs();
+                    if (response.data.success) {
+                        console.log("response: " + response.data.success);
+                        let array = response.data.idNamePairs;
+                        console.log("array: " + array[0]);
+                        storeReducer({
+                            type: GlobalStoreActionType.DELETE_COMMENT,
+                            payload: {
+                                commentIdNamePairs: array
+                            }
+                        });
+                    }
+                    else{
+                        console.log("API FAILED TO GET THE COMMENT PAIRS");
+                    }
+                }asyncLoadIdNamePairs();
+            }
+        }
+        asyncDelete(commentId)
+    }
+
 
     store.increaseMapDisLikes = function (id) {
         // GET THE LIST
@@ -682,9 +742,11 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE COMMENTS
     store.loadCommentPairs = function () {
         async function asyncLoadCommentPairs() {
+            console.log(store.commentIdNamePairs);
             const response = await api.getcommentPairs();
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
                 console.log("load pais: " + response.data.idNamePairs);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_COMMENT_PAIRS,
