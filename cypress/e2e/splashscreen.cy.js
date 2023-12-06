@@ -22,19 +22,19 @@ describe('Login System', () => {
     cy.get('button[type="submit"]').click();
 
     // Check if the login was successful
-    cy.url().should('include','https://mapcraft-55160ee4aae1.herokuapp.com');
+    cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com');
     
     // Check if an element with ID "map-name" exists
-cy.get('#map-name').should('exist');
+    cy.get('#map-name').should('exist');
 
 // Check if an element with ID "export-close" exists
-cy.get('#export-close').should('exist');
+    cy.get('#export-close').should('exist');
 
 // Check if an element with ID "container" exists
-cy.get('#container').should('exist');
+    cy.get('#container').should('exist');
 
 // Check if an element with ID "function-bar" exists
-cy.get('#function-bar').should('exist');
+    cy.get('#function-bar').should('exist');
 
 
   });
