@@ -20,10 +20,15 @@ export const GlobalStoreActionType = {
     CLOSE_CURRENT_MAP: "CLOSE_CURRENT_MAP",
     CREATE_NEW_MAP: "CREATE_NEW_MAP",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
+    LOAD_COMMENT_PAIRS: "LOAD_COMMENT_PAIRS",
     MARK_MAP_FOR_DELETION: "MARK_MAP_FOR_DELETION",
     SET_CURRENT_MAP: "SET_CURRENT_MAP",
     SET_MAP_NAME_EDIT_ACTIVE: "SET_MAP_NAME_EDIT_ACTIVE",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    CREATE_NEW_COMMENT: "CREATE_NEW_COMMENT",
+    EDIT_COMMENT_LIKES: "EDIT_COMMENT_LIKES",
+    EDIT_LIKES: "EDIT_LIKES",
+    GET_TEXT: "GET_TEXT"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -48,7 +53,11 @@ function GlobalStoreContextProvider(props) {
         mapMarkedForDeletion: null,
         isEdition: false,
         isDeleting: false,
-        currentmapName: ""
+        currentmapName: "",
+        currentComment: null,
+        commentIdNamePairs: [],
+        searchText: ""
+
     });
     const history = useHistory();
 
@@ -73,7 +82,8 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName
+                    currentmapName: store.currentmapName,
+                    searchText: store.searchText
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -86,7 +96,9 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: ""
+                    currentmapName: "",
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 })
             }
             // CREATE A NEW LIST
@@ -99,9 +111,72 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 })
             }
+
+            case GlobalStoreActionType.CREATE_NEW_COMMENT: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter+1,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: payload.commentIdNamePairs,
+                    searchText: store.searchText
+                })
+            }
+
+            case GlobalStoreActionType.EDIT_COMMENT_LIKES: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: payload.commentIdNamePairs,
+                    searchText: store.searchText
+                })
+            }
+
+            case GlobalStoreActionType.EDIT_LIKES: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
+                })
+            }
+
+            case GlobalStoreActionType.GET_TEXT: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: payload.searchText
+                })
+            }
+
             // GET ALL THE MAPS SO WE CAN PRESENT THEM
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
                 return setStore({
@@ -112,7 +187,25 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: ""
+                    currentmapName: "",
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
+                });
+            }
+
+            case GlobalStoreActionType.LOAD_COMMENT_PAIRS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: store.currentMap,
+                    mapCounter: store.mapCounter,
+                    mapNameActive: false,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: payload,
+                    searchText: store.searchText
+
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -125,7 +218,9 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: payload.id,
                     mapMarkedForDeletion: payload.map,
-                    currentmapName: ""
+                    currentmapName: "",
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 });
             }
             // UPDATE A LIST
@@ -138,7 +233,9 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: false,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 });
             }
 
@@ -153,7 +250,9 @@ function GlobalStoreContextProvider(props) {
                     mapNameActive: true,
                     mapIdMarkedForDeletion: null,
                     mapMarkedForDeletion: null,
-                    currentmapName: store.currentmapName
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 });
             }
            
@@ -168,7 +267,9 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     isEdition: payload.isEdition,
                     isDeleting: payload.isDeleting,
-                    currentmapName: store.currentmapName
+                    currentmapName: store.currentmapName,
+                    commentIdNamePairs: store.commentIdNamePairs,
+                    searchText: store.searchText
                 });
             }
             default:
@@ -197,8 +298,7 @@ function GlobalStoreContextProvider(props) {
         let newMapName = "Map" + store.mapCounter;
         let username = auth.user.firstName+" " + auth.user.lastName;
         const response = await api.createMap(newMapName, auth.user.email, username);
-        console.log("createNewMap response: " + response);
-        // store.loadIdNamePairs();
+
         if (response.status === 201) {
             //tps.clearAllTransactions();
             let newMap = response.data.map;
@@ -297,7 +397,7 @@ function GlobalStoreContextProvider(props) {
     }
 
 
-    store.setComment = function (id, comment, username) {
+    /*store.setComment = function (id, comment, username) {
         async function asyncSetComment(id) {
             let response = await api.getMapById(id);
             if (response.data.success) {
@@ -306,6 +406,8 @@ function GlobalStoreContextProvider(props) {
                 const singleComment = {
                     userName: username,
                     comment: comment,
+                    like: 0,
+                    disLike: 0
                   };
                   map.commentObject.push(singleComment);
                 //map.commentObject.push({username,comment});
@@ -331,22 +433,12 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncSetComment(id);
-    }
+    }*/
 
-    // store.storeFile = function (id, geojsonChunks) {
-    //     async function asyncStoreFile(id, geojsonChunks) {
-    //         for (let i = 0; i < geojsonChunks.length; i++) {
-    //             let response = await api.storeGeoFile(id, geojsonChunks[i]);
-    //         }
-    //     }
-    //     asyncStoreFile(id, geojsonChunks);
-    // }
 
     store.storeFile = function (id, geojsonData) {
         async function asyncStoreFile(id, geojsonData) {
-            //for (let i = 0; i < geojsonChunks.length; i++) {
-                let response = await api.storeGeoFile(id, geojsonData);
-           // }
+            let response = await api.storeGeoFile(id, geojsonData);
         }
         asyncStoreFile(id, geojsonData);
     }
@@ -380,8 +472,6 @@ function GlobalStoreContextProvider(props) {
         store.deleteMap(store.mapIdMarkedForDeletion);
         store.hideModals();
     }
-    // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
-    // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
 
     store.changeMapName = function (id, newName) {
         // GET THE LIST
@@ -436,6 +526,271 @@ function GlobalStoreContextProvider(props) {
             payload: null
         });
     }
+
+    store.increaseMapLikes = function (id) {
+        // GET THE LIST
+        async function asyncSetLikes(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                 map.likes = map.likes + 1;
+                 map.disLikes = map.disLikes;
+                async function updateMap(map) {
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs() {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_LIKES,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs();
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncSetLikes(id);
+    }
+
+    store.increaseMapDisLikes = function (id) {
+        // GET THE LIST
+        async function asyncSetLikes(id) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                 map.likes = map.likes;
+                 map.disLikes = map.disLikes + 1;
+                async function updateMap(map) {
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs() {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_LIKES,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs();
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncSetLikes(id);
+    }
+
+
+    store.increaseCommentLikes = (id) => {
+        async function asyncSetLikes(id) {
+            let response = await api.getCommentById(id);
+            if (response.data.success) {
+                let comment = response.data.comment;
+                 comment.like = comment.like + 1;
+                 comment.disLike = comment.disLike;
+                 console.log(comment.like);
+                 async function updateComment(comment) {
+                    response = await api.updateCommentById(comment._id, comment);
+                    if (response.data.success) {
+                        console.log("success");
+                        async function getCommentPairs() {
+                            response = await api.getcommentPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_COMMENT_LIKES,
+                                    payload: {
+                                        commentIdNamePairs: pairsArray,
+                                    }
+                                });
+                            }
+                        }
+                        getCommentPairs();
+                    }
+                }
+                updateComment(comment);
+            }
+        }
+        asyncSetLikes(id);
+    }
+
+
+    store.increaseCommentDisLikes = (id) => {
+        async function asyncSetLikes(id) {
+            let response = await api.getCommentById(id);
+            if (response.data.success) {
+                let comment = response.data.comment;
+                 comment.like = comment.like;
+                 comment.disLike = comment.disLike + 1;
+                 console.log(comment.like);
+                 async function updateComment(comment) {
+                    response = await api.updateCommentById(comment._id, comment);
+                    if (response.data.success) {
+                        console.log("success");
+                        async function getCommentPairs() {
+                            response = await api.getcommentPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_COMMENT_LIKES,
+                                    payload: {
+                                        commentIdNamePairs: pairsArray,
+                                    }
+                                });
+                            }
+                        }
+                        getCommentPairs();
+                    }
+                }
+                updateComment(comment);
+            }
+        }
+        asyncSetLikes(id);
+    }
+
+
+    store.setComment = async function (comment, username) {
+        let like = 0;
+        let disLike = 0;
+        const response = await api.createComment(comment, username, like, disLike, store.currentMap._id);
+        console.log("create Comment response: " + response);
+        if (response.status === 201) {
+            let newComment = response.data.comment;
+            async function asyncLoadIdNamePairs() {
+                const response = await api.getcommentPairs();
+                console.log("getcommentpairs response: " + response.data.idNamePairs);
+                console.log("comment pairs-------");
+                if (response.data.success) {
+                    console.log("response: " + response.data.success);
+                    let array = response.data.idNamePairs;
+                    console.log("array: " + array[0]);
+                    storeReducer({
+                        type: GlobalStoreActionType.CREATE_NEW_COMMENT,
+                        payload: {
+                            comment: newComment,
+                            commentIdNamePairs: array
+                        }
+                    });
+                }
+                else{
+                    console.log("API FAILED TO GET THE COMMENT PAIRS");
+                }
+            }asyncLoadIdNamePairs();
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW COMMENT");
+        }
+    }
+
+    // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE COMMENTS
+    store.loadCommentPairs = function () {
+        async function asyncLoadCommentPairs() {
+            const response = await api.getcommentPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log("load pais: " + response.data.idNamePairs);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_COMMENT_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE COMMENT PAIRS");
+            }
+        }
+        asyncLoadCommentPairs();
+    }
+
+    store.sortLikes = function () {
+        let listLikes = store.idNamePairs;
+        listLikes.sort((a,b) => {
+            if (a.likes > b.likes) {
+                return -1;
+            } 
+            if (a.likes < b.likes) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: listLikes
+        });
+    }
+
+    store.sortDisLikes = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.disLikes > b.disLikes) {
+                return -1;
+            } 
+            if (a.disLikes < b.disLikes) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+    store.sortCreationDatesAsc = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.createdAt < b.createdAt) {
+                return -1;
+            } 
+            if (a.createdAt > b.createdAt) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+    store.sortCreationDatesDesc = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.createdAt > b.createdAt) {
+                return -1;
+            } 
+            if (a.createdAt < b.createdAt) {
+                return 1;
+            }
+            console.log("create date" + a.createdAt);
+            console.log("create date" + b.createdAt);
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+    store.storeSearchValue = function (text) {
+        storeReducer({
+            type: GlobalStoreActionType.GET_TEXT,
+            payload: {
+                searchText: text
+            }
+        });
+}
+
 
 
 

@@ -1,8 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom'
 import AuthContext from '../auth';
-//import { GlobalStoreContext } from '../store'
-
+import { GlobalStoreContext } from '../store'
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
@@ -17,7 +16,7 @@ import { useHistory } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
-    
+    const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
@@ -35,6 +34,7 @@ export default function AppBanner() {
         auth.logoutUser();
     }
 
+
     const handleCommunityButton = () => {
         history.push("/community/");
     }
@@ -43,6 +43,15 @@ export default function AppBanner() {
         handleMenuClose();
         history.push("/setting/");
     }
+
+
+    function handleKeyPressSearch(event) {
+        if (event.code === "Enter") {
+            let text = event.target.value;
+            store.storeSearchValue(text);
+        }
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -119,6 +128,7 @@ export default function AppBanner() {
                   placeholder="Search..."
                   size="small"
                   sx={{ width: '500px' }}
+                  onKeyPress = {handleKeyPressSearch}
                 />
               ) : null}
               <Box sx={{ flexGrow: 1 }}></Box>

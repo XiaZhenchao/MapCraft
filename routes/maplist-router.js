@@ -13,6 +13,5 @@ router.post('/map/:id', auth.verify, MapController.storeGeoFile)
 router.delete('/map/:id', auth.verify, MapController.deleteMap)
 router.get('/map/:id', MapController.getMapById)
 router.get('/mapairs',  MapController.getMapPairs)
-router.get('/mapList', MapController.getMapList)
 router.put('/map/:id',  MapController.updateMapById)
 module.exports = router

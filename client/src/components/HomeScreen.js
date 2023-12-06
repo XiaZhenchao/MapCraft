@@ -23,6 +23,8 @@ import toGeoJSON from 'togeojson';
 import * as shapefile from 'shapefile';
 import MUIBanUserLoginModal from './MUIBanUserLoginModal.js';
 import MapTemplateModal from './MapTemplateModal.js';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -46,6 +48,8 @@ const HomeScreen = () => {
     const [current, setcurrent] = useState(null)
     const [openBanUserLoginModal, setOpenBanUserLoginModal] = useState(false);
     const [MapTemplateModalStatus, setMapTemplateModalStatus] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
         if(auth.user)
@@ -92,6 +96,15 @@ const HomeScreen = () => {
        renderShpFile();
        setRendering( rendering );
     }
+};
+
+const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+};
+
+
+const handleMenuClose = () => {
+    setAnchorEl(null);
 };
 
 
@@ -256,6 +269,23 @@ const renderKMLFile = () => {
         setMapTemplateModalStatus(true);
     };
 
+
+    const handleselectasc = (value) => {
+        store.sortCreationDatesAsc();
+       }
+    
+       const handleselectdesc = (value) => {
+        store.sortCreationDatesDesc();
+       }
+    
+       const handleselectlikes = (value) => {
+        store.sortLikes();
+       }
+    
+       const handleselectdisLikes = (value) => {
+        store.sortDisLikes();
+       }
+
     const handleMapTemplateModalConfirm = ({ file, mapType }) => {
         // Handle the selected file and map type in your HomeScreen component
         console.log('Selected File:', file);
@@ -333,49 +363,117 @@ const renderKMLFile = () => {
    let listCard = "";
     //load only public map
     if (store && publicList) {
-        console.log("public list")
-        listCard = 
-        <div>
-            {
-                store.idNamePairs.filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
-                .filter((pair) => pair.publishStatus === true).map((pair) => (
-                    <MapList
-                        key={pair._id}
-                        idNamePair={pair}
-                        publish = {pair.publishStatus}
-                        publishDate = {pair.publishDate}
-                        likes = {pair.likes}
-                        disLikes = {pair.disLikes}
-                    />
-                ))
-            }
-        
-        </div>
+        if (store.searchText === ""){
+            console.log("public list")
+            listCard = 
+            <div>
+                {
+                    store.idNamePairs.filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
+                    .filter((pair) => pair.publishStatus === true).map((pair) => (
+                        <MapList
+                            key={pair._id}
+                            idNamePair={pair}
+                            publish = {pair.publishStatus}
+                            publishDate = {pair.publishDate}
+                            likes = {pair.likes}
+                            disLikes = {pair.disLikes}
+                        />
+                    ))
+                }
+            
+            </div>
+        } else {
+            listCard = 
+            <div>
+                {
+                    store.idNamePairs.filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
+                    .filter((pair) => pair.publishStatus === true)
+                    .filter((pair) => pair.name.toLowerCase().includes(store.searchText)).map((pair) => (
+                        <MapList
+                            key={pair._id}
+                            idNamePair={pair}
+                            publish = {pair.publishStatus}
+                            publishDate = {pair.publishDate}
+                            likes = {pair.likes}
+                            disLikes = {pair.disLikes}
+                        />
+                    ))
+                }
+            
+            </div>
+        }
 
     }
     //load only private map
     else {
-        console.log("private list")
-        listCard = 
-        <div>
-            {
-                store.idNamePairs
-                .filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
-                .filter((pair) => pair.publishStatus === false)
-                    .map((pair) => (
-                        <MapList
-                            key={pair._id}
-                            idNamePair={pair}
-                            publish={pair.publishStatus}
-                            publishDate={pair.publishDate}
-                            likes={pair.likes}
-                            disLikes={pair.disLikes}
-                        />
-                    ))
-            }
-        </div>
+        if (store.searchText === ""){
+            console.log("private list")
+            listCard = 
+            <div>
+                {
+                    store.idNamePairs
+                    .filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
+                    .filter((pair) => pair.publishStatus === false)
+                        .map((pair) => (
+                            <MapList
+                                key={pair._id}
+                                idNamePair={pair}
+                                publish={pair.publishStatus}
+                                publishDate={pair.publishDate}
+                                likes={pair.likes}
+                                disLikes={pair.disLikes}
+                            />
+                        ))
+                }
+            </div>
+        }else {
+            listCard = 
+            <div>
+                {
+                    store.idNamePairs
+                    .filter((pair) => pair.authorName === auth.user.firstName + " " + auth.user.lastName)
+                    .filter((pair) => pair.publishStatus === false)
+                    .filter((pair) => pair.name.toLowerCase().includes(store.searchText))
+                        .map((pair) => (
+                            <MapList
+                                key={pair._id}
+                                idNamePair={pair}
+                                publish={pair.publishStatus}
+                                publishDate={pair.publishDate}
+                                likes={pair.likes}
+                                disLikes={pair.disLikes}
+                            />
+                        ))
+                }
+            </div>
+        }
 
     }
+
+
+    const sortByMenu = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={handleselectlikes}>Likes(High - Low)</MenuItem>
+            <MenuItem onClick={handleselectdisLikes}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handleselectasc}>Creation Date(asc)</MenuItem>
+            <MenuItem onClick={handleselectdesc}>Creation Date(desc)</MenuItem>
+        </Menu>
+    )
+
+
   
    return (
        <div >
@@ -384,7 +482,7 @@ const renderKMLFile = () => {
            <IconButton style = {{color:'black'}}> <AddCircleIcon onClick={handleAdd} style={{fontSize: '2rem'}}></AddCircleIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <PublishedWithChangesIcon onClick={handlePublic} style={{ fontSize: '2rem',border: isBorderVisible ? '2px solid black' : 'none' }}></PublishedWithChangesIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <LockIcon onClick={handlePrivate} style={{ fontSize: '2rem',border: !isBorderVisible ? '2px solid black' : 'none' }}></LockIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <IconButton style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>
+           <IconButton onClick={handleProfileMenuOpen} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>{sortByMenu}
        </Box>
        
        <div style={{ width: '29%', overflow: 'scroll' }}>

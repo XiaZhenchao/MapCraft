@@ -3,7 +3,8 @@ import { GlobalStoreContext } from '../store'
 import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
 import { IconButton } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 
 function MapList(props) {
@@ -23,6 +24,14 @@ function MapList(props) {
         store.selectMap(id); 
     }
 
+    const handleLikes = () => {
+         store.increaseMapLikes(idNamePair._id);
+        }
+     
+    const handleDisLikes = () => {
+         store.increaseMapDisLikes(idNamePair._id,);
+    }
+
    
     let cardElement =
     <ListItem
@@ -37,6 +46,8 @@ function MapList(props) {
     }}
 >
     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+    <IconButton onClick = {handleLikes}><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>{idNamePair.likes}
+    <IconButton onClick = {handleDisLikes}><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>{idNamePair.disLikes}
     
     
 </ListItem>

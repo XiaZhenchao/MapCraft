@@ -1,24 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth'
-import AppBanner from './AppBanner';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import MapList from './MapList.js';
 import SortIcon from '@mui/icons-material/Sort';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import { useHistory } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { IconButton } from '@mui/material';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import FaceIcon from '@mui/icons-material/Face';
-import Face4Icon from '@mui/icons-material/Face4';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import TextField from '@mui/material/TextField';
 import CommentCard from './CommentCard.js';
@@ -44,6 +37,9 @@ const CommunityScreen = () => {
     // Load the map when the component mounts
     loadMap();
     store.loadIdNamePairs();
+    store.loadCommentPairs();
+    //console.log(store.commentIdNamePairs);
+    
   }, []); // The empty dependency array ensures it runs once on mount
 
   useEffect(() => {
@@ -78,9 +74,10 @@ const CommunityScreen = () => {
    const handleCommentInput = (event) =>{
     if(event.keyCode == 13){
         let temp = event.target.value
-        store.setComment(store.currentMap._id,temp,auth.user.firstName+" "+auth.user.lastName)
+        store.setComment(temp,auth.user.firstName+" "+auth.user.lastName)
     }
    }
+
 
    const handleEditButton = () => {
        history.push("/edit/");
@@ -89,9 +86,28 @@ const CommunityScreen = () => {
    const handleSort = () => {
     setIsExpanded(!isExpanded);
    }
-   const handleselect = (value) => {
+   const handleselectasc = (value) => {
     setButtonText(value)
     setIsExpanded(!isExpanded);
+    store.sortCreationDatesAsc();
+   }
+
+   const handleselectdesc = (value) => {
+    setButtonText(value)
+    setIsExpanded(!isExpanded);
+    store.sortCreationDatesDesc();
+   }
+
+   const handleselectlikes = (value) => {
+    setButtonText(value)
+    setIsExpanded(!isExpanded);
+    store.sortLikes();
+   }
+
+   const handleselectdisLikes = (value) => {
+    setButtonText(value)
+    setIsExpanded(!isExpanded);
+    store.sortDisLikes();
    }
 
    const handleBanUserButton = () =>{
@@ -108,42 +124,93 @@ const CommunityScreen = () => {
     
 }
 
-   let listCard = "";
-   if (store) {
-       listCard = 
-       <div>
-           {
-               store.idNamePairs.filter((pair) => pair.publishStatus === true).map((pair) => (
-                   <MapList
-                       key={pair._id}
-                       idNamePair={pair}
-                       publish = {pair.publishStatus}
-                       publishDate = {pair.publishDate}
-                       likes = {pair.likes}
-                       disLikes = {pair.disLikes}
-                   />
-               ))
-           }
-       
-       </div>
 
-   }
-
-   let commentCard = "";
-    if (store.currentMap) {
-        commentCard = store.currentMap.commentObject.map(Pair => 
-            (
-            <div id = 'comment-list'>
-            <div>@{Pair.userName}: </div>
-            <div className='space'>{Pair.comment}</div>
-            <IconButton><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>
-             <IconButton><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>
-                <Button id = "report-box"></Button>
+    let listCard = "";
+    if (store ) {
+        if (store.searchText === "")
+            listCard = 
+            <div>
+                {
+                    store.idNamePairs.filter((pair) => pair.publishStatus === true).map((pair) => (
+                        <MapList
+                            key={pair._id}
+                            idNamePair={pair}
+                            publish = {pair.publishStatus}
+                            publishDate = {pair.publishDate}
+                            likes = {pair.likes}
+                            disLikes = {pair.disLikes}
+                        />
+                    ))
+                }
+            
             </div>
-            ))
-        console.log(commentCard);
+        else {
+            listCard = 
+            <div>
+                {
+                    store.idNamePairs.filter((pair) => pair.publishStatus === true && 
+                    pair.name.toLowerCase().includes(store.searchText)).map((pair) => (
+                        <MapList
+                            key={pair._id}
+                            idNamePair={pair}
+                            publish = {pair.publishStatus}
+                            publishDate = {pair.publishDate}
+                            likes = {pair.likes}
+                            disLikes = {pair.disLikes}
+                        />
+                    ))
+                }
+            
+            </div>
+        }
+
     }
 
+    console.log("comment pairs-------");
+    store.commentIdNamePairs.forEach(item => {
+        console.log(item);
+      });
+
+
+    /*let commentCard = "";
+     if (store.currentMap) {
+        console.log(
+            store.commentIdNamePairs
+              .filter((pair) => pair.mapId === store.currentMap._id)
+              .map((pair) => pair)
+          );
+         commentCard = store.commentIdNamePairs.filter((pair) => pair.mapId === store.currentMap._id).map((Pair) =>  
+             (
+             <div id = 'comment-list'>
+             <div>@{Pair.userName}: </div>
+             <div className='space'>{Pair.comment}</div>
+             <IconButton onClick = {handleCommentLikes}><ThumbUpIcon style={{fontSize: '1rem'}}></ThumbUpIcon></IconButton>
+              <IconButton onClick = {handleCommentDisLikes}><ThumbDownIcon style={{fontSize: '1rem'}}></ThumbDownIcon></IconButton>
+                 <Button id = "report-box"></Button>
+             </div>
+             ))
+         console.log(commentCard);
+     }*/
+
+    let commentCard = "";
+    if (store.currentMap) {
+        commentCard = 
+        <div>
+            {
+                commentCard = store.commentIdNamePairs.filter((pair) => pair.mapId === store.currentMap._id).map((Pair) =>
+                    <CommentCard
+                        key={Pair._id}
+                        idNamePair={Pair}
+                        likes = {Pair.likes}
+                        disLikes = {Pair.disLikes}
+                        comment = {Pair.comment}
+                    />
+                )
+            }
+        
+        </div>
+
+    }
 
   
    return (
@@ -153,10 +220,10 @@ const CommunityScreen = () => {
            <IconButton onClick = {handleSort} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon><div style={{paddingLeft:'60px'}}>{buttonText}</div></IconButton>
            {isExpanded && (
         <div>
-          <Button id='sort-selection' onClick={() => handleselect('Date (asc)')} >Date (asc)</Button>
-          <Button id='sort-selection' onClick={() => handleselect('Date (desc)')} >Date (desc)</Button>
-          <Button id='sort-selection' onClick={() => handleselect('Likes')} >Likes</Button>
-          <Button id='sort-selection' onClick={() => handleselect('Dislikes')} >Dislikes</Button>
+          <Button id='sort-selection' onClick={() => handleselectasc('Date (asc)')} >Date (asc)</Button>
+          <Button id='sort-selection' onClick={() => handleselectdesc('Date (desc)')} >Date (desc)</Button>
+          <Button id='sort-selection' onClick={() => handleselectlikes('Likes')} >Likes</Button>
+          <Button id='sort-selection' onClick={() => handleselectdisLikes('Dislikes')} >Dislikes</Button>
         </div>
         
       )}

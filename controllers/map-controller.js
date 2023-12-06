@@ -10,6 +10,13 @@ const db = require('../db')
 createMap = (req, res) => {
     const body = req.body;
     console.log("createMap body: " + JSON.stringify(body));
+    console.log("Request method: ", req.method);
+    console.log("Request URL: ", req.url);
+    console.log("Request headers: ", req.headers);
+    console.log("Request params: ", req.params);
+    console.log("Request query: ", JSON.stringify(req.query));
+    console.log("Request body: ", req.body);
+
 
     if (!body) {
         return res.status(400).json({
@@ -53,10 +60,7 @@ createMap = (req, res) => {
 }
 
 deleteMap = async (req, res) => {
-    console.log("delete Map with id: " + JSON.stringify(req.params.id));
-    console.log("delete " + req.params.id);
     Map.findById({ _id: req.params.id }, (err, map) => {
-        console.log("map found: " + JSON.stringify(map));
         if (err) {
             return res.status(404).json({
                 errorMessage: 'Map not found!',
@@ -66,10 +70,7 @@ deleteMap = async (req, res) => {
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(map) {
             User.findOne({ email: map.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
-                    console.log("correct user!");
                     Map.findOneAndDelete({ _id: req.params.id }, () => {
                         // Remove the map ID from the user's maplist
                         user.maplist = user.maplist.filter(mapId => mapId.toString() !== req.params.id);
@@ -91,8 +92,6 @@ deleteMap = async (req, res) => {
  }
  
 getMapById = async (req, res) => {
-    // console.log("Find Playlist with id: " + JSON.stringify(req.params.id));
-
     await Map.findById({ _id: req.params.id }, (err, list) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
@@ -100,9 +99,11 @@ getMapById = async (req, res) => {
         else {
             return res.status(200).json({ success: true, map: list });
         }
-    }).catch(err => console.log(err))
-    
+    }).catch(err => console.log(err))    
 }
+
+
+
 getMapPairs = async (req, res) => {
                     await Map.find({}, (err, maps) => {
                         if (err) {
@@ -126,7 +127,8 @@ getMapPairs = async (req, res) => {
                             //source: map.source,
                             renderStatus: map.renderStatus,
                             ownerEmail: map.ownerEmail,
-                            mapTemplate:map.mapTemplate
+                            mapTemplate:map.mapTemplate,
+                            createdAt: map.createdAt
 
                                
                         };
@@ -137,22 +139,6 @@ getMapPairs = async (req, res) => {
             }).catch(err => console.log(err))
 }
 
-getMapList = async (req, res) => {
-    await Map.find({}, (err, mapList) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if (!mapList.length) {
-            return res
-                .status(404)
-                .json({ success: false, error: `MapList not found` })
-        }
-        else {
-            console.log("Send the MapList pairs");
-            return res.status(200).json({ success: true, mapList: mapList })
-        }
-    }).catch(err => console.log(err))
-}
 
 
 updateMapById = async (req, res) => {
@@ -229,7 +215,6 @@ module.exports = {
     deleteMap,
     getMapById,
     getMapPairs,
-    getMapList,
     updateMapById,
     storeGeoFile
 }

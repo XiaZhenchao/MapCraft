@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
 /*
     This is where we specify the format of the data we're going to put into
     the database.
@@ -16,7 +17,7 @@ const MapCraftSchema = new Schema(
         likes: {type: Number, required: true},
         disLikes: {type: Number, required: true},
         authorName: {type:String, required: true},
-        commentObject: {type: [{userName: String, comment: String, banned: Boolean}], required: true},
+        commentObject: [{type: ObjectId, ref: 'Comment'}],
         banned: {type: Boolean, required: true},
         editStatus: {type: Boolean, required: true},
         //source: {type: String, required: true}
