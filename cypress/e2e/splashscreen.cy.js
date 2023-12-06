@@ -21,6 +21,7 @@ describe('Login System', () => {
     // Click on the "Login" button
     cy.get('button[type="submit"]').click();
 
+    //visit 
     // Check if the login was successful
     cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com');
     
