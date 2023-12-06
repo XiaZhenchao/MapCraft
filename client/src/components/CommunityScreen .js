@@ -197,8 +197,8 @@ function handleForkButton(){
 
   
    return (
-       <div >
-        <div style={{ display: 'flex', flexDirection: 'column',maxHeight:'630px'}}>
+       <div id = 'app-root'>
+        <div style={{ display: 'flex', flexDirection: 'column',height: '100%', maxHeight:'600px'}}>
        <Box sx={{ background: 'lightgray', alignItems: 'center',padding:'0%'}} id = "navigation-bar" >
            <IconButton onClick = {handleSort} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon><div style={{paddingLeft:'60px'}}>{buttonText}</div></IconButton>
            {isExpanded && (
@@ -221,7 +221,7 @@ function handleForkButton(){
        <div id = "map-name" style={{fontSize: '2rem'}}>
           {store.currentMap != null? store.currentmapName: "" }       
        </div>
-       <Box  id = "export-close">
+       <Box  id = "export-close-community">
        {auth.user!=null?(auth.user.role === "admin" && <IconButton onClick={handleBanUserButton}>
                         <PersonOffIcon style={{ fontSize: '1.5rem', color: 'red'}} />
 

@@ -415,8 +415,8 @@ const handleMenuClose = () => {
     }
   
    return (
-       <div >
-        <div style={{ display: 'flex', flexDirection: 'column',maxHeight:'630px'}}>
+       <div id = 'app-root'>
+        <div style={{ display: 'flex', flexDirection: 'column',height: '100%', maxHeight:'600px'}}>
        <Box sx={{ flexGrow: 1,background: 'lightgray', alignItems: 'center', paddingLeft: '30px'}} id = "navigation-bar" >
            <IconButton style = {{color:'black'}}> <AddCircleIcon onClick={handleAdd} style={{fontSize: '2rem'}}></AddCircleIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <IconButton style = {{color:'black'}}> <PublishedWithChangesIcon onClick={handlePublic} style={{ fontSize: '2rem',border: isBorderVisible ? '2px solid black' : 'none' }}></PublishedWithChangesIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -424,7 +424,7 @@ const handleMenuClose = () => {
            <IconButton onClick={handleProfileMenuOpen} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>{sortByMenu}
        </Box>
        
-       <div style={{ width: '29%', overflow: 'scroll' }}>
+       <div style={{ width: '29%', height: '100%',  overflow: 'scroll' }}>
         <List sx={{ bgcolor: '#ABC8B2', mb:"20px"}}>  
             {listCard}
         </List>

@@ -38,8 +38,8 @@ body {
 #app-root {
   position: absolute;
   width: 100%;
-  height: 100%;
-  top: 0%;
+  height:90%;
+  top: 10%;
   left: 0%;
 }
 
@@ -96,7 +96,7 @@ body {
 #navigation-bar {
   border: 1px solid ; 
   width: 27%;
-  margin-top: 2%;
+  margin-top: 3%;
   margin-left: 2%;
   border-radius: 0px;
 }
@@ -140,8 +140,8 @@ body {
 #Mapview{
   position: absolute;
   width: 73%;
-  height: 70%;
-  top: 23%;
+  height: 80%;
+  top: 10%;
   left: 29%;
   border-radius: 10px;
   /* overflow: scroll; */
@@ -151,7 +151,7 @@ body {
   position: absolute;
   width: 63%;
   height: 5%;
-  top: 15%;
+  top:3%;
   left: 65%;
 
 }
@@ -168,7 +168,7 @@ body {
   position: absolute;
   width: 63%;
   height: 5%;
-  top: 15%;
+  top: 5%;
   left: 50%;
 }
 
@@ -176,8 +176,16 @@ body {
   position: absolute;
   width: 63%;
   height: 5%;
-  top: 15%;
-  left: 85%;
+  top: 5%;
+  left: 90%;
+}
+
+#export-close-community{
+  position: absolute;
+  width: 63%;
+  height: 5%;
+  top: 5%;
+  left: 87%;
 }
 
 #reset-box{
@@ -422,6 +430,7 @@ body {
   width: 89.5%;
   cursor: pointer;
   margin-bottom: 2%;
+  font-size: 80%;
 }
 
 .info-card{
@@ -431,6 +440,7 @@ body {
   width: 90%;
   cursor: pointer;
   margin-bottom: 2%;
+  font-size: 80%;
 }
 
 .element-with-stroke {
