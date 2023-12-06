@@ -428,7 +428,7 @@
 
       // Create a new temporary marker at the current mouse position
       temporaryMarker = L.marker(event.latlng, {
-        icon: locationLogoIcon,
+        //icon: locationLogoIcon,
         draggable: true,
       }).addTo(map);
     };

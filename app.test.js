@@ -59,6 +59,21 @@ describe("Test application", () => {
 
     });
 
+    test('Add new comment', async () => {
+      if (!authToken) {
+        return;
+      }
+  
+      const res = await request(app)
+        .post('/auth/comment')
+        .send({
+          mapName: 'New comment',
+        });
+  
+      expect(res.statusCode).toBe(200);
+
+    });
+
 
     test('Delete map', async () => {
         // Ensure that a map ID is available for deletion
@@ -75,7 +90,37 @@ describe("Test application", () => {
         // Add assertions based on your application's response
       });
 
+      test('Delete comment', async () => {
+        // Ensure that a map ID is available for deletion
+        if (!authToken || !commentId) {
+          // Handle cases where either authToken or mapId is not available
+          return;
+        }
+    
+        const res = await request(app)
+          .delete(`/auth/comment/${mapId}`) // Replace with the endpoint to delete a map
+          .set('Authorization', `Bearer ${authToken}`);
+    
+        expect(res.statusCode).toBe(200);
+        // Add assertions based on your application's response
+      });
+
     test('Publish map', async () => {
+        // Ensure that a map ID is available for deletion
+        if (!authToken || !mapId) {
+          // Handle cases where either authToken or mapId is not available
+          return;
+        }
+    
+        const res = await request(app)
+          .put(`/auth/map/${mapId}`) // Replace with the endpoint to delete a map
+          .set('Authorization', `Bearer ${authToken}`);
+    
+        expect(res.statusCode).toBe(200);
+        // Add assertions based on your application's response
+      });
+
+      test('Fork map', async () => {
         // Ensure that a map ID is available for deletion
         if (!authToken || !mapId) {
           // Handle cases where either authToken or mapId is not available
