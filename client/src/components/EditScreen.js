@@ -584,10 +584,10 @@
         <DeleteIcon />
       </IconButton>
     </Box>
-    <div id="map-name-another">
+    <div id="map-name-edit">
       Map1 <IconButton><EditIcon /></IconButton>
     </div>
-    <Box id="export-close">
+    <Box id="export-close-edit">
       <ExitToAppIcon />
       <CloseIcon />
     </Box>

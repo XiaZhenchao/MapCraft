@@ -172,11 +172,27 @@ body {
   left: 50%;
 }
 
+#map-name-edit{
+  position: absolute;
+  width: 63%;
+  height: 5%;
+  top: 15%;
+  left: 50%;
+}
+
 #export-close{
   position: absolute;
   width: 63%;
   height: 5%;
   top: 5%;
+  left: 90%;
+}
+
+#export-close-edit{
+  position: absolute;
+  width: 63%;
+  height: 5%;
+  top: 15%;
   left: 90%;
 }
 
