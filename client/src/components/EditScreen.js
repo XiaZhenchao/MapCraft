@@ -386,7 +386,71 @@
       }
   };
   const handleLocationOnClick = () => {
-  // Add your logic for adding markers here
+    seteditOption('locate');
+
+    // Set the custom cursor for the entire map
+    map._container.style.cursor = 'crosshair';
+
+    // Function to handle map click events
+    const handleMapClick = (event) => {
+      // Remove the temporary marker if it exists
+      if (temporaryMarker) {
+        map.removeLayer(temporaryMarker);
+      }
+
+      // Create a marker at the clicked location
+      const marker = L.marker(event.latlng).addTo(map);
+
+      // Remove the custom cursor and map click event listener
+      map._container.style.cursor = 'auto';
+      map.off('click', handleMapClick); // Pass the reference to the function
+      map.off('mousemove', updateTemporaryMarker);
+    };
+
+    // Handle map click to create a marker
+    map.on('click', handleMapClick);
+
+    // Create a temporary marker that follows the mouse position
+    let temporaryMarker;
+
+    // Function to update the position of the temporary marker
+    const updateTemporaryMarker = (event) => {
+      // Remove the previous temporary marker if it exists
+      if (temporaryMarker) {
+        map.removeLayer(temporaryMarker);
+      }
+
+      // Define a custom icon using an HTML element (circle)
+      const locationLogoIcon = L.divIcon({
+        iconUrl: './locate.png',
+        iconSize: [32, 32],
+      });
+
+      // Create a new temporary marker at the current mouse position
+      temporaryMarker = L.marker(event.latlng, {
+        icon: locationLogoIcon,
+        draggable: true,
+      }).addTo(map);
+    };
+
+    // Handle mousemove to update the temporary marker position
+    map.on('mousemove', updateTemporaryMarker);
+
+    // Finish marking function
+    const finishMarking = () => {
+      // Remove the temporary marker if it exists
+      if (temporaryMarker) {
+        map.removeLayer(temporaryMarker);
+      }
+
+      // Reset the cursor to the default
+      map._container.style.cursor = 'auto';
+
+      // Remove the map click and mousemove event listeners
+      map.off('click', handleMapClick); // Pass the reference to the function
+      map.off('mousemove', updateTemporaryMarker);
+    };
+
   };
  
  
