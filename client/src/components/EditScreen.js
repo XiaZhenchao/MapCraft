@@ -9,6 +9,7 @@
  import ExitToAppIcon from '@mui/icons-material/ExitToApp';
  import CloseIcon from '@mui/icons-material/Close';
  import LegendToggleIcon from '@mui/icons-material/LegendToggle';
+ import { useHistory } from 'react-router-dom';
  import L from 'leaflet';
  import 'leaflet/dist/leaflet.css';
  import 'leaflet-draw/dist/leaflet.draw.css';
@@ -40,6 +41,7 @@
   const [legendItems, setLegendItems] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [existlegend,setLegend] = useState(null);
+  const history = useHistory();
   const fontOptions = [
     'Arial',
     'Helvetica',
@@ -550,7 +552,11 @@
   const handleDeleteClick = () => {
   // Add your logic for removing an edit here
   };
- 
+
+  const handleCloseButton =() =>{
+    store.closeCurrentMap();
+    history.push("/");
+}
  
   return (
   <div style={{ display: 'flex', height: '100vh' }}>
@@ -718,8 +724,13 @@
       Map1 <IconButton><EditIcon /></IconButton>
     </div>
     <Box id="export-close-edit">
-      <ExitToAppIcon />
-      <CloseIcon />
+    <IconButton>
+            <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
+        </IconButton>
+      {/* <CloseIcon onClick={handleCloseButton}></CloseIcon> */}
+      <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
+        </CloseIcon>
+        </IconButton>
     </Box>
     <div id="edit-container"></div>
   </div>
