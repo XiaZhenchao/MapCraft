@@ -26,7 +26,7 @@ import MapTemplateModal from './MapTemplateModal.js';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import 'leaflet.heat/dist/leaflet-heat.js'; 
-
+import 'leaflet-easyprint';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -374,6 +374,24 @@ const handleMenuClose = () => {
         selectClass = "selected-map-card";
     }
 
+    const handleExportButton = () =>{
+        if (map) { // Assuming 'map' is set in your state and properly updated via 'setMap'
+            // Create the easyPrint control and add it to the map instance
+            var printer = L.easyPrint({
+                filename: 'myMap',
+                exportOnly: true,
+                hideControlContainer: true,
+                hidden: true,
+            }).addTo(map);
+    
+            // Trigger the printing action
+            printer.printMap('CurrentSize', 'MyManualPrint');
+        } else {
+            console.error('Map instance not found.'); // Log an error if the map instance is missing
+        }
+
+    };
+
     let listCard = "";
     //load only public map
     if (store && publicList) {
@@ -504,7 +522,7 @@ const handleMenuClose = () => {
        </div>
        <Box  id = "export-close">
         <IconButton>
-            <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
+            <ExitToAppIcon onClick={handleExportButton} style={{fontSize: '1.5rem'}}></ExitToAppIcon>
         </IconButton>
         <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
         </CloseIcon>
