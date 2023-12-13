@@ -132,6 +132,7 @@ getMapPairs = async (req, res) => {
 
                             mapTemplate: map.mapTemplate,
                             mapObjects: map.mapObjects,
+                            layers: map.layers
                                
                         };
                         pairs.push(pair);
@@ -150,6 +151,7 @@ updateMapById = async (req, res) => {
     console.log("req.body.map.name: " + req.body.map.name);
     console.log("req.body.map: " + req.body.map);
     console.log("req.body.map.comment: " + req.body.map.commentObject);
+    console.log("req.body.map.comment: " + req.body.map.layers);
 
     if (!body) {
         return res.status(400).json({
@@ -179,7 +181,8 @@ updateMapById = async (req, res) => {
                     list.renderStatus = body.map.renderStatus,
                     list.ownerEmail = body.map.ownerEmail,
                     list.mapTemplate=body.map.mapTemplate,
-                    list.mapObjects= body.map.mapObjects
+                    list.mapObjects= body.map.mapObjects,
+                    list.layers= body.map.layers
 
                     
                     list

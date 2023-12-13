@@ -25,6 +25,7 @@ import MUIBanUserLoginModal from './MUIBanUserLoginModal.js';
 import MapTemplateModal from './MapTemplateModal.js';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import 'leaflet.heat/dist/leaflet-heat.js'; 
 
 
 /*
@@ -38,6 +39,7 @@ const HomeScreen = () => {
    const [selectedFile, setSelectedFile] = useState(null);
    const [mapType, setMapType] = useState('');
    const [map, setMap] = useState(null);
+   const [heatLayer, setHeatLayer] = useState(null);
    const history = useHistory();
    const [isBorderVisible, setIsBorderVisible] = useState(false);
    const [publicList, setPublicList]=useState(false);
@@ -108,29 +110,53 @@ const HomeScreen = () => {
         const thisMap = map;//assgin map variable from state
             try {
                 const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
-                console.log(geojsonData)
+                // console.log(geojsonData.type);
+                //console.log(geojsonData.feature.properties.name_en);
+                // console.log(geojsonData.geometry.coordinates);
+                // console.log(geojsonData.properties.name_en);
                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
                     onEachFeature: function (feature, layer) {
                         // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
                         if (feature.properties && feature.properties.name_en) {
-                           layer.bindPopup(feature.properties.name_en);
+                            console.log(feature.type);
+                            console.log(feature.geometry.type);
+                            console.log(feature.geometry.coordinates);
+                            console.log(feature.properties.name_en);
+                            layer.bindPopup(feature.properties.name_en);
+                             
+                            layer.on({
+                                click: (event) => {
+                                    event.target.setStyle({
+                                        color: "green",
+                                        fillColor: "yellow",
+                                    })
+                                }
+                            })
                         }
                         
                     },
                 }).addTo(thisMap); //adds the geojason layer to the leaft map.
 
-            // function onEachFeature(feature, layer) { //onEachFeature function
-            //     let featureArray = []; //create an empty array to store all the features
-            //      if (feature.properties) {
-            //         for (let i in feature.properties) { //for loop to loop the feature
-            //             featureArray.push(i + ": " + feature.properties[i]);//put the feature into the arrayls
-            //         }
+                // Sample heat map data (latitude, longitude, intensity)
+            const heatData = [
+                [0, 0, 1],
+                [10, 10, 0.5],
+                [11, 3, 4],
+                // Add more data points as needed
+            ];
 
-            //         layer.bindTooltip(featureArray.join("<br />"));
-            //     }
-            // }
+            // Create the heat layer
+            const heatLayer = L.heatLayer(heatData, { radius: 25 });
 
-            thisMap.fitBounds(geojsonLayer.getBounds());//make the layer and map fit to each other
+            // Add the heat layer to the map
+            heatLayer.addTo(thisMap);
+
+            // Fit the map bounds to the GeoJSON layer
+            thisMap.fitBounds(geojsonLayer.getBounds());
+            
+            // Set the heat layer in state or perform other necessary operations
+            setHeatLayer(heatLayer);
+
             }
             catch (error) {
                 console.error('Error rendering GeoJSON:', error);
@@ -144,7 +170,9 @@ const HomeScreen = () => {
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
             }).addTo(mapInstance);
+
             setMap(mapInstance);
+            
     } catch (error) {
       console.error('Error loading map:', error);
     }
@@ -234,6 +262,12 @@ const handleMenuClose = () => {
                     try {
                         const arrayBuffer = e.target.result; // FileReader result is an ArrayBuffer
                         const geojsonData = await shapefile.read(arrayBuffer);
+                        geojsonData.features.forEach(feature => {
+                            const coordinates = feature.geometry.coordinates;
+                            const regionName = feature.properties.name_en;
+                            console.log("coordinates: ", coordinates);
+                            console.log("regionName: ", regionName);
+                        });
                         store.storeFile(store.currentMap._id, geojsonData,mapType)
                     } catch (error) {
                       console.error('Error storing Shapefile:', error);
@@ -247,6 +281,25 @@ const handleMenuClose = () => {
                     try {
                         const geojsonData = JSON.parse(e.target.result); //Parse the data of GeoJSON file
                         console.log("home screen storefile");
+                        const coordinateArray = [];
+                        const regionNameArray = [];
+                        geojsonData.features.forEach(feature => {
+                            //const coordinates = feature.geometry.coordinates;
+                            const regionName = feature.properties.name_en;
+                            //console.log("coordinates: ", coordinates);
+                            console.log("regionName: ", regionName);
+                            //coordinateArray.push(coordinates);
+                            regionNameArray.push(regionName);
+                            feature.geometry.coordinates.forEach(polygon => {
+                                polygon.forEach(ring => {
+                                    ring.forEach(coordinate => {
+                                        coordinateArray.push(coordinate);
+                                    });
+                                });
+                            })
+                        });
+
+                        store.saveLayerData(store.currentMap._id,coordinateArray, regionNameArray);
                         store.storeFile(store.currentMap._id, geojsonData,mapType)
                         //console.log("right after storefile")
                     }

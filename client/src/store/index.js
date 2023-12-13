@@ -876,6 +876,49 @@ function GlobalStoreContextProvider(props) {
         asyncStoreFile(id, geojsonData,mapType);
     }
 
+    store.saveLayerData = function (id,coordinatesData, regionNameData){
+        async function asyncStoreData(id,coordinatesData,regionNameData) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                
+                let newLayer = {
+                    coordinates : coordinatesData,
+                    regionName : regionNameData
+                }
+                console.log(newLayer.coordinates);
+                console.log(newLayer.regionName);
+                map.layers.push(newLayer);
+                console.log(map.layers);
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    console.log("id: "+id);
+                    console.log("siccess or not: ", response.data.success);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.STORE_FILE,
+                                    payload: {
+                                        idNamePairs:pairsArray,
+                                        map:map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncStoreData(id,coordinatesData, regionNameData);
+    }
+
     store.markMapForDeletion = function (id) {
         async function getMapToDelete(id) {
             let response = await api.getMapById(id);

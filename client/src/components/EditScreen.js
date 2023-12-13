@@ -176,6 +176,11 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
         }).addTo(mapInstance);
+
+        // setMap(mapInstance);
+        // console.log(mapInstance);
+        // console.log(map);
+        renderGeoJSON(mapInstance);
          var drawnItems = new L.FeatureGroup();
         mapInstance.addLayer(drawnItems);
          drawControl = new L.Control.Draw({
@@ -218,6 +223,67 @@
       console.error('Failed to initialize map:', error);
     }
   };
+
+
+  const renderGeoJSON = (mapInstance) => {
+    if (mapInstance) {// if map variable from stat e exists(load map function excute successfully)
+      console.log("here----------------------------------------------");
+        const thisMap = mapInstance;//assgin map variable from state
+            try {
+                const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
+                // console.log(geojsonData.type);
+                //console.log(geojsonData.feature.properties.name_en);
+                // console.log(geojsonData.geometry.coordinates);
+                // console.log(geojsonData.properties.name_en);
+                const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
+                    onEachFeature: function (feature, layer) {
+                        // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
+                        if (feature.properties && feature.properties.name_en) {
+                            console.log(feature.type);
+                            console.log(feature.geometry.type);
+                            console.log(feature.geometry.coordinates);
+                            console.log(feature.properties.name_en);
+                            layer.bindPopup(feature.properties.name_en);
+                             
+                            layer.on({
+                                click: (event) => {
+                                    event.target.setStyle({
+                                        color: "green",
+                                        fillColor: "yellow",
+                                    })
+                                }
+                            })
+                        }
+                        
+                    },
+                }).addTo(thisMap); //adds the geojason layer to the leaft map.
+
+                // Sample heat map data (latitude, longitude, intensity)
+            // const heatData = [
+            //     [0, 0, 1],
+            //     [10, 10, 0.5],
+            //     [11, 3, 4],
+            //     // Add more data points as needed
+            // ];
+
+            // Create the heat layer
+            //const heatLayer = L.heatLayer(heatData, { radius: 25 });
+
+            // Add the heat layer to the map
+            //heatLayer.addTo(thisMap);
+
+            // Fit the map bounds to the GeoJSON layer
+            thisMap.fitBounds(geojsonLayer.getBounds());
+            
+            // Set the heat layer in state or perform other necessary operations
+            //setHeatLayer(heatLayer);
+
+            }
+            catch (error) {
+                console.error('Error rendering GeoJSON:', error);
+        }
+    };
+}
  
  
   const updateLegend = () => {

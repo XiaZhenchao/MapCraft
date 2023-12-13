@@ -18,6 +18,12 @@ const MapCraftSchema = new Schema(
         disLikes: {type: Number, required: true},
         authorName: {type:String, required: true},
         commentObject: [{type: ObjectId, ref: 'Comment'}],
+        layers: {
+            type: [{
+                coordinates: { type: [Number], required: false },
+                regionName: { type: [String], required: false }
+            }]
+        },
         banned: {type: Boolean, required: true},
         editStatus: {type: Boolean, required: true},
         //source: {type: String, required: true}

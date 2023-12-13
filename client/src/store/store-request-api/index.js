@@ -57,6 +57,7 @@ export const createMap = (newMapName, userEmail, username) => {
         disLikes: 0,
         authorName: username,
         commentObject: [],
+        layerObject: [],
         banned: false,
         editStatus: false,
         mapTemplate:"null",
