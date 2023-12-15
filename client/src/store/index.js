@@ -482,6 +482,11 @@ function GlobalStoreContextProvider(props) {
                         console.log("newMap.mapTemplate: "+ newMap.mapTemplate)
                         newMap.mapObjects = mapToCopy.mapObjects;
                         console.log("newMap.mapObjects: "+ newMap.mapObjects)
+                        
+                        //check if heatMap has heatPoint to be copied
+                        if(mapToCopy.mapTemplate=="heatMap"){
+                            newMap.heatArray=mapToCopy.heatArray
+                        }
                         async function updateMap(newMap) {
                             response = await api.updateMapById(newId, newMap);
                             if (response.data.success) {
