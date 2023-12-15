@@ -11,6 +11,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.heat/dist/leaflet-heat.js';
 import { IconButton } from '@mui/material';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import TextField from '@mui/material/TextField';
@@ -32,6 +33,8 @@ const CommunityScreen = () => {
     const [map, setMap] = useState(null);
     const [banUserSuccessModal, setBanUserSuccessModal] = useState(false);
     const history = useHistory();
+    const [heatLayer, setHeatLayer] = useState(null);
+
 
   useEffect(() => {
     // Load the map when the component mounts
@@ -60,15 +63,55 @@ const CommunityScreen = () => {
 
   const loadMap = () => {
     try {
-            const mapInstance = L.map('community-container').setView([0, 0], 5);
+            const mapInstance = L.map('big-container').setView([0, 0], 5);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
             }).addTo(mapInstance);
+
             setMap(mapInstance);
+            renderGeoJSON(mapInstance)
+
+            //HeatMap Cases
+            if (store.currentMap.mapTemplate=="heatMap"){
+                // Check if there are existing points in store.currentMap.heatArray
+                if (store.currentMap.heatArray && store.currentMap.heatArray.length > 0) {
+                // Create the heat layer with existing points
+                const existingHeatLayer = L.heatLayer(store.currentMap.heatArray, { radius: 25 });
+        
+                // Add the heat layer to the map
+                existingHeatLayer.addTo(mapInstance);
+        
+                // Save the heat layer in state if needed
+                setHeatLayer(existingHeatLayer);
+                }
+            }
+            
     } catch (error) {
       console.error('Error loading map:', error);
     }
   };
+    const renderGeoJSON = (mapInstance) => {
+        if (mapInstance) {// if map variable from stat e exists(load map function excute successfully)
+            const thisMap = mapInstance;//assgin map variable from state
+                try {
+                    const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
+                    const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
+                        onEachFeature: function (feature, layer) {
+                            // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
+                        },
+                    }).addTo(thisMap); //adds the geojason layer to the leaft map.
+                    // Get the bounds of the GeoJSON layer
+                    const geojsonBounds = geojsonLayer.getBounds();
+
+                    // Set the map view to the bounds of the GeoJSON layer
+                    thisMap.fitBounds(geojsonBounds);
+
+                }
+                catch (error) {
+                    console.error('Error rendering GeoJSON:', error);
+            }
+        };
+    }
 
    const handleCommentInput = (event) =>{
     if(event.keyCode == 13){

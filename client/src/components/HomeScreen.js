@@ -17,6 +17,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.heat/dist/leaflet-heat.js';
 import MUIDeleteModal from './MUIDeleteModal.js';
 import TextField from '@mui/material/TextField';
 import toGeoJSON from 'togeojson';
@@ -105,60 +106,82 @@ const HomeScreen = () => {
         store.sortDisLikes();
        }
 
-  const renderGeoJSON = () => {
-    if (map) {// if map variable from stat e exists(load map function excute successfully)
-        const thisMap = map;//assgin map variable from state
-            try {
-                const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
-                const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
-                    onEachFeature: function (feature, layer) {
-                        // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
-                        if (feature.properties && feature.properties.name_en) {
-                            console.log(feature.type);
-                            console.log(feature.geometry.type);
-                            console.log(feature.geometry.coordinates);
-                            console.log(feature.properties.name_en);
-                            layer.bindPopup(feature.properties.name_en);
+//   const renderGeoJSON = () => {
+//     if (map) {// if map variable from stat e exists(load map function excute successfully)
+//         const thisMap = map;//assgin map variable from state
+//             try {
+//                 const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
+//                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
+//                     onEachFeature: function (feature, layer) {
+//                         // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
+//                         if (feature.properties && feature.properties.name_en) {
+//                             console.log(feature.type);
+//                             console.log(feature.geometry.type);
+//                             console.log(feature.geometry.coordinates);
+//                             console.log(feature.properties.name_en);
+//                             layer.bindPopup(feature.properties.name_en);
                              
-                            layer.on({
-                                click: (event) => {
-                                    event.target.setStyle({
-                                        color: "green",
-                                        fillColor: "yellow",
-                                    })
-                                }
-                            })
-                        }
+//                             layer.on({
+//                                 click: (event) => {
+//                                     event.target.setStyle({
+//                                         color: "green",
+//                                         fillColor: "yellow",
+//                                     })
+//                                 }
+//                             })
+//                         }
                         
-                    },
-                }).addTo(thisMap); //adds the geojason layer to the leaft map.
+//                     },
+//                 }).addTo(thisMap); //adds the geojason layer to the leaft map.
 
-                // Sample heat map data (latitude, longitude, intensity)
-            const heatData = [
-                [0, 0, 1],
-                [10, 10, 0.5],
-                [11, 3, 4],
-                // Add more data points as needed
-            ];
+//                 // Sample heat map data (latitude, longitude, intensity)
+//             const heatData = [
+//                 [0, 0, 1],
+//                 [10, 10, 0.5],
+//                 [11, 3, 4],
+//                 // Add more data points as needed
+//             ];
 
-            // Create the heat layer
-            const heatLayer = L.heatLayer(heatData, { radius: 25 });
+//             // Create the heat layer
+//             const heatLayer = L.heatLayer(heatData, { radius: 25 });
 
-            // Add the heat layer to the map
-            heatLayer.addTo(thisMap);
+//             // Add the heat layer to the map
+//             heatLayer.addTo(thisMap);
 
-            // Fit the map bounds to the GeoJSON layer
-            thisMap.fitBounds(geojsonLayer.getBounds());
+//             // Fit the map bounds to the GeoJSON layer
+//             thisMap.fitBounds(geojsonLayer.getBounds());
             
-            // Set the heat layer in state or perform other necessary operations
-            setHeatLayer(heatLayer);
+//             // Set the heat layer in state or perform other necessary operations
+//             setHeatLayer(heatLayer);
 
+//             }
+//             catch (error) {
+//                 console.error('Error rendering GeoJSON:', error);
+//         }
+//     };
+// }
+    const renderGeoJSON = (mapInstance) => {
+        if (mapInstance) {// if map variable from stat e exists(load map function excute successfully)
+            const thisMap = mapInstance;//assgin map variable from state
+                try {
+                    const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
+                    const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
+                        onEachFeature: function (feature, layer) {
+                            // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
+                        },
+                    }).addTo(thisMap); //adds the geojason layer to the leaft map.
+                    // Get the bounds of the GeoJSON layer
+                    const geojsonBounds = geojsonLayer.getBounds();
+
+                    // Set the map view to the bounds of the GeoJSON layer
+                    thisMap.fitBounds(geojsonBounds);
+
+                }
+                catch (error) {
+                    console.error('Error rendering GeoJSON:', error);
             }
-            catch (error) {
-                console.error('Error rendering GeoJSON:', error);
-        }
-    };
-}
+        };
+    }
     
   const loadMap = () => {
     try {
@@ -168,6 +191,22 @@ const HomeScreen = () => {
             }).addTo(mapInstance);
 
             setMap(mapInstance);
+            renderGeoJSON(mapInstance)
+
+            //HeatMap Cases
+            if (store.currentMap.mapTemplate=="heatMap"){
+                // Check if there are existing points in store.currentMap.heatArray
+                if (store.currentMap.heatArray && store.currentMap.heatArray.length > 0) {
+                // Create the heat layer with existing points
+                const existingHeatLayer = L.heatLayer(store.currentMap.heatArray, { radius: 25 });
+        
+                // Add the heat layer to the map
+                existingHeatLayer.addTo(mapInstance);
+        
+                // Save the heat layer in state if needed
+                setHeatLayer(existingHeatLayer);
+                }
+            }
             
     } catch (error) {
       console.error('Error loading map:', error);
