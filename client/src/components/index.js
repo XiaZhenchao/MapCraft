@@ -15,6 +15,7 @@ import AdminCommunity from './AdminCommunity'
 import AdminBanner from './AdminBanner'
 import MUIDeleteModal from './MUIDeleteModal.js';
 import MapTemplateModal from './MapTemplateModal.js'
+import EditScreenHeatMap from './EditScreenHeatMap.js'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -38,5 +39,6 @@ export {
     AdminCommunity,
     AdminBanner,
     MUIDeleteModal,
-    MapTemplateModal
+    MapTemplateModal,
+    EditScreenHeatMap
     }

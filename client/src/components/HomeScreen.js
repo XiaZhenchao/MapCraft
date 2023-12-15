@@ -110,10 +110,6 @@ const HomeScreen = () => {
         const thisMap = map;//assgin map variable from state
             try {
                 const geojsonData = store.currentMap.mapObjects;; //Parse the data of GeoJSON file
-                // console.log(geojsonData.type);
-                //console.log(geojsonData.feature.properties.name_en);
-                // console.log(geojsonData.geometry.coordinates);
-                // console.log(geojsonData.properties.name_en);
                 const geojsonLayer = L.geoJSON(geojsonData, { //create geojason layer
                     onEachFeature: function (feature, layer) {
                         // Check if the feature has a 'name' property (replace 'name' with the actual property name containing region names)
@@ -179,7 +175,12 @@ const HomeScreen = () => {
   };
 
    const handleEditButton = () => {
-       history.push("/edit/");
+       if(store.currentMap.mapTemplate=="heatMap"){
+            history.push("/edit-heat-map/");
+       }
+       else{
+            history.push("/edit/");
+       }
    }
    const handleAdd =()=>{
         store.createNewMap();

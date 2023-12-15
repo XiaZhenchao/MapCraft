@@ -15,7 +15,8 @@ import {
     EditScreen,
     Setting,
     AdminHome,
-    AdminCommunity
+    AdminCommunity,
+    EditScreenHeatMap
 } from './components'
 /*
     This is our application's top-level component.
@@ -43,6 +44,7 @@ const App = () => {
                         <Route path="/forgot-password/" exact component={ForgotPassword} />
                         <Route path="/reset-password/" exact component={ResetPassword} />
                         <Route path="/edit/" exact component={EditScreen} />
+                        <Route path="/edit-heat-map/" exact component={EditScreenHeatMap} />
                         <Route path="/community/" exact component={CommunityScreen} />
                         <Route path="/setting/" exact component={Setting} />
                         <Route path="/admin-home/" exact component={AdminHome} />
