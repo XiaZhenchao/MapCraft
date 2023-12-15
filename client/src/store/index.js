@@ -876,6 +876,39 @@ function GlobalStoreContextProvider(props) {
         asyncStoreFile(id, geojsonData,mapType);
     }
 
+    store.saveHeatArray = function(id, allClickedPoints){
+        async function asyncStoreHeatArray(id, allClickedPoints) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                
+                map.heatArray.push(...allClickedPoints);
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.STORE_FILE,
+                                    payload: {
+                                        idNamePairs:pairsArray,
+                                        map:map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncStoreHeatArray(id, allClickedPoints);
+    }
     store.saveLayerData = function (id,coordinatesData, regionNameData){
         async function asyncStoreData(id,coordinatesData,regionNameData) {
             let response = await api.getMapById(id);
@@ -895,7 +928,7 @@ function GlobalStoreContextProvider(props) {
                     console.log("id: "+id);
                     response = await api.updateMapById(map._id, map);
                     console.log("id: "+id);
-                    console.log("siccess or not: ", response.data.success);
+                    console.log("success or not: ", response.data.success);
                     if (response.data.success) {
                         async function getMapPairs(map) {
                             response = await api.getMapPairs();

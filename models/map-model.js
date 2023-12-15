@@ -24,6 +24,7 @@ const MapCraftSchema = new Schema(
                 regionName: { type: [String], required: false }
             }]
         },
+        heatArray:{type:Array, required:false},
         banned: {type: Boolean, required: true},
         editStatus: {type: Boolean, required: true},
         //source: {type: String, required: true}

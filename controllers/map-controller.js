@@ -132,7 +132,8 @@ getMapPairs = async (req, res) => {
 
                             mapTemplate: map.mapTemplate,
                             mapObjects: map.mapObjects,
-                            layers: map.layers
+                            layers: map.layers,
+                            heatArray:map.heatArray,
                                
                         };
                         pairs.push(pair);
@@ -182,7 +183,8 @@ updateMapById = async (req, res) => {
                     list.ownerEmail = body.map.ownerEmail,
                     list.mapTemplate=body.map.mapTemplate,
                     list.mapObjects= body.map.mapObjects,
-                    list.layers= body.map.layers
+                    list.layers= body.map.layers,
+                    list.heatArray= body.map.heatArray
 
                     
                     list

@@ -7,9 +7,6 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat/dist/leaflet-heat.js';
 import { useHistory } from 'react-router-dom';
 
-
-
-
 const HeatmapEditScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [clickedPoints, setClickedPoints] = useState([]);
@@ -177,6 +174,14 @@ const HeatmapEditScreen = () => {
     const handleExit =() =>{
         history2.push('/');
     }
+
+    const handleSave =() =>{
+        store.saveHeatArray(store.currentMap._id, allClickedPoints)
+        setClickedPoints([]);
+        setAllClickedPoints([]);
+        setLastClickedPoint(null);
+        history2.push('/');
+    }
     return (
         <div id="heatmap-edit-container">
             <div id="heatmap-controls">
@@ -190,7 +195,7 @@ const HeatmapEditScreen = () => {
                 <Button onClick={handleClearPoints}>Clear Points</Button>
                 <Button onClick={handleUndo} disabled={historyIndex === 0}> Undo </Button>
                 <Button onClick={handleRedo} disabled={historyIndex === history.length - 1}> Redo </Button>
-                <Button >Save</Button>
+                <Button onClick={handleSave} >Save</Button>
                 <Button onClick={handleExit}>Exit</Button>
             </div>
             <div id="heatmap-map" style={{ height: '500px' }} />

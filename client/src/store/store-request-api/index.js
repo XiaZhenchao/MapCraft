@@ -63,6 +63,7 @@ export const createMap = (newMapName, userEmail, username) => {
         mapTemplate:"null",
         mapObjects:{ "type": "FeatureCollection",
         "features": []},
+        heatArray: [],
     })
 }
 export const deleteMapById = (id) => api.delete(`/map/${id}`)
