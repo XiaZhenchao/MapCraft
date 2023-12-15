@@ -29,12 +29,24 @@ const HeatmapEditScreen = () => {
 
         setMap(mapInstance);
         renderGeoJSON(mapInstance);
+
+        // Check if there are existing points in store.currentMap.heatArray
+        if (store.currentMap.heatArray && store.currentMap.heatArray.length > 0) {
+        // Create the heat layer with existing points
+        const existingHeatLayer = L.heatLayer(store.currentMap.heatArray, { radius: 25 });
+
+        // Add the heat layer to the map
+        existingHeatLayer.addTo(mapInstance);
+
+        // Save the heat layer in state if needed
+        setHeatLayer(existingHeatLayer);
+        }
         return () => {
             if (mapInstance) {
                 mapInstance.remove();
             }
         };
-    }, []);
+    }, [store.currentMap.heatArray]);
 
     const handleMapClick = (e) => {
         const { lat, lng } = e.latlng;
