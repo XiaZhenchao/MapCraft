@@ -22,6 +22,7 @@ function MapList(props) {
         console.log("handleLoadList for " + id);
         store.currentmapName = idNamePair.name;
         store.selectMap(id); 
+
     }
 
     const handleLikes = () => {

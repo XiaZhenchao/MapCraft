@@ -16,6 +16,7 @@ import AdminBanner from './AdminBanner'
 import MUIDeleteModal from './MUIDeleteModal.js';
 import MapTemplateModal from './MapTemplateModal.js'
 import EditScreenHeatMap from './EditScreenHeatMap.js'
+import EditScreenChoroplethMap from './EditScreenChoroplethMap.js'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -40,5 +41,6 @@ export {
     AdminBanner,
     MUIDeleteModal,
     MapTemplateModal,
-    EditScreenHeatMap
+    EditScreenHeatMap,
+    EditScreenChoroplethMap,
     }

@@ -192,6 +192,7 @@ const HomeScreen = () => {
 
             setMap(mapInstance);
             renderGeoJSON(mapInstance)
+            console.log("map object data is " +store.currentMap.mapObjects)
 
             //HeatMap Cases
             if (store.currentMap.mapTemplate=="heatMap"){
@@ -216,6 +217,9 @@ const HomeScreen = () => {
    const handleEditButton = () => {
        if(store.currentMap.mapTemplate=="heatMap"){
             history.push("/edit-heat-map/");
+       }
+       else if(store.currentMap.mapTemplate=="choroplethMap"){
+            history.push("/edit-choropleth-map/")
        }
        else{
             history.push("/edit/");
