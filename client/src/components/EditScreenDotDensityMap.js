@@ -88,6 +88,7 @@ const DotDensityEditScreen = () => {
         if (layer instanceof L.CircleMarker) {
             map.removeLayer(layer); // Remove existing markers
         }
+
         if (layer.getBounds) {
             const layerBounds = layer.getBounds();
             if (layerBounds.isValid()) {
