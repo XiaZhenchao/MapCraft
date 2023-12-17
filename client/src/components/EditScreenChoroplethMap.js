@@ -48,10 +48,14 @@ const ChoroplethEditScreen = () => {
   const handleMapClick = (e) => {
     // Get the clicked layer
     const clickedLayer = e.target;
+    console.log("target: ", clickedLayer);
   
     // Get the index of the clicked layer
+    //console.log("target: ", map.currentMap);
+
     const index = map.currentMap.getLayerId(clickedLayer);
-  
+    console.log("target: ");
+
     // Set the selected region and its properties
     setSelectedRegion(index);
     setRegionProperties(store.getRegionProperties(index));

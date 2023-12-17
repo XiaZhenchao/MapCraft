@@ -17,6 +17,7 @@ import MUIDeleteModal from './MUIDeleteModal.js';
 import MapTemplateModal from './MapTemplateModal.js'
 import EditScreenHeatMap from './EditScreenHeatMap.js'
 import EditScreenChoroplethMap from './EditScreenChoroplethMap.js'
+import EditScreenDotDensityMap from './EditScreenDotDensityMap.js'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -43,4 +44,5 @@ export {
     MapTemplateModal,
     EditScreenHeatMap,
     EditScreenChoroplethMap,
+    EditScreenDotDensityMap
     }

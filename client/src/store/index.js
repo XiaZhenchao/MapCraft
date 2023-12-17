@@ -487,6 +487,9 @@ function GlobalStoreContextProvider(props) {
                         if(mapToCopy.mapTemplate=="heatMap"){
                             newMap.heatArray=mapToCopy.heatArray
                         }
+                        if(mapToCopy.mapTemplate=="heatMap"){
+                            newMap.dotArray=mapToCopy.dotArray
+                        }
                         async function updateMap(newMap) {
                             response = await api.updateMapById(newId, newMap);
                             if (response.data.success) {
@@ -550,6 +553,18 @@ function GlobalStoreContextProvider(props) {
     //     }
     //     asyncSetComment(id);
     // }
+    store.getRegionProperties = (regionId) => {
+        // Find the selected region based on the ID
+        const selectedRegion = store.currentMap.mapObjects.features.find(
+          (feature) => feature.id === regionId
+        );
+
+        console.log("select region: ", selectedRegion);
+      
+        // Return the properties of the selected region
+        return selectedRegion ? selectedRegion.properties : {};
+      };
+
     store.setComment = async function (comment, username) {
         let like = 0;
         let disLike = 0;
@@ -914,6 +929,45 @@ function GlobalStoreContextProvider(props) {
         }
         asyncStoreHeatArray(id, allClickedPoints);
     }
+
+
+    store.saveDotArray = function(id, allDotPoints){
+        async function asyncStoreDotArray(id, allDotPoints) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+                console.log("dot points:", allDotPoints);
+                if (allDotPoints.length == 0){
+                    map.dotArray = [];
+                }
+                map.dotArray.push(...allDotPoints);
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.STORE_FILE,
+                                    payload: {
+                                        idNamePairs:pairsArray,
+                                        map:map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncStoreDotArray(id, allDotPoints);
+    }
+
     store.saveLayerData = function (id,coordinatesData, regionNameData){
         async function asyncStoreData(id,coordinatesData,regionNameData) {
             let response = await api.getMapById(id);

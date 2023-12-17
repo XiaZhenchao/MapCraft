@@ -25,6 +25,7 @@ const MapCraftSchema = new Schema(
             }]
         },
         heatArray:{type:Array, required:false},
+        dotArray:{type:Array, required:false},
         banned: {type: Boolean, required: true},
         editStatus: {type: Boolean, required: true},
         //source: {type: String, required: true}

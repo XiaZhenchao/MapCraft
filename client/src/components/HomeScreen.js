@@ -207,6 +207,15 @@ const HomeScreen = () => {
                 // Save the heat layer in state if needed
                 setHeatLayer(existingHeatLayer);
                 }
+            } 
+            if (store.currentMap.mapTemplate=="dotDensityMap"){
+                console.log("I am here");
+                // Check if there are existing points in store.currentMap.dotArray
+                if (store.currentMap.dotArray && store.currentMap.dotArray.length > 0) {
+                    const markers = store.currentMap.dotArray.map(point => L.circleMarker(point, { radius: 0.1, color: 'red' }));
+                    const markerLayer = L.layerGroup(markers);
+                    mapInstance.addLayer(markerLayer);
+                }
             }
             
     } catch (error) {
@@ -220,6 +229,9 @@ const HomeScreen = () => {
        }
        else if(store.currentMap.mapTemplate=="choroplethMap"){
             history.push("/edit-choropleth-map/")
+       }
+       else if(store.currentMap.mapTemplate=="dotDensityMap"){
+            history.push("/edit-dotDensity-map/")
        }
        else{
             history.push("/edit/");
