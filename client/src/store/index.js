@@ -487,8 +487,8 @@ function GlobalStoreContextProvider(props) {
                         if(mapToCopy.mapTemplate=="heatMap"){
                             newMap.heatArray=mapToCopy.heatArray
                         }
-                        if(mapToCopy.mapTemplate=="heatMap"){
-                            newMap.dotArray=mapToCopy.dotArray
+                        if(mapToCopy.mapTemplate=="dotDensityMap"){
+                            newMap.dotDensityArray=mapToCopy.dotDensityArray
                         }
                         async function updateMap(newMap) {
                             response = await api.updateMapById(newId, newMap);
@@ -931,16 +931,25 @@ function GlobalStoreContextProvider(props) {
     }
 
 
-    store.saveDotArray = function(id, allDotPoints){
-        async function asyncStoreDotArray(id, allDotPoints) {
+    store.saveDotArray = function(id, allDotPoints, population, gdp,  dotColor, dotCounts){
+        async function asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts) {
             let response = await api.getMapById(id);
             if (response.data.success) {
                 let map = response.data.map;
-                console.log("dot points:", allDotPoints);
-                if (allDotPoints.length == 0){
-                    map.dotArray = [];
+                console.log("dot points:", allDotPoints.length);
+                if (allDotPoints.length == 0 || map.dotDensityArray >= 1){
+                    map.dotDensityArray= [];
+                } else {
+                    let newLayer = {
+                        dotArray : allDotPoints,
+                        population: population,
+                        GDP: gdp,
+                        color: dotColor,
+                        dotCounts: dotCounts
+                    }
+                    console.log(newLayer);
+                    map.dotDensityArray.push(newLayer);
                 }
-                map.dotArray.push(...allDotPoints);
                 async function updateMap(map) {
                     console.log("map._id: "+map._id);
                     console.log("id: "+id);
@@ -965,7 +974,7 @@ function GlobalStoreContextProvider(props) {
                 updateMap(map);
             }
         }
-        asyncStoreDotArray(id, allDotPoints);
+        asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts);
     }
 
     store.saveLayerData = function (id,coordinatesData, regionNameData){

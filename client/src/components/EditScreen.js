@@ -249,34 +249,19 @@
                             console.log(feature.properties.name_en);
                             layer.bindPopup(feature.properties.name_en);
                              
-                            layer.on({
-                                click: (event) => {
-                                    event.target.setStyle({
-                                        color: "green",
-                                        fillColor: "yellow",
-                                    })
-                                }
-                            })
+                            // layer.on({
+                            //     click: (event) => {
+                            //         event.target.setStyle({
+                            //             color: "green",
+                            //             fillColor: "yellow",
+                            //         })
+                            //     }
+                            // })
                         }
                         
                     },
                 }).addTo(thisMap); //adds the geojason layer to the leaft map.
 
-                // Sample heat map data (latitude, longitude, intensity)
-            // const heatData = [
-            //     [0, 0, 1],
-            //     [10, 10, 0.5],
-            //     [11, 3, 4],
-            //     // Add more data points as needed
-            // ];
-
-            // Create the heat layer
-            //const heatLayer = L.heatLayer(heatData, { radius: 25 });
-
-            // Add the heat layer to the map
-            //heatLayer.addTo(thisMap);
-
-            // Fit the map bounds to the GeoJSON layer
             thisMap.fitBounds(geojsonLayer.getBounds());
             
             // Set the heat layer in state or perform other necessary operations
@@ -457,6 +442,9 @@
   };
 
   const handleMapClick2 = (e) => {
+    map.eachLayer((layer) => {
+      layer.on('click', handleMapClick2);
+    })
     const { lat, lng } = e.latlng;
     const point = turf.point([lng, lat]);
     console.log("point here:", point);
@@ -470,9 +458,19 @@
     .addTo(map);
   };
 
-  const handleLocationOnClick = () => {
+  const handleLocationOnClick = (event) => {
+    if (editOption === 'addlabel') {
+      map.off('click');
+      map.eachLayer((layer) => {
+      layer.off('click'); 
+    })
+      setAnchorEl(event.currentTarget);
+      } else {
+        seteditOption('addlabel');
+        setAnchorEl(event.currentTarget);
+    }
     if (map) {
-            map.on('click', handleMapClick2);
+        map.on('click', handleMapClick2);
     }
   };
  
@@ -484,8 +482,36 @@
   };
  
  
-  const handleColorBoxClick = () => {
+  const handleColorBoxClick = (event) => {
   // Add your logic for setting fill color on a polygon here
+  if (editOption === 'addcolor') {
+    map.off('click');
+    map.eachLayer((layer) => {
+        layer.off('click'); 
+    })
+    setAnchorEl(event.currentTarget);
+    } else {
+    seteditOption('addcolor');
+    setAnchorEl(event.currentTarget);
+  }
+  if (!map) return; // Ensure map is available   
+  map.eachLayer((layer) => {
+    map.off('click');
+    layer.off('click'); 
+
+    layer.on({
+      click: (event) => {
+        console.log("enent:",event.target);
+          event.target.setStyle({
+              color: "green",
+              fillColor: "yellow",
+          })
+      }
+  })  
+
+  })
+
+
   };
  
  

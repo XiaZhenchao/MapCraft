@@ -10,12 +10,15 @@ const DotDensityEditScreen = () => {
   const { store } = useContext(GlobalStoreContext);
   const [intensity, setIntensity] = useState(0);
   const [map, setMap] = useState(null);
-  const [densityOption, setDensityOption] = useState('population'); // Default option
+  const [densityOption, setDensityOption] = useState('Population'); // Default option
   const [allDotPoints, setAllDotPoints] = useState([]);
   const history2 = useHistory();
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [dotColor, setDotColor] = useState('red');
+  const [dotColor, setDotColor] = useState('black');
+  const [population, setPopulation] = useState(0);
+  const [gdp, setGDP] = useState(0);
+  const [dotCounts, setDotCounts] = useState(0);
 
   useEffect(() => {
     const mapInstance = L.map('heatmap-map').setView([0, 0], 5);
@@ -27,8 +30,8 @@ const DotDensityEditScreen = () => {
     renderGeoJSON(mapInstance);
 
     // Check if there are existing points in store.currentMap.dotArray
-    if (store.currentMap.dotArray && store.currentMap.dotArray.length > 0) {
-        const markers = store.currentMap.dotArray.map(point => L.circleMarker(point, { radius: 0.1, color: dotColor }));
+    if (store.currentMap.dotDensityArray && store.currentMap.dotDensityArray.length > 0) {
+        const markers = store.currentMap.dotDensityArray[0].dotArray.map(point => L.circleMarker(point, { radius: 0.1, color: store.currentMap.dotDensityArray[0].color }));
         const markerLayer = L.layerGroup(markers);
         mapInstance.addLayer(markerLayer);
     }
@@ -37,7 +40,7 @@ const DotDensityEditScreen = () => {
                 mapInstance.remove();
             }
         };
-    }, allDotPoints);
+    }, allDotPoints.length);
 
 
     const renderGeoJSON = (map) => {
@@ -76,59 +79,83 @@ const DotDensityEditScreen = () => {
         setDensityOption(event.target.value);
     };
 
+    const handleColorChange = (event) => {
+        setDotColor(event.target.value);
+    };
+
 
     const handleGenerate = () => {
         if (!map) return; // Ensure map is available
     
         let markerArray = [];
-        const layerBoundsArray = [];
-
-    
+  
         map.eachLayer((layer) => {
-        if (layer instanceof L.CircleMarker) {
-            map.removeLayer(layer); // Remove existing markers
-        }
-
-        if (layer.getBounds) {
-            const layerBounds = layer.getBounds();
-            if (layerBounds.isValid()) {
-              layerBoundsArray.push(layerBounds);
+            if (layer instanceof L.CircleMarker) {
+                map.removeLayer(layer); // Remove existing markers
             }
-        }
-        console.log(layerBoundsArray);
-        });
+        })
+
     
         store.currentMap.mapObjects.features.forEach((feature) => {
             let densityValue;
-            if (densityOption == 'Population'){
+            if (densityOption === 'Population'){
                 densityValue = feature.properties.pop_est;
+                console.log("----");
+                setPopulation(densityValue);
+                setGDP(gdp);
             } else {
                 densityValue = feature.properties.gdp_md;
+                console.log("----111");
+                setPopulation(population);
+                setGDP(densityValue);
             }
         
         const dotsCount = Math.round(densityValue / intensity);
-        console.log(densityValue);
+        console.log("ppopulation:",densityValue);
         console.log(dotsCount);
         const bounds = L.geoJSON(feature).getBounds();
     
         //to create an array of random points.
         const randomPoints = Array.from({ length: dotsCount }, () => generateRandomPoint(bounds));
+        console.log("ramdom:",randomPoints);
         markerArray = [...markerArray, ...randomPoints];
         setAllDotPoints(markerArray);
-        console.log("ramdom:",randomPoints);
-        console.log(markerArray);
+        console.log("makerArray: ",markerArray);
 
         // Create a layer group with all markers
-        const markers = L.layerGroup(randomPoints.map(point => L.circleMarker(point, { radius: 0.5, color: dotColor })));
+        const markers = L.layerGroup(randomPoints.map(point => L.circleMarker(point, { radius: 0.5, color: dotColor })
+                                                                .bindPopup('Region: '+ feature.properties.name_en +  '<br>' +  
+                                                                (densityOption === 'Population'? "Population: " + feature.properties.pop_est
+                                                                : "GDP: " + feature.properties.gdp_md))));
 
         // Add the layer group to the map
         markers.addTo(map);
         });
+         // Save the complete history of allClickedPoints
+         const updatedHistory = [...history, markerArray];
+         console.log("update: ", updatedHistory );
+         setHistory(updatedHistory);
+         setHistoryIndex(updatedHistory.length);
+         //setAllDotPoints(markerArray.flat());
+         setDotCounts(allDotPoints.length);
     }
 
+     //genrate random points in the bounds
+     const generateRandomPoint = (bounds) => {
+        const randomLat = bounds.getSouth() + Math.random() * (bounds.getNorth() - bounds.getSouth());
+        const randomLng = bounds.getWest() + Math.random() * (bounds.getEast() - bounds.getWest());
+      
+        return [randomLat, randomLng];
+    };
+
     const handleSave =() =>{
-        console.log(allDotPoints);
-        store.saveDotArray(store.currentMap._id, allDotPoints)
+        setDotColor(dotColor);
+        console.log("1:",allDotPoints);
+        console.log(dotColor);
+        console.log(population);
+        console.log(gdp);
+        console.log("5:",dotCounts);
+        store.saveDotArray(store.currentMap._id, allDotPoints, population, gdp,dotColor, dotCounts);
         setAllDotPoints([]);
         history2.push('/');
     }
@@ -136,14 +163,6 @@ const DotDensityEditScreen = () => {
     const handleExit =() =>{
         history2.push('/');
     }
-
-    //genrate random points in the bounds
-    const generateRandomPoint = (bounds) => {
-        const randomLat = bounds.getSouth() + Math.random() * (bounds.getNorth() - bounds.getSouth());
-        const randomLng = bounds.getWest() + Math.random() * (bounds.getEast() - bounds.getWest());
-      
-        return [randomLat, randomLng];
-    };
 
     const handleClearPoints = () => {
         // Remove all existing layers
@@ -157,12 +176,51 @@ const DotDensityEditScreen = () => {
     
         // Clear the clicked points and last clicked point
         setAllDotPoints([]);
+        setHistory([]);
+        setHistoryIndex(-1);
         // Clear undo and redo history
     };
 
-    const handleColorChange = (event) => {
-        setDotColor(event.target.value);
+
+    const handleUndo = () => {
+        console.log('history index: ', historyIndex);
+        if (historyIndex > 0) {
+          const newHistoryIndex = historyIndex - 1;
+          setHistoryIndex(newHistoryIndex);
+          console.log(history);
+    
+          // Update the map based on the points from history
+          const previousPoints = history[newHistoryIndex];
+          console.log("previous: ", previousPoints);
+          updateMapWithPoints(previousPoints);
+        }
       };
+    
+      const handleRedo = () => {
+        if (historyIndex < history.length - 1) {
+          const newHistoryIndex = historyIndex + 1;
+          setHistoryIndex(newHistoryIndex);
+    
+          // Update the map based on the points from history
+          const nextPoints = history[newHistoryIndex];
+          updateMapWithPoints(nextPoints);
+        }
+      };
+    
+      const updateMapWithPoints = (points) => {
+        // Remove the current markers
+        map.eachLayer((layer) => {
+          if (layer instanceof L.CircleMarker) {
+            map.removeLayer(layer);
+          }
+        });
+    
+        // Add new markers based on the points from history
+        const newDotDensityLayer = L.layerGroup(points.map(point => L.circleMarker(point, { radius: 0.5, color: dotColor })));
+        newDotDensityLayer.addTo(map);
+      };
+
+
     
 
 
@@ -181,8 +239,8 @@ const DotDensityEditScreen = () => {
           value={densityOption}
           onChange={handleDensityOptionChange}
         >
-          <MenuItem value="population">Population</MenuItem>
-          <MenuItem value="gdp">GDP</MenuItem>
+          <MenuItem value="Population">Population</MenuItem>
+          <MenuItem value="GDP">GDP</MenuItem>
         </TextField>
 
         <input
@@ -194,15 +252,15 @@ const DotDensityEditScreen = () => {
 
         <Button onClick={handleGenerate}> Generate </Button>
         <Button onClick={handleClearPoints}>Clear Points</Button>
-        <Button > Undo </Button>
-        <Button > Redo </Button>
+        <Button onClick={handleUndo}> Undo </Button>
+        <Button onClick={handleRedo}> Redo </Button>
         <Button onClick={handleSave}>Save</Button>
         <Button onClick={handleExit}>Exit</Button>
       </div>
       <div id="heatmap-map" style={{ height: '500px' }} />
       <p>
-        {densityOption === 'population'
-        ? `1 point = ${intensity} population`
+        {densityOption === 'Population'
+        ? `1 point = ${intensity} Population`
         : `1 point = ${intensity} GDP`
         }
   </p>
@@ -210,4 +268,4 @@ const DotDensityEditScreen = () => {
   );
 };
 
-export default DotDensityEditScreen;
+export default DotDensityEditScreen; 

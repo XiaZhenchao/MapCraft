@@ -44,28 +44,12 @@ const ChoroplethEditScreen = () => {
       });
     }
   }, [selectedRegion, regionProperties, map, store]);
-
-  const handleMapClick = (e) => {
-    // Get the clicked layer
-    const clickedLayer = e.target;
-    console.log("target: ", clickedLayer);
-  
-    // Get the index of the clicked layer
-    //console.log("target: ", map.currentMap);
-
-    const index = map.currentMap.getLayerId(clickedLayer);
-    console.log("target: ");
-
-    // Set the selected region and its properties
-    setSelectedRegion(index);
-    setRegionProperties(store.getRegionProperties(index));
-  };
   
 
   useEffect(() => {
     if (map) {
       // Add an event listener for map click
-      map.on('click', handleMapClick);
+      map.on('click');
 
       // Add GeoJSON features to the map
       store.currentMap.mapObjects.features.forEach((feature, index) => {
@@ -83,7 +67,7 @@ const ChoroplethEditScreen = () => {
 
     return () => {
       if (map) {
-        map.off('click', handleMapClick);
+        map.off('click');
       }
     };
   }, [map, store.currentMap]);
@@ -99,28 +83,34 @@ const ChoroplethEditScreen = () => {
   const renderGeoJSON = (map) => {
     if (map) {
       const thisMap = map;
-
+  
       try {
         const geojsonData = store.currentMap.mapObjects;
         const geojsonLayer = L.geoJSON(geojsonData, {
-          style: {
-            color: 'blue',
-            fillColor: 'lightblue',
+          style: (feature) => {
+            const value = getValueForFeature(feature);
+            return {
+              fillColor: getColor(value),
+              color: 'blue',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.8,
+            };
           },
-          onEachFeature: function (feature, layer) {
-            // Attach the GeoJSON feature id (using index) to the layer for identification
-            layer.feature = { id: store.currentMap.mapObjects.features.indexOf(feature) };
-
-            // Add a click event listener to the layer
-            layer.on('click', (event) => {
-              handleMapClick(event);
+          onEachFeature: function(feature, layer) {
+            // Bind a popup with information to each feature
+            layer.bindPopup('Region: ' + feature.properties.regionName);
+            // Add click event
+            layer.on('click', function() {
+              alert('You clicked on ' + feature.properties.regionName);
+              // You can perform additional actions here
             });
-          },
-        }).addTo(thisMap);
-
+          }
+        }).addTo(map);
+  
         // Get the bounds of the GeoJSON layer
         const geojsonBounds = geojsonLayer.getBounds();
-
+  
         // Set the map view to the bounds of the GeoJSON layer
         thisMap.fitBounds(geojsonBounds);
       } catch (error) {
@@ -128,17 +118,37 @@ const ChoroplethEditScreen = () => {
       }
     }
   };
-
-  function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
+  
+  function getValueForFeature(feature) {
+    // Replace this with the logic to retrieve the value for each feature
+    // For example, you might get the value from feature.properties or another source
+    return feature.properties.value || 0;
   }
+  
+  function getColor(d) {
+    return d > 1000
+      ? '#800026'
+      : d > 500
+      ? '#BD0026'
+      : d > 200
+      ? '#E31A1C'
+      : d > 100
+      ? '#FC4E2A'
+      : d > 50
+      ? '#FD8D3C'
+      : d > 20
+      ? '#FEB24C'
+      : d > 10
+      ? '#FED976'
+      : '#FFEDA0';
+  }
+  
+    const handleRegionClick = (event, feature) => {
+      setSelectedRegion(feature.id);
+      setRegionProperties(feature.properties);
+      // Other logic for handling the click
+      console.log('Clicked on region:', feature);
+    };
 
   const handleExit = () => {
     history.push('/');

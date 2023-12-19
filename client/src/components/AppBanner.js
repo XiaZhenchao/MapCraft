@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -142,12 +143,16 @@ export default function AppBanner() {
                     }}
                 >
                     <div style={{ display: 'flex', alignItems: 'left' }}>
+                    <Tooltip title="Home" arrow>
                         <Link style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }} to='/'>⌂</Link>
+                    </Tooltip>
                         <Box>
                             {logIn ? (
-                                <IconButton onClick={handleCommunityButton}>
+                                <Tooltip title="Community" arrow>
+                                    <IconButton onClick={handleCommunityButton}>
                                     <GroupsOutlinedIcon />
-                                </IconButton>
+                                    </IconButton>
+                              </Tooltip>
                             ) : null}
                         </Box>
                     </div>

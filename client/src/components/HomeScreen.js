@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
+import Tooltip from '@mui/material/Tooltip';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat/dist/leaflet-heat.js';
@@ -28,6 +29,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import 'leaflet.heat/dist/leaflet-heat.js'; 
 import 'leaflet-easyprint';
+
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -210,9 +212,10 @@ const HomeScreen = () => {
             } 
             if (store.currentMap.mapTemplate=="dotDensityMap"){
                 console.log("I am here");
-                // Check if there are existing points in store.currentMap.dotArray
-                if (store.currentMap.dotArray && store.currentMap.dotArray.length > 0) {
-                    const markers = store.currentMap.dotArray.map(point => L.circleMarker(point, { radius: 0.1, color: 'red' }));
+                console.log(store.currentMap.dotDensityArray);
+                
+                if (store.currentMap.dotDensityArray && store.currentMap.dotDensityArray.length > 0) {
+                    const markers = store.currentMap.dotDensityArray[0].dotArray.map(point => L.circleMarker(point, { radius: 0.1, color: store.currentMap.dotDensityArray[0].color }));
                     const markerLayer = L.layerGroup(markers);
                     mapInstance.addLayer(markerLayer);
                 }
@@ -538,17 +541,48 @@ const handleMenuClose = () => {
                 }
             </div>
         }
-
     }
+
   
    return (
        <div id = 'app-root'>
         <div style={{ display: 'flex', flexDirection: 'column',height: '100%', maxHeight:'600px'}}>
        <Box sx={{ flexGrow: 1,background: 'lightgray', alignItems: 'center', paddingLeft: '30px'}} id = "navigation-bar" >
-           <IconButton style = {{color:'black'}}> <AddCircleIcon onClick={handleAdd} style={{fontSize: '2rem'}}></AddCircleIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <IconButton style = {{color:'black'}}> <PublishedWithChangesIcon onClick={handlePublic} style={{ fontSize: '2rem',border: isBorderVisible ? '2px solid black' : 'none' }}></PublishedWithChangesIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <IconButton style = {{color:'black'}}> <LockIcon onClick={handlePrivate} style={{ fontSize: '2rem',border: !isBorderVisible ? '2px solid black' : 'none' }}></LockIcon></IconButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <IconButton onClick={handleProfileMenuOpen} style = {{color:'black'}}> <SortIcon style={{fontSize: '2rem'}}></SortIcon></IconButton>{sortByMenu}
+       <Tooltip title="Create Map" arrow>
+            <IconButton className="tooltip" style={{ color: 'black',  marginRight: '8px' }} onClick={handleAdd}>
+                <AddCircleIcon style={{ fontSize: '2rem' }} />
+            </IconButton>
+            </Tooltip>
+        <Tooltip title="Public Map" arrow>
+            <IconButton style={{ color: 'black', marginRight: '8px' }}>
+            <PublishedWithChangesIcon
+                onClick={handlePublic}
+                style={{
+                fontSize: '2rem',
+                border: isBorderVisible ? '2px solid black' : 'none',
+                }}
+            />
+            </IconButton>
+      </Tooltip>
+      <Tooltip title="Private Map" arrow>
+        <IconButton style={{ color: 'black', marginRight: '8px' }}>
+          <LockIcon
+            onClick={handlePrivate}
+            style={{
+              fontSize: '2rem',
+              border: !isBorderVisible ? '2px solid black' : 'none',
+            }}
+          />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Sorting" arrow>
+        <IconButton onClick={handleProfileMenuOpen} style={{ color: 'black'}}>
+          <SortIcon style={{ fontSize: '2rem' }} />
+        </IconButton>
+      </Tooltip>
+
+      {sortByMenu}
        </Box>
        
        <div style={{ width: '29%', height: '100%',  overflow: 'scroll' }}>
@@ -570,19 +604,23 @@ const handleMenuClose = () => {
        ) : (
         <>
           {store.currentMap != null? store.currentmapName: "" }
-          <IconButton onClick={handleEditNameClick}>
-            <EditIcon style={{ fontSize: '2rem' }}></EditIcon>
+          <IconButton onClick={handleEditNameClick} title="Edit Name">
+            <EditIcon style={{ fontSize: '2rem' }} />
           </IconButton>
         </>
        )}
        </div>
        <Box  id = "export-close">
-        <IconButton>
-            <ExitToAppIcon onClick={handleExportButton} style={{fontSize: '1.5rem'}}></ExitToAppIcon>
-        </IconButton>
-        <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
-        </CloseIcon>
-        </IconButton>
+       <Tooltip title="Export" arrow>
+            <IconButton onClick={handleExportButton}>
+            <ExitToAppIcon style={{ fontSize: '1.5rem' }} />
+            </IconButton>
+       </Tooltip>
+       <Tooltip title="Close" arrow>
+            <IconButton onClick={handleCloseButton}>
+            <CloseIcon style={{ fontSize: '1.5rem' }} />
+            </IconButton>
+       </Tooltip>
         </Box>
        <List id = "Mapview" >
         {store.currentMap == null? (

@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { useHistory } from 'react-router-dom';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
+import Tooltip from '@mui/material/Tooltip';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat/dist/leaflet-heat.js';
@@ -83,6 +84,17 @@ const CommunityScreen = () => {
         
                 // Save the heat layer in state if needed
                 setHeatLayer(existingHeatLayer);
+                }
+            }
+
+            if (store.currentMap.mapTemplate=="dotDensityMap"){
+                console.log("I am here");
+                console.log(store.currentMap.dotDensityArray);
+                
+                if (store.currentMap.dotDensityArray && store.currentMap.dotDensityArray.length > 0) {
+                    const markers = store.currentMap.dotDensityArray[0].dotArray.map(point => L.circleMarker(point, { radius: 0.1, color: store.currentMap.dotDensityArray[0].color }));
+                    const markerLayer = L.layerGroup(markers);
+                    mapInstance.addLayer(markerLayer);
                 }
             }
             
@@ -169,6 +181,24 @@ function handleForkButton(){
     store.forkMap(store.currentMap._id)   
     history.push("/") 
 }
+
+const handleExportButton = () =>{
+    if (map) { // Assuming 'map' is set in your state and properly updated via 'setMap'
+        // Create the easyPrint control and add it to the map instance
+        var printer = L.easyPrint({
+            filename: 'myMap',
+            exportOnly: true,
+            hideControlContainer: true,
+            hidden: true,
+        }).addTo(map);
+
+        // Trigger the printing action
+        printer.printMap('CurrentSize', 'MyManualPrint');
+    } else {
+        console.error('Map instance not found.'); // Log an error if the map instance is missing
+    }
+
+};
 
 
     let listCard = "";
@@ -270,12 +300,16 @@ function handleForkButton(){
 
                     </IconButton>):null
         }  
-        <IconButton>
-            <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
-        </IconButton>
-        <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
-        </CloseIcon>
-        </IconButton>
+        <Tooltip title="Export" arrow>
+            <IconButton onClick={handleExportButton}>
+            <ExitToAppIcon style={{ fontSize: '1.5rem' }} />
+            </IconButton>
+       </Tooltip>
+       <Tooltip title="Close" arrow>
+            <IconButton onClick={handleCloseButton}>
+            <CloseIcon style={{ fontSize: '1.5rem' }} />
+            </IconButton>
+       </Tooltip>
         </Box>
        
         <Box id = "Mapview" style={{ maxHeight: '800px', maxWidth: '780px', overflowY: 'auto' }} >

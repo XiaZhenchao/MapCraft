@@ -95,7 +95,7 @@ body {
 
 #navigation-bar {
   border: 1px solid ; 
-  width: 27%;
+  width: 25%;
   margin-top: 3%;
   margin-left: 2%;
   border-radius: 0px;
@@ -412,6 +412,8 @@ body {
   padding-top: 2%;
   margin: 0.5rem;
 }
+
+
 
 .map-card{
   background: url(exampleMap.jpg);
