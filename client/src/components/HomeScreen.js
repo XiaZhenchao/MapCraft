@@ -236,6 +236,10 @@ const HomeScreen = () => {
        else if(store.currentMap.mapTemplate=="dotDensityMap"){
             history.push("/edit-dotDensity-map/")
        }
+       else if(store.currentMap.mapTemplate=="flowMap"){
+            console.log("Flowmap!");
+            history.push("/edit-voronoi-map/")
+       }
        else{
             history.push("/edit/");
        }

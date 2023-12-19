@@ -18,7 +18,9 @@ import {
     AdminCommunity,
     EditScreenHeatMap,
     EditScreenChoroplethMap,
-    EditScreenDotDensityMap
+    EditScreenDotDensityMap,
+    EditScreenFlowMap,
+    EditScreenVoronoiMap
 
 } from './components'
 /*
@@ -50,6 +52,7 @@ const App = () => {
                         <Route path="/edit-heat-map/" exact component={EditScreenHeatMap} />
                         <Route path="/edit-choropleth-map/" exact component={EditScreenChoroplethMap} />
                         <Route path="/edit-dotDensity-map/" exact component={EditScreenDotDensityMap} />
+                        <Route path="/edit-voronoi-map/" exact component={EditScreenVoronoiMap} />
                         <Route path="/community/" exact component={CommunityScreen} />
                         <Route path="/setting/" exact component={Setting} />
                         <Route path="/admin-home/" exact component={AdminHome} />
