@@ -35,8 +35,8 @@ const EditScreen = () => {
  const [history, setHistory] = useState([]);
  const [historyIndex, setHistoryIndex] = useState(0);
  const [markers,setmarkers] = useState([]);
+ const [Regions,setRegions] = useState([]);
  const [needreload, setneedreload] = useState(false);
- // const [drag, setdrag] = useState(false);
  const [editOption, seteditOption] = useState('');
  const [fontFamily, setFontFamily] = useState('Arial');
  const [anchorEl, setAnchorEl] = useState(null);
@@ -49,9 +49,11 @@ const EditScreen = () => {
  const [legendItems, setLegendItems] = useState([]);
  const [isModalOpen, setModalOpen] = useState(false);
  const [existlegend,setLegend] = useState(null);
+ const [selectedRegionColor,setSelectedRegionColor] = useState("#000000");
  const selectedColorRef = useRef(selectedColor);
  const selectFontSizeRef = useRef(fontSize);
  const selectFontRef = useRef(fontFamily);
+ const selectedRegionColorRef = useRef(selectedRegionColor);
  const history2 = useHistory();
  const fontOptions = [
    'Arial',
@@ -103,6 +105,9 @@ const EditScreen = () => {
    }
  }, [AllChanges]);
 
+ useEffect(()=>{
+  console.log("Regions update: ", Regions);
+ },[Regions]);
 
  useEffect(() => {
    const handleMarkerDragEnd = (event, markerData) => {
@@ -147,6 +152,9 @@ const EditScreen = () => {
  useEffect(() => {
    console.log("markers Updated",markers);
  }, [markers]);
+ useEffect(()=>{
+  selectedRegionColorRef.current = selectedRegionColor;
+ },[selectedRegionColor]);
  useEffect(() => {
  selectedColorRef.current = selectedColor;
  }, [selectedColor]);
@@ -356,6 +364,17 @@ const EditScreen = () => {
            console.log('null!!!')
          }
        }
+       else if (EditItem["type"]=="Regioncolor"){
+        console.log("current regions: ", Regions)
+        const layer = Regions.filter(m => m.feature.geometry===EditItem["layer"])
+        if (layer.length!==0){
+          layer[0].setStyle({
+            color: "green",
+            fillColor: EditItem["color"],
+        });
+        }
+        
+       }
      });
    }
  }
@@ -388,6 +407,35 @@ const EditScreen = () => {
    }
  };
 
+ function arraysMatch(arr1, arr2) {
+  // Check if the arrays have the same length
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  // Iterate over each element in the array
+  for (let i = 0; i < arr1.length; i++) {
+    const element1 = arr1[i];
+    const element2 = arr2[i];
+
+    // If both elements are arrays, recursively check them
+    if (Array.isArray(element1) && Array.isArray(element2)) {
+      if (!arraysMatch(element1, element2)) {
+        return false;
+      }
+    } else {
+      // If the elements are not arrays, compare them directly
+      if (element1 !== element2) {
+        return false;
+      }
+    }
+  }
+
+  // All elements match
+  return true;
+}
+
+
 
  const renderGeoJSON = (mapInstance) => {
    if (mapInstance) {// if map variable from stat e exists(load map function excute successfully)
@@ -403,13 +451,19 @@ const EditScreen = () => {
                          console.log(feature.geometry.coordinates);
                          console.log(feature.properties.name_en);
                          layer.bindPopup(feature.properties.name_en);
-                         layer.on({
-                             click: (event) => {
-                                 event.target.setStyle({
-                                     color: "green",
-                                     fillColor: "yellow",
-                                 })
-                             }
+                         setRegions((prevRegions)=>[...prevRegions,layer]);
+                         console.log("Changes in geojson: ",AllChanges)
+                         const addcolor = AllChanges.filter(m=>m["type"]==="Regioncolor")
+                         console.log("filter: ",addcolor)
+                         addcolor.forEach(function(item){
+                          console.log("Comaring: ",item["layer"].coordinates,feature.geometry.coordinates,arraysMatch(item["layer"].coordinates,feature.geometry.coordinates))
+                            if (arraysMatch(item["layer"].coordinates,feature.geometry.coordinates)){
+                              
+                              layer.setStyle({
+                                           color: "green",
+                                           fillColor:item["color"],
+                                       })
+                            }
                          })
                      }
                     
@@ -579,12 +633,18 @@ const EditScreen = () => {
                     // Set the style of the clicked polygon
                     event.target.setStyle({
                         color: "green",
-                        fillColor: "yellow",
+                        fillColor: selectedRegionColorRef.current,
                     });
 
                     // You can also access the properties of the clicked polygon, for example:
                     const polygonProperties = event.target.feature.properties;
                     console.log("Polygon Properties:", polygonProperties);
+                    const textlabel = {"type":"Regioncolor","layer":event.target.feature.geometry,"color": selectedRegionColorRef.current}
+                    // const regionChanges = AllChanges.filter((m)=>(m["type"]==="Regioncolor"))
+                    // regionChanges.filter(m=>)
+                    setAllChanges((prevAllChanges) => [...prevAllChanges, textlabel]);
+                    setHistoryIndex((prev)=>(prev+1));
+                    setRegions((prevRegions) => [...prevRegions.filter(m => m !== layer),layer]);
                 }
             }
         });
@@ -598,6 +658,17 @@ const EditScreen = () => {
      setHistoryIndex(newHistoryIndex);
      setAllChanges((prevEdit) => {
        const previousEdit = history[newHistoryIndex].slice();
+       const currentEdit = history[historyIndex].slice();
+       const differenceCurrenttoPrev = currentEdit.filter(item => !previousEdit.includes(item));
+       differenceCurrenttoPrev.forEach(function(item){
+        if (item["type"]==="Regioncolor"){
+          const layer = Regions.filter(m => m.feature.geometry===item["layer"])[0]
+          layer.setStyle({
+            color: "#3388ff",
+            fillColor: "#3388ff",
+        });
+        }
+       });
        return previousEdit;
      });
      markers.forEach(function(marker){
@@ -793,10 +864,40 @@ const EditScreen = () => {
       </Tooltip>
 
       <Tooltip title="Color" placement="top">
-        <IconButton onClick={handleColorBoxClick} style={{ border: editOption === 'color' ? '2px solid black' : 'none' }}>
+        <IconButton onClick={handleColorBoxClick} style={{ border: editOption === 'addcolor' ? '2px solid black' : 'none' }}>
           <ColorLensIcon />
         </IconButton>
       </Tooltip>
+      <Popover
+       open={Boolean(anchorEl)&&(editOption=="addcolor")}
+       anchorEl={anchorEl}
+       onClose={() => setAnchorEl(null)}
+       anchorOrigin={{
+         vertical: 'center',
+         horizontal: 'right',
+       }}
+       transformOrigin={{
+         vertical: 'top',
+         horizontal: 'left',
+       }}
+     >
+       <Box p={2} style={{ height: '7vh', display: 'flex', flexDirection: 'column' }}>
+         
+       <div style={{ marginTop: '10px' }}>
+           <Typography variant="h7">Select Region Color: </Typography>
+           <input
+             type="color"
+             id="textColorPicker"
+             value={selectedRegionColor}
+             onChange={(e) => {
+               setSelectedRegionColor(e.target.value);
+               console.log('e.target.value:', e.target.value);
+               console.log('selectedRegionColor:', selectedRegionColor);
+             }}
+           />
+         </div>
+       </Box>
+     </Popover>
 
       <Tooltip title="Undo" placement="top">
         <IconButton onClick={handleUndoClick}>
