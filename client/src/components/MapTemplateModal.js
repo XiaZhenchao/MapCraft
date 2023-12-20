@@ -119,11 +119,11 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           <input
             type="radio"
             name="mapType"
-            value="flowMap"
-            checked={mapType === 'flowMap'}
+            value="voronoiMap"
+            checked={mapType === 'voronoiMap'}
             onChange={handleMapTypeChange}
           />
-          Flow Map
+          Voronoi Map
         </label>
 
         <label style={{ marginLeft: '30px' }}>
@@ -131,7 +131,7 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
             type="radio"
             name="mapType"
             value="RegularMap"
-            checked={mapType === 'flowMap'}
+            checked={mapType === 'voronoiMap'}
             onChange={handleMapTypeChange}
           />
           no specific map

@@ -294,8 +294,7 @@ const HomeScreen = () => {
        else if(store.currentMap.mapTemplate=="dotDensityMap"){
             history.push("/edit-dotDensity-map/")
        }
-       else if(store.currentMap.mapTemplate=="flowMap"){
-            console.log("Flowmap!");
+       else if(store.currentMap.mapTemplate=="voronoiMap"){
             history.push("/edit-voronoi-map/")
        }
        else{
