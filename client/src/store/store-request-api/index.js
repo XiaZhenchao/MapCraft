@@ -47,7 +47,7 @@ export const updateCommentById = (id, comment) => {
 export const createMap = (newMapName, userEmail, username) => {
     const currentDate = new Date();
     return api.post(`/map/`, {
-        // SPECIFY THE PAYLOAD
+        // SPECIFY THE PAYLOADFfo
         name: newMapName,
         ownerEmail: userEmail,
         publishDate: currentDate.toISOString(),

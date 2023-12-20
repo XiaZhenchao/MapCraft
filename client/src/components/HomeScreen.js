@@ -62,7 +62,7 @@ const HomeScreen = () => {
         {
                 if(auth.user.role == "admin")
             {
-                history.push("/admin-home/")
+                history.push("/admin-community/")
             }
             else if(auth.user.role == "banned"){
                 handleBanUserLoginModal();

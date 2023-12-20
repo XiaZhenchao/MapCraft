@@ -490,6 +490,10 @@ function GlobalStoreContextProvider(props) {
                         if(mapToCopy.mapTemplate=="dotDensityMap"){
                             newMap.dotDensityArray=mapToCopy.dotDensityArray
                         }
+
+                        if(mapToCopy.mapTemplate=="voronoiMap"){
+                            newMap.voronoiArray=mapToCopy.voronoiArray
+                        }
                         async function updateMap(newMap) {
                             response = await api.updateMapById(newId, newMap);
                             if (response.data.success) {
