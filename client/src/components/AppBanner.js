@@ -86,7 +86,6 @@ export default function AppBanner() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            <MenuItem onClick={handleSetting}>Setting</MenuItem>
         </Menu>        
 
 

@@ -14,6 +14,7 @@ const ChoroplethEditScreen = () => {
   const [densityOption, setDensityOption] = useState('Population'); // Default option
   const { store } = useContext(GlobalStoreContext);
   const history = useHistory();
+  const history2 = useHistory();
 
   useEffect(() => {
     const mapInstance = L.map('choropleth-map').setView([0, 0], 5);
@@ -51,8 +52,7 @@ const ChoroplethEditScreen = () => {
   useEffect(() => {
     if (map) {
       const geojsonData = store.currentMap.mapObjects;
-
-      //const colorScale = chroma.scale(['#fafa6e', '#2A4858']).domain([0, 1000000000]); // Adjust colors and domain as needed
+      let propertiesArr = [];
 
       const geojsonLayer = L.geoJSON(geojsonData, {
         style: (feature) => {
@@ -62,6 +62,10 @@ const ChoroplethEditScreen = () => {
           } else {
             data = feature.properties.gdp_md || 0;
           }
+          let newArr = [feature.properties.name_en, data, getColor(data)];
+          propertiesArr.push(newArr);
+          console.log(propertiesArr);
+          setRegionProperties(propertiesArr);
           return {
             fillColor: getColor(data),
             color: 'blue',
@@ -237,6 +241,12 @@ const ChoroplethEditScreen = () => {
     setDensityOption(event.target.value);
   };
 
+  const handleSave =() =>{
+    console.log("1:",regionProperties);
+    store.saveChoroplethArray(store.currentMap._id, regionProperties, densityOption);
+    history2.push('/');
+  }
+
 
   return (
     <div id="choropleth-edit-container">
@@ -263,6 +273,7 @@ const ChoroplethEditScreen = () => {
           <MenuItem value="Population">Population</MenuItem>
           <MenuItem value="GDP">GDP</MenuItem>
         </TextField>
+        <Button onClick={handleSave}>Save</Button>
         <Button onClick={handleExit}>Exit</Button>
       </div>
       <div id="choropleth-map" style={{ height: '500px' }} />
