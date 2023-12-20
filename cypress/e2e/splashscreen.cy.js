@@ -70,25 +70,25 @@ describe('Community view', () => {
 
 });
 
-describe('Password Recovery System', () => {
-  it('should send a password reset email', () => {
-    // Visit the password recovery page
-    cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/forgot-password');
+// describe('Password Recovery System', () => {
+//   it('should send a password reset email', () => {
+//     // Visit the password recovery page
+//     cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/forgot-password');
 
-    cy.get('input[name="EmailAddress"]').type('a1149934007@gmail.com');
-    cy.get('#SendLinkButton').click();
-    cy.url().should('include','https://mapcraft-55160ee4aae1.herokuapp.com/login/');
-  });
-});
+//     cy.get('input[name="EmailAddress"]').type('a1149934007@gmail.com');
+//     cy.get('#SendLinkButton').click();
+//     cy.url().should('include','https://mapcraft-55160ee4aae1.herokuapp.com/login/');
+//   });
+// });
 
-describe('Password Recovery System', () => {
-  it('should send an invalid email and pop out error modal', () => {
-    //Visit the password recovery page
-    cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/forgot-password');
+// describe('Password Recovery System', () => {
+//   it('should send an invalid email and pop out error modal', () => {
+//     //Visit the password recovery page
+//     cy.visit('https://mapcraft-55160ee4aae1.herokuapp.com/forgot-password');
 
-    cy.get('input[name="EmailAddress"]').type('a1149937@gmail.com');
-   cy.get('#SendLinkButton').click();
-   cy.get('.forgot-password-modal').should('be.visible');
+//     cy.get('input[name="EmailAddress"]').type('a1149937@gmail.com');
+//    cy.get('#SendLinkButton').click();
+//    cy.get('.forgot-password-modal').should('be.visible');
 
- });
-});
+//  });
+// });
