@@ -10,6 +10,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
@@ -545,10 +546,52 @@ const EditScreen = () => {
    };
    map.on('click', handleMapClick);
  };
-  const handleColorBoxClick = () => {
-   seteditOption("color");
- // Add your logic for setting fill color on a polygon here
- };
+
+
+  const handleColorBoxClick = (event) => {
+    if (editOption === 'addcolor') {
+        // If the user is already in 'addcolor' mode, disable the click event and return
+        map.off('click');
+        map.eachLayer((layer) => {
+            layer.off('click');
+        });
+        setAnchorEl(event.currentTarget);
+    } else {
+        // If the user is not in 'addcolor' mode, switch to 'addcolor' mode and set the anchor element
+        seteditOption('addcolor');
+        setAnchorEl(event.currentTarget);
+    }
+
+    // Check if the map is available
+    if (!map) return;
+
+    // Attach a click event listener to each layer
+    map.eachLayer((layer) => {
+        layer.off('click'); // Remove existing click event listeners
+
+        layer.on({
+            click: (event) => {
+                // Log the clicked target (layer)
+                console.log("event:", event);
+
+                // Check if the clicked feature is a polygon
+                if (event.target && event.target.feature && (event.target.feature.geometry.type === 'MultiPolygon' ||event.target.feature.geometry.type === 'Polygon')){
+                    // Set the style of the clicked polygon
+                    event.target.setStyle({
+                        color: "green",
+                        fillColor: "yellow",
+                    });
+
+                    // You can also access the properties of the clicked polygon, for example:
+                    const polygonProperties = event.target.feature.properties;
+                    console.log("Polygon Properties:", polygonProperties);
+                }
+            }
+        });
+      });
+    };
+
+
  const handleUndoClick = () => {
    if (historyIndex > 0) {
      const newHistoryIndex = historyIndex - 1;
@@ -608,12 +651,17 @@ const EditScreen = () => {
  return (
  <div >
    <Box sx={{ flexGrow: 1, background: 'lightgray', alignItems: 'center', paddingLeft: '20px', margin: '1.0rem' }} id="edit-bar">
-   <IconButton onClick={handleHandClick} style={{border: editOption=='' ? '2px solid black' : 'none'}}>
-       <BackHandIcon />
-     </IconButton>
-     <IconButton onClick={handleTextFieldsClick} style={{border: editOption=='addtext' ? '2px solid black' : 'none'}}>
-       <TextFieldsIcon />
-     </IconButton>
+   <Tooltip title="Back Hand" placement="top">
+        <IconButton onClick={handleHandClick} style={{ border: editOption === '' ? '2px solid black' : 'none' }}>
+          <BackHandIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Add Text" placement="top">
+        <IconButton onClick={handleTextFieldsClick} style={{ border: editOption === 'addtext' ? '2px solid black' : 'none' }}>
+          <TextFieldsIcon />
+        </IconButton>
+      </Tooltip>
      <Popover
        open={Boolean(anchorEl)&&(editOption === 'addtext')}
        anchorEl={anchorEl}
@@ -737,36 +785,59 @@ const EditScreen = () => {
          <Button onClick={handleDoneClick}>Done</Button>
        </DialogActions>
      </Dialog>
-     <IconButton onClick={handleLocationOnClick}style={{border: editOption=='locate' ? '2px solid black' : 'none'}}>
-       <LocationOnIcon />
-     </IconButton>
-     <IconButton style={{border: editOption=='color' ? '2px solid black' : 'none'}} onClick={handleColorBoxClick}>
-     <ColorLensIcon/>
-     </IconButton>
-     <IconButton onClick={handleUndoClick}>
-       <UndoIcon/>
-     </IconButton>
-     <IconButton  onClick={handleRedoClick}>
-     <RedoIcon/>
-     </IconButton>
-     <IconButton onClick={handleSaveClick}>
-       <SaveIcon />
-     </IconButton>
-     <IconButton onClick={handleDeleteClick} style={{border: editOption=='remove' ? '2px solid black' : 'none'}}>
-       <DeleteIcon />
-     </IconButton>
+     
+     <Tooltip title="Locate" placement="top">
+        <IconButton onClick={handleLocationOnClick} style={{ border: editOption === 'locate' ? '2px solid black' : 'none' }}>
+          <LocationOnIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Color" placement="top">
+        <IconButton onClick={handleColorBoxClick} style={{ border: editOption === 'color' ? '2px solid black' : 'none' }}>
+          <ColorLensIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Undo" placement="top">
+        <IconButton onClick={handleUndoClick}>
+          <UndoIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Redo" placement="top">
+        <IconButton onClick={handleRedoClick}>
+          <RedoIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Save" placement="top">
+        <IconButton onClick={handleSaveClick}>
+          <SaveIcon />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Delete" placement="top">
+        <IconButton onClick={handleDeleteClick} style={{ border: editOption === 'remove' ? '2px solid black' : 'none' }}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
    </Box>
    <div id="map-name-edit">
      {store.currentMap.name}
    </div>
    <Box id="export-close-edit">
-   <IconButton>
-           <ExitToAppIcon style={{fontSize: '1.5rem'}}></ExitToAppIcon>
-       </IconButton>
-     {/* <CloseIcon onClick={handleCloseButton}></CloseIcon> */}
-     <IconButton onClick={handleCloseButton}><CloseIcon style={{fontSize: '1.5rem'}}>
-       </CloseIcon>
-       </IconButton>
+
+       <Tooltip title="Export" placement="top">
+        <IconButton>
+          <ExitToAppIcon style={{ fontSize: '1.5rem' }} />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Close" placement="top">
+        <IconButton onClick={handleCloseButton}>
+          <CloseIcon style={{ fontSize: '1.5rem' }} />
+        </IconButton>
+      </Tooltip>
    </Box>
    <div id="edit-container"></div>
  </div>

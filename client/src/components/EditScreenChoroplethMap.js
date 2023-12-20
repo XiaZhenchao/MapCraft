@@ -5,11 +5,13 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useHistory } from 'react-router-dom';
 import { GlobalStoreContext } from '../store';
+import { MenuItem } from '@mui/material';
 
 const ChoroplethEditScreen = () => {
   const [map, setMap] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [regionProperties, setRegionProperties] = useState({});
+  const [densityOption, setDensityOption] = useState('Population'); // Default option
   const { store } = useContext(GlobalStoreContext);
   const history = useHistory();
 
@@ -48,29 +50,70 @@ const ChoroplethEditScreen = () => {
 
   useEffect(() => {
     if (map) {
-      // Add an event listener for map click
-      map.on('click');
+      const geojsonData = store.currentMap.mapObjects;
 
-      // Add GeoJSON features to the map
-      store.currentMap.mapObjects.features.forEach((feature, index) => {
-        const geojsonLayer = L.geoJSON(feature, {
-          style: {
+      //const colorScale = chroma.scale(['#fafa6e', '#2A4858']).domain([0, 1000000000]); // Adjust colors and domain as needed
+
+      const geojsonLayer = L.geoJSON(geojsonData, {
+        style: (feature) => {
+          let data;
+          if (densityOption === 'Population'){
+            data = feature.properties.pop_est || 0; // Adjust property name based on your GeoJSON structure
+          } else {
+            data = feature.properties.gdp_md || 0;
+          }
+          return {
+            fillColor: getColor(data),
             color: 'blue',
-            fillColor: 'lightblue',
-          },
-        }).addTo(map);
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8,
+          };
+        },
+        onEachFeature: (feature, layer) => {
+          layer.on({
+            mouseover: (event) => {
+              const hoveredLayer = event.target;
+              hoveredLayer.setStyle({
+                weight: 3,
+                color: 'black',
+                fillOpacity: 1,
+              });
 
-        // Attach the GeoJSON feature id (using index) to the layer for identification
-        geojsonLayer.feature = { id: index };
-      });
+              if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                hoveredLayer.bringToFront();
+              }
+            },
+            mouseout: (event) => {
+              const hoveredLayer = event.target;
+              hoveredLayer.setStyle({
+                weight: 1,
+                color: 'blue',
+                fillOpacity: 0.8,
+              });
+            },
+            click: (event) => {
+              const clickedFeature = event.target.feature.properties;
+              //handleRegionClick(clickedFeature);
+            },
+          });
+
+          layer.bindPopup((layer) => {
+            const properties = layer.feature.properties;
+            if (densityOption === 'Population'){
+              return `Region: ${properties.name_en}<br>Population: ${properties.pop_est}`; // Adjust accordingly
+            }
+            if (densityOption === 'GDP'){
+              return `Region: ${properties.name_en}<br>GDP: ${properties.gdp_md}`; // Adjust accordingly
+            }
+          });
+        },
+      }).addTo(map);
+
+      const geojsonBounds = geojsonLayer.getBounds();
+      map.fitBounds(geojsonBounds);
     }
-
-    return () => {
-      if (map) {
-        map.off('click');
-      }
-    };
-  }, [map, store.currentMap]);
+  }, [map, store.currentMap.mapObjects, densityOption]);
 
   const handleRegionPropertyChange = (event, propertyName) => {
     // Update the regionProperties state
@@ -88,26 +131,39 @@ const ChoroplethEditScreen = () => {
         const geojsonData = store.currentMap.mapObjects;
         const geojsonLayer = L.geoJSON(geojsonData, {
           style: (feature) => {
-            const value = getValueForFeature(feature);
+            const population = feature.properties.pop_est || 0; // Adjust property name based on your GeoJSON structure
             return {
-              fillColor: getColor(value),
+              fillColor: getColor(population),
               color: 'blue',
               weight: 1,
               opacity: 1,
               fillOpacity: 0.8,
             };
           },
-          onEachFeature: function(feature, layer) {
+          onEachFeature: function (feature, layer) {
             // Bind a popup with information to each feature
             layer.bindPopup('Region: ' + feature.properties.regionName);
             // Add click event
-            layer.on('click', function() {
+            layer.on('click', function () {
               alert('You clicked on ' + feature.properties.regionName);
               // You can perform additional actions here
             });
-          }
-        }).addTo(map);
+          
+            layer.on('mouseover', function () {
+              layer.setStyle({
+                weight: 3,
+                color: 'black',
+                fillOpacity: 1,
+              });
+            });
   
+            // Reset styles on mouseout
+            layer.on('mouseout', function () {
+              geojsonLayer.resetStyle(layer);
+            });
+          },
+        }).addTo(map);
+        
         // Get the bounds of the GeoJSON layer
         const geojsonBounds = geojsonLayer.getBounds();
   
@@ -126,17 +182,17 @@ const ChoroplethEditScreen = () => {
   }
   
   function getColor(d) {
-    return d > 1000
-      ? '#800026'
-      : d > 500
-      ? '#BD0026'
-      : d > 200
+    return d > 10000000
+      ? 'red'
+      : d > 1000000
+      ? 'blue'
+      : d > 100000
       ? '#E31A1C'
-      : d > 100
+      : d > 10000
       ? '#FC4E2A'
-      : d > 50
+      : d > 1000
       ? '#FD8D3C'
-      : d > 20
+      : d > 100
       ? '#FEB24C'
       : d > 10
       ? '#FED976'
@@ -154,6 +210,34 @@ const ChoroplethEditScreen = () => {
     history.push('/');
   };
 
+  var legend = L.control({position: 'bottomright'});
+
+  if(map){
+    legend.onAdd = function (map) {
+
+      var div = L.DomUtil.create('div', 'info legend'),
+          grades = [0, 10, 100, 1000, 10000, 100000, 1000000, 100000000],
+          labels = [];
+
+      // loop through our density intervals and generate a label with a colored square for each interval
+      for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+              grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+      }
+
+      return div;
+  };
+
+  legend.addTo(map);
+  }
+
+  const handleDensityOptionChange = (event) => {
+    console.log(event.target.value);
+    setDensityOption(event.target.value);
+  };
+
+
   return (
     <div id="choropleth-edit-container">
       <div id="choropleth-controls">
@@ -170,6 +254,15 @@ const ChoroplethEditScreen = () => {
             ))}
           </>
         )}
+        <TextField
+          select
+          label="Density Option"
+          value={densityOption}
+          onChange={handleDensityOptionChange}
+        >
+          <MenuItem value="Population">Population</MenuItem>
+          <MenuItem value="GDP">GDP</MenuItem>
+        </TextField>
         <Button onClick={handleExit}>Exit</Button>
       </div>
       <div id="choropleth-map" style={{ height: '500px' }} />
