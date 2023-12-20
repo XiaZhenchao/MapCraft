@@ -25,6 +25,7 @@ const MapCraftSchema = new Schema(
             }]
         },
         heatArray:{type:Array, required:false},
+        customLabel:{type:Array, required:false},
         //dotArray:{type:Array, required:false},
         dotDensityArray:{
             type:[{

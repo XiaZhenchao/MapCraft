@@ -1020,6 +1020,40 @@ function GlobalStoreContextProvider(props) {
         asyncStoreData(id,coordinatesData, regionNameData);
     }
 
+    store.saveCustomLabel = function(id, AllChanges){
+        async function asyncStoreCustomEdit(id, AllChanges) {
+            let response = await api.getMapById(id);
+            if (response.data.success) {
+                let map = response.data.map;
+               
+                map.customLabel=AllChanges;
+                async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
+                    response = await api.updateMapById(map._id, map);
+                    if (response.data.success) {
+                        async function getMapPairs(map) {
+                            response = await api.getMapPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.STORE_FILE,
+                                    payload: {
+                                        idNamePairs:pairsArray,
+                                        map:map
+                                    }
+                                });
+                            }
+                        }
+                        getMapPairs(map);
+                    }
+                }
+                updateMap(map);
+            }
+        }
+        asyncStoreCustomEdit(id, AllChanges);
+    }
+ 
     store.markMapForDeletion = function (id) {
         async function getMapToDelete(id) {
             let response = await api.getMapById(id);

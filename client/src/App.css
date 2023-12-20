@@ -104,12 +104,12 @@ body {
 #edit-bar {
   position: absolute;
   background-color: #e1e4cb;
-  width: 6%;
-  height: 65%;
+  width: 5.5%;
+  height: 55%;
   top: 25%;
   left: 2%;
   border-radius: 10px;
-}
+ } 
 
 #function-bar {
   background-color: white;
@@ -605,7 +605,10 @@ body {
 .space {
   margin-left: 40px;
 }
-
+.custom-cursor {
+  cursor: url('Trash_light.png') 12 12, auto;
+ }
+ 
 /*Legend specific*/
 .legend {
   padding: 6px 8px;
