@@ -930,6 +930,45 @@ function GlobalStoreContextProvider(props) {
         asyncStoreHeatArray(id, allClickedPoints);
     }
 
+    store.saveVoronoiData = async function(id, allClickedPoints) {
+        console.log("store.saveVoronoiData") 
+         async function asyncStoreVoronoiData(id, allClickedPoints) {
+             let response = await api.getMapById(id);
+             if (response.data.success) {
+                 console.log("store.saveVoronoiData success")
+                 let map = response.data.map;
+ 
+                 // Update the map object with the new voronoiData structure
+                 map.voronoiArray.push(...allClickedPoints) // Assuming voronoiData is an array
+                 console.log("map.voronoiArray: " +map.voronoiArray);
+                 async function updateMap(map) {
+                     response = await api.updateMapById(map._id, map);
+                     if (response.data.success) {
+                         console.log("store.saveVoronoiData response.data.success")
+                         async function getMapPairs(map) {
+                             response = await api.getMapPairs();
+                             if (response.data.success) {
+                                 console.log("store.saveVoronoiData idnamepairs.success")
+                                 let pairsArray = response.data.idNamePairs;
+                                 storeReducer({
+                                     type: GlobalStoreActionType.STORE_FILE,
+                                     payload: {
+                                         idNamePairs: pairsArray,
+                                         map: map
+                                     }
+                                 });
+                             }
+                         }
+                         getMapPairs(map);
+                     }
+                 }
+                 updateMap(map);
+             }
+         }
+         asyncStoreVoronoiData(id, allClickedPoints);
+     };
+ 
+
 
     store.saveDotArray = function(id, allDotPoints, population, gdp,  dotColor, dotCounts, intensity){
         async function asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts, intensity) {

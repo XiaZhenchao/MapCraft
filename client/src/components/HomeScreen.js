@@ -173,9 +173,8 @@ const HomeScreen = () => {
                     }).addTo(thisMap); //adds the geojason layer to the leaft map.
                     // Get the bounds of the GeoJSON layer
                     const geojsonBounds = geojsonLayer.getBounds();
-
                     // Set the map view to the bounds of the GeoJSON layer
-                    thisMap.fitBounds(geojsonBounds);
+                    // thisMap.fitBounds(geojsonBounds);
 
                 }
                 catch (error) {
@@ -574,8 +573,6 @@ const handleMenuClose = () => {
                 hidden: true,
             }).addTo(map);
     
-            // Trigger the printing action
-            printer.printMap('CurrentSize', 'MyManualPrint');
         } else {
             console.error('Map instance not found.'); // Log an error if the map instance is missing
         }

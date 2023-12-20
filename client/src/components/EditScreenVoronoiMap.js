@@ -23,25 +23,21 @@ const VoronoiMapEditScreen = () => {
     const [geojsonBounds, setGeojsonBounds] = useState(null);
     const [voronoiLayers, setVoronoiLayers] = useState([]);
     const [hasRunVoronoi, setHasRunVoronoi] = useState(false);
+
     useEffect(() => {
         const mapInstance = L.map('heatmap-map').setView([0, 0], 5);
-    
-        // Adding tile layer remains the same
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href=" ">OpenStreetMap</a > contributors',
         }).addTo(mapInstance);
-    
         setMap(mapInstance);
-        
         renderGeoJSON(mapInstance);
 
-     
-    
-        return () => {
-            if (mapInstance) {
-                mapInstance.remove();
-            }
-        };
+        // return () => {
+        //     if (mapInstance) {
+        //         mapInstance.remove();
+        //     }
+        // };
+
     }, [store.currentMap.voronoiArray]);
 
     const handleMapClick = (e) => {
@@ -130,7 +126,7 @@ const VoronoiMapEditScreen = () => {
         setVoronoiLayers(newVoronoiLayers); // Update the Voronoi layers state
     };
     
-    // Adjust useEffect to handle map click
+   
     useEffect(() => {
         if (store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0 && map && !hasRunVoronoi) {
             console.log("store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0");
@@ -139,6 +135,7 @@ const VoronoiMapEditScreen = () => {
             updateVoronoiLayer(store.currentMap.voronoiArray);
             setHasRunVoronoi(true); // Update the state to indicate that the code has run
         }
+
         if (map) {
             map.on('click', handleMapClick);
         }
