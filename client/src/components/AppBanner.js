@@ -40,12 +40,6 @@ export default function AppBanner() {
         history.push("/community/");
     }
 
-    const handleSetting = () => {
-        handleMenuClose();
-        history.push("/setting/");
-    }
-
-
     function handleKeyPressSearch(event) {
         if (event.code === "Enter") {
             let text = event.target.value;
@@ -73,8 +67,6 @@ export default function AppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/community/'>Continue As Guest</Link></MenuItem>
-            <MenuItem onClick={handleSetting}><Link to='/setting/'>Setting</Link></MenuItem>
-            {/* <MenuItem onClick={handleMenuClose}><Link to='/admin-home/'>Continue As Admin </Link></MenuItem> */}
         </Menu>
     );
     const loggedInMenu = 
