@@ -931,8 +931,8 @@ function GlobalStoreContextProvider(props) {
     }
 
 
-    store.saveDotArray = function(id, allDotPoints, population, gdp,  dotColor, dotCounts){
-        async function asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts) {
+    store.saveDotArray = function(id, allDotPoints, population, gdp,  dotColor, dotCounts, intensity){
+        async function asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts, intensity) {
             let response = await api.getMapById(id);
             if (response.data.success) {
                 let map = response.data.map;
@@ -945,7 +945,8 @@ function GlobalStoreContextProvider(props) {
                         population: population,
                         GDP: gdp,
                         color: dotColor,
-                        dotCounts: dotCounts
+                        dotCounts: dotCounts,
+                        intensity: intensity
                     }
                     console.log(newLayer);
                     map.dotDensityArray.push(newLayer);
@@ -974,34 +975,41 @@ function GlobalStoreContextProvider(props) {
                 updateMap(map);
             }
         }
-        asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts);
+        asyncStoreDotArray(id, allDotPoints, population, gdp,  dotColor, dotCounts, intensity);
     }
 
-    store.saveVoronoiData = async function(id, allClickedPoints) {
-       console.log("store.saveVoronoiData") 
-        async function asyncStoreVoronoiData(id, allClickedPoints) {
+
+    store.saveChoroplethArray = function(id, properties, densityOption){
+        async function asyncStoreDotArray(id, properties, densityOption) {
             let response = await api.getMapById(id);
             if (response.data.success) {
-                console.log("store.saveVoronoiData success")
                 let map = response.data.map;
-    
-                // Update the map object with the new voronoiData structure
-                map.voronoiArray.push(...allClickedPoints) // Assuming voronoiData is an array
-                console.log("map.voronoiArray: " +map.voronoiArray);
+                //console.log("dot points:", allDotPoints.length);
+                for (let i = 0 ; i < properties.length; i++){
+                    let newArray = {
+                        regionName: properties[i][0],
+                        data: properties[i][1],
+                        choroplethColor: properties[i][2],
+                        densityOption: densityOption
+                    }
+                    map.choroplethMapArray.push(newArray);
+                }
+                console.log(map.choroplethMapArray);
+                // map.choroplethMapArray = newArray;
                 async function updateMap(map) {
+                    console.log("map._id: "+map._id);
+                    console.log("id: "+id);
                     response = await api.updateMapById(map._id, map);
                     if (response.data.success) {
-                        console.log("store.saveVoronoiData response.data.success")
                         async function getMapPairs(map) {
                             response = await api.getMapPairs();
                             if (response.data.success) {
-                                console.log("store.saveVoronoiData idnamepairs.success")
                                 let pairsArray = response.data.idNamePairs;
                                 storeReducer({
                                     type: GlobalStoreActionType.STORE_FILE,
                                     payload: {
-                                        idNamePairs: pairsArray,
-                                        map: map
+                                        idNamePairs:pairsArray,
+                                        map:map
                                     }
                                 });
                             }
@@ -1012,11 +1020,9 @@ function GlobalStoreContextProvider(props) {
                 updateMap(map);
             }
         }
-        asyncStoreVoronoiData(id, allClickedPoints);
-    };
+        asyncStoreDotArray(id, properties, densityOption);
+    }
     
-    
-
 
 
     store.saveLayerData = function (id,coordinatesData, regionNameData){
