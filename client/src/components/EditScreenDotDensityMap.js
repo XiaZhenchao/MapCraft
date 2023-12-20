@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import L from 'leaflet';
 import { useHistory } from 'react-router-dom';
 import { MenuItem } from '@mui/material';
+import Box from '@mui/material/Box';
 
 const DotDensityEditScreen = () => {
   const { store } = useContext(GlobalStoreContext);
@@ -155,7 +156,7 @@ const DotDensityEditScreen = () => {
         console.log(population);
         console.log(gdp);
         console.log("5:",dotCounts);
-        store.saveDotArray(store.currentMap._id, allDotPoints, population, gdp,dotColor, dotCounts);
+        store.saveDotArray(store.currentMap._id, allDotPoints, population, gdp,dotColor, dotCounts, intensity);
         setAllDotPoints([]);
         history2.push('/');
     }
@@ -232,34 +233,39 @@ const DotDensityEditScreen = () => {
           type="number"
           value={intensity}
           onChange={handleIntensityChange}
+          style={{ margin: '8px' }}
         />
         <TextField
           select
           label="Density Option"
           value={densityOption}
           onChange={handleDensityOptionChange}
+          style={{ margin: '8px', marginRight: '20px' }}
         >
           <MenuItem value="Population">Population</MenuItem>
           <MenuItem value="GDP">GDP</MenuItem>
         </TextField>
 
+        Color: 
         <input
               type="color"
               value={dotColor}
               onChange={handleColorChange}
-              style={{ width: '50px', height: '30px', borderRadius: '10%', cursor: 'pointer' }}
+              style={{ width: '50px', height: '30px', borderRadius: '10%', cursor: 'pointer', marginLeft: '10px', margin: '8px' }}
         />
 
-        <Button onClick={handleGenerate}> Generate </Button>
-        <Button onClick={handleClearPoints}>Clear Points</Button>
-        <Button onClick={handleUndo}> Undo </Button>
-        <Button onClick={handleRedo}> Redo </Button>
-        <Button onClick={handleSave}>Save</Button>
-        <Button onClick={handleExit}>Exit</Button>
+        <Button onClick={handleGenerate} style={{ margin: '8px' }}> Generate </Button>
+        <Button onClick={handleClearPoints} style={{ margin: '8px' }}>Clear Points</Button>
+        <Button onClick={handleSave} style={{ margin: '8px' }}>Save</Button>
+        <Button onClick={handleExit} style={{ margin: '8px' }}>Exit</Button>
       </div>
       <div id="heatmap-map" style={{ height: '500px' }} />
       <p>
-        {densityOption === 'Population'
+        {store.currentMap.dotDensityArray.length > 0
+        ? densityOption === 'Population'
+          ? `1 point = ${store.currentMap.dotDensityArray[0].intensity} Population`
+          : `1 point = ${store.currentMap.dotDensityArray[0].intensity} GDP`
+        : densityOption === 'Population'
         ? `1 point = ${intensity} Population`
         : `1 point = ${intensity} GDP`
         }

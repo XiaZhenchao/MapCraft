@@ -29,7 +29,12 @@ const MapCraftSchema = new Schema(
         //dotArray:{type:Array, required:false},
         dotDensityArray:{
             type:[{
-                dotArray:[], population: Number, GDP: Number, color: String, dotCounts: Number
+                dotArray:[], population: Number, GDP: Number, color: String, dotCounts: Number, intensity: Number
+            }], required: false},
+
+        choroplethMapArray:{
+            type:[{
+                regionName: String, data: Number, choroplethColor: String, densityOption: String
             }], required: false},
         voronoiArray:{type:Array, required:false},
         banned: {type: Boolean, required: true},

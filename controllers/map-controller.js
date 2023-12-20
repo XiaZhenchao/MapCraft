@@ -137,6 +137,7 @@ getMapPairs = async (req, res) => {
                             dotDensityArray:map.dotDensityArray,
                             voronoiArray: map.voronoiArray,
                             customLabel:map.customLabel,
+                            choroplethMapArray: map.choroplethMapArray
                         };
                         pairs.push(pair);
                     }
@@ -149,12 +150,6 @@ getMapPairs = async (req, res) => {
 
 updateMapById = async (req, res) => {
     const body = req.body
-    console.log("updateMap: " + JSON.stringify(body));
-    console.log("req.body.name: " + req.body.name);
-    console.log("req.body.map.name: " + req.body.map.name);
-    console.log("req.body.map: " + req.body.map);
-    console.log("req.body.map.comment: " + req.body.map.commentObject);
-    console.log("req.body.map.comment: " + req.body.map.layers);
 
     if (!body) {
         return res.status(400).json({
@@ -190,6 +185,7 @@ updateMapById = async (req, res) => {
                     list.dotDensityArray= body.map.dotDensityArray,
                     list.voronoiArray = body.map.voronoiArray,
                     list.customLabel = body.map.customLabel,
+                    list.choroplethMapArray= body.map.choroplethMapArray
                     
                     list
                         .save()
