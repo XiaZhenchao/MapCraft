@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth'
-import AppBanner from './AppBanner';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import MapList from './MapList.js'
@@ -667,20 +666,21 @@ const handleMenuClose = () => {
        ) : (
         <>
           {store.currentMap != null? store.currentmapName: "" }
+          {store.currentMap != null? 
           <IconButton onClick={handleEditNameClick} title="Edit Name">
             <EditIcon style={{ fontSize: '2rem' }} />
-          </IconButton>
+          </IconButton>:null}
         </>
        )}
        </div>
        <Box  id = "export-close">
        <Tooltip title="Export" arrow>
-            <IconButton onClick={handleExportButton}>
+            <IconButton disabled={!store.currentMap} onClick={handleExportButton}>
             <ExitToAppIcon style={{ fontSize: '1.5rem' }} />
             </IconButton>
        </Tooltip>
        <Tooltip title="Close" arrow>
-            <IconButton onClick={handleCloseButton}>
+            <IconButton disabled={!store.currentMap} onClick={handleCloseButton}>
             <CloseIcon style={{ fontSize: '1.5rem' }} />
             </IconButton>
        </Tooltip>
