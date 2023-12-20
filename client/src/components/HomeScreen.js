@@ -704,10 +704,10 @@ const handleMenuClose = () => {
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    disabled={!store.currentMap}
                    onClick={handleEditButton}>Edit</Button>
-           <Button className='button'
+           {/* <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    disabled={!store.currentMap}
-                   onClick={handleRenderButtonClick}>Render</Button>
+                   onClick={handleRenderButtonClick}>Render</Button> */}
            <Button className='button'
                    sx={{ color: 'black', backgroundColor: '#ABC8B2', margin: '0.4rem',  fontSize: '0.5rem'}}
                    disabled={!store.currentMap}
