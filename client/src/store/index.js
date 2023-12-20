@@ -494,6 +494,9 @@ function GlobalStoreContextProvider(props) {
                         if(mapToCopy.mapTemplate=="voronoiMap"){
                             newMap.voronoiArray=mapToCopy.voronoiArray
                         }
+                        if(mapToCopy.mapTemplate=="regular"){
+                            newMap.customLabel=mapToCopy.customLabel
+                        }
                         async function updateMap(newMap) {
                             response = await api.updateMapById(newId, newMap);
                             if (response.data.success) {
