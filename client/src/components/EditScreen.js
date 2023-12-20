@@ -142,7 +142,21 @@ const EditScreen = () => {
    };
  }, [markers,editOption])
 
+ const handleExportButton = () =>{
+  if (map) { // Assuming 'map' is set in your state and properly updated via 'setMap'
+      // Create the easyPrint control and add it to the map instance
+      var printer = L.easyPrint({
+          filename: 'myMap',
+          exportOnly: true,
+          hideControlContainer: true,
+          hidden: true,
+      }).addTo(map);
+      printer.printMap('CurrentSize', 'MyManualPrint');
+  } else {
+      console.error('Map instance not found.'); // Log an error if the map instance is missing
+  }
 
+};
  useEffect(() => {
    console.log("history Updated",history);
  }, [history]);
@@ -430,7 +444,6 @@ const EditScreen = () => {
       }
     }
   }
-
   // All elements match
   return true;
 }
@@ -929,7 +942,7 @@ const EditScreen = () => {
    <Box id="export-close-edit">
 
        <Tooltip title="Export" placement="top">
-        <IconButton>
+        <IconButton onClick = {handleExportButton}>
           <ExitToAppIcon style={{ fontSize: '1.5rem' }} />
         </IconButton>
       </Tooltip>

@@ -572,7 +572,7 @@ const handleMenuClose = () => {
                 hideControlContainer: true,
                 hidden: true,
             }).addTo(map);
-    
+            printer.printMap('CurrentSize', 'MyManualPrint');
         } else {
             console.error('Map instance not found.'); // Log an error if the map instance is missing
         }
