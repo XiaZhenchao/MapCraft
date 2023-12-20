@@ -269,12 +269,13 @@ const ChoroplethEditScreen = () => {
           label="Density Option"
           value={densityOption}
           onChange={handleDensityOptionChange}
+          style={{ margin: '8px' }}
         >
           <MenuItem value="Population">Population</MenuItem>
           <MenuItem value="GDP">GDP</MenuItem>
         </TextField>
-        <Button onClick={handleSave}>Save</Button>
-        <Button onClick={handleExit}>Exit</Button>
+        <Button onClick={handleSave} style={{ margin: '8px' }}>Save</Button>
+        <Button onClick={handleExit} style={{ margin: '8px' }}>Exit</Button>
       </div>
       <div id="choropleth-map" style={{ height: '500px' }} />
     </div>
