@@ -22,6 +22,7 @@ const VoronoiMapEditScreen = () => {
     const history2 = useHistory();
     const [geojsonBounds, setGeojsonBounds] = useState(null);
     const [voronoiLayers, setVoronoiLayers] = useState([]);
+    const [hasRunVoronoi, setHasRunVoronoi] = useState(false);
     useEffect(() => {
         const mapInstance = L.map('heatmap-map').setView([0, 0], 5);
     
@@ -34,12 +35,7 @@ const VoronoiMapEditScreen = () => {
         
         renderGeoJSON(mapInstance);
 
-        if (store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0) {
-            console.log("store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0");
-            console.log("store.currentMap.voronoiArray: "+ store.currentMap.voronoiArray);
-            setVoronoiLayers(store.currentMap.voronoiArray);
-            updateVoronoiLayer(store.currentMap.voronoiArray);
-            }
+     
     
         return () => {
             if (mapInstance) {
@@ -77,6 +73,12 @@ const VoronoiMapEditScreen = () => {
     const updateVoronoiLayer = (points) => {
         console.log("Update Voronoi Layer with points: ", points);
         const newVoronoiLayers = [];
+        if(geojsonBounds)
+        {
+            console.log("it has geojsonBounds");
+        }else{
+            console.log("it doesn't have geojsonBounds");
+        }
         if (!geojsonBounds) return;
         console.log("has geojsonBounds")
         // First, remove the existing Voronoi layers if they exist
@@ -130,6 +132,13 @@ const VoronoiMapEditScreen = () => {
     
     // Adjust useEffect to handle map click
     useEffect(() => {
+        if (store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0 && map && !hasRunVoronoi) {
+            console.log("store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0");
+            console.log("store.currentMap.voronoiArray: " + store.currentMap.voronoiArray);
+            setVoronoiLayers(store.currentMap.voronoiArray);
+            updateVoronoiLayer(store.currentMap.voronoiArray);
+            setHasRunVoronoi(true); // Update the state to indicate that the code has run
+        }
         if (map) {
             map.on('click', handleMapClick);
         }
@@ -204,6 +213,7 @@ const VoronoiMapEditScreen = () => {
     };
 
     const renderGeoJSON = (map) => {
+        console.log("renderGeoJSON")
         if (map) {// if map variable from stat e exists(load map function excute successfully)
             const thisMap = map;//assgin map variable from state
                 try {
@@ -219,7 +229,7 @@ const VoronoiMapEditScreen = () => {
                     setGeojsonBounds(geojsonBounds); // Store the bounds
                      // Set the map view to the bounds of the GeoJSON layer
                     thisMap.fitBounds(geojsonBounds);
-    
+                    console.log("geojsonBounds: "+ geojsonBounds)
                 }
                 catch (error) {
                     console.error('Error rendering GeoJSON:', error);
