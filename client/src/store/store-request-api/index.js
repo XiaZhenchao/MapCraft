@@ -65,6 +65,7 @@ export const createMap = (newMapName, userEmail, username) => {
         "features": []},
         heatArray: [],
         dotDensityArray: [],
+        voronoiArray: [],
         customLabel: [],
     })
 }

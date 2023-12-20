@@ -31,6 +31,7 @@ const MapCraftSchema = new Schema(
             type:[{
                 dotArray:[], population: Number, GDP: Number, color: String, dotCounts: Number
             }], required: false},
+        voronoiArray:{type:Array, required:false},
         banned: {type: Boolean, required: true},
         editStatus: {type: Boolean, required: true},
         //source: {type: String, required: true}

@@ -21,6 +21,7 @@ const VoronoiMapEditScreen = () => {
     const [historyIndex, setHistoryIndex] = useState(-1);
     const history2 = useHistory();
     const [geojsonBounds, setGeojsonBounds] = useState(null);
+    const [voronoiLayers, setVoronoiLayers] = useState([]);
     useEffect(() => {
         const mapInstance = L.map('heatmap-map').setView([0, 0], 5);
     
@@ -30,14 +31,22 @@ const VoronoiMapEditScreen = () => {
         }).addTo(mapInstance);
     
         setMap(mapInstance);
+        
         renderGeoJSON(mapInstance);
+
+        if (store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0) {
+            console.log("store.currentMap.voronoiArray && store.currentMap.voronoiArray.length > 0");
+            console.log("store.currentMap.voronoiArray: "+ store.currentMap.voronoiArray);
+            setVoronoiLayers(store.currentMap.voronoiArray);
+            updateVoronoiLayer(store.currentMap.voronoiArray);
+            }
     
         return () => {
             if (mapInstance) {
                 mapInstance.remove();
             }
         };
-    }, []);
+    }, [store.currentMap.voronoiArray]);
 
     const handleMapClick = (e) => {
         const { lat, lng } = e.latlng;
@@ -66,7 +75,15 @@ const VoronoiMapEditScreen = () => {
     
     
     const updateVoronoiLayer = (points) => {
+        console.log("Update Voronoi Layer with points: ", points);
+        const newVoronoiLayers = [];
         if (!geojsonBounds) return;
+        console.log("has geojsonBounds")
+        // First, remove the existing Voronoi layers if they exist
+        voronoiLayers.forEach((layer) => {
+            map.removeLayer(layer);
+        });
+        setVoronoiLayers([]); 
         // First, remove the existing Voronoi layer if it exists
         map.eachLayer((layer) => {
             if (layer.options && layer.options.isVoronoi) {
@@ -99,6 +116,16 @@ const VoronoiMapEditScreen = () => {
         });
         map.addLayer(new voronoiLayer());
         setAllClickedPoints(points);
+        diagram.cells.forEach((cell) => {
+            const points = cell.halfedges.map((edge) => {
+                return [edge.getStartpoint().y, edge.getStartpoint().x];
+            });
+            if (points.length > 0) {
+                const newLayer = L.polygon(points, { isVoronoi: true }).addTo(map);
+                newVoronoiLayers.push(newLayer); // Collect the new Voronoi layers
+            }
+        });
+        setVoronoiLayers(newVoronoiLayers); // Update the Voronoi layers state
     };
     
     // Adjust useEffect to handle map click
@@ -112,28 +139,6 @@ const VoronoiMapEditScreen = () => {
             }
         };
     }, [map, allClickedPoints]);
-
-    // const handleIntensityChange = (event) => {
-    //     setIntensity(parseFloat(event.target.value));
-    // };
-
-    const handleHeatpointSubmit = () => {
-        if (map && clickedPoints.length > 0) {
-            // Create the heat layer
-            const heatLayer = L.heatLayer(clickedPoints, { radius: 25 });
-
-            // Add the heat layer to the map
-            heatLayer.addTo(map);
-
-            // Save the heat layer in state if needed
-            setHeatLayer(heatLayer);
-
-             // Clear the clicked points and last clicked point for the next input
-            setClickedPoints([]);
-            setLastClickedPoint(null);
-
-        }
-    };
 
     const handleClearPoints = () => {
         // Remove all existing heat layers
@@ -227,7 +232,8 @@ const VoronoiMapEditScreen = () => {
     }
 
     const handleSave =() =>{
-        store.saveHeatArray(store.currentMap._id, allClickedPoints)
+        store.saveVoronoiData(store.currentMap._id, allClickedPoints);
+        console.log("allClickedPoints: "+ allClickedPoints);
         setClickedPoints([]);
         setAllClickedPoints([]);
         setLastClickedPoint(null);
@@ -236,14 +242,8 @@ const VoronoiMapEditScreen = () => {
     return (
         <div id="Voronoi-edit-container">
             <div id="voronoi-controls">
-                {/* <TextField
-                    type="number"
-                    label="Intensity"
-                    value={intensity}
-                    onChange={handleIntensityChange}
-                /> */}
-                <Button onClick={handleHeatpointSubmit}>Add Heat Point</Button>
-                <Button onClick={handleClearPoints}>Clear Points</Button>
+                {/* <Button onClick={handleHeatpointSubmit}>Add Heat Point</Button>
+                <Button onClick={handleClearPoints}>Clear Points</Button> */}
                 <Button onClick={handleUndo} disabled={historyIndex === 0}> Undo </Button>
                 <Button onClick={handleRedo} disabled={historyIndex === history.length - 1}> Redo </Button>
                 <Button onClick={handleSave} >Save</Button>
