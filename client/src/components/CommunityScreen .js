@@ -62,6 +62,68 @@ const CommunityScreen = () => {
     }
   }, [store.currentMap]);
 
+  const renderChoro = (mapInstance) => {
+    if (mapInstance) {
+      const geojsonData = store.currentMap.mapObjects;
+
+      const geojsonLayer = L.geoJSON(geojsonData, {
+        style: (feature) => {
+          for (let i = 0 ; i < store.currentMap.choroplethMapArray.length; i++){
+            if (feature.properties.name_en === store.currentMap.choroplethMapArray[i].regionName){
+                return {
+                    fillColor: store.currentMap.choroplethMapArray[i].choroplethColor,
+                    color: 'blue',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8,
+                }
+            }
+          }
+        },
+        onEachFeature: (feature, layer) => {
+          layer.on({
+            mouseover: (event) => {
+              const hoveredLayer = event.target;
+              hoveredLayer.setStyle({
+                weight: 3,
+                color: 'black',
+                fillOpacity: 1,
+              });
+
+              if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                hoveredLayer.bringToFront();
+              }
+            },
+            mouseout: (event) => {
+              const hoveredLayer = event.target;
+              hoveredLayer.setStyle({
+                weight: 1,
+                color: 'blue',
+                fillOpacity: 0.8,
+              });
+            },
+            click: (event) => {
+              const clickedFeature = event.target.feature.properties;
+              //handleRegionClick(clickedFeature);
+            },
+          });
+
+          layer.bindPopup((layer) => {
+            const properties = layer.feature.properties;
+            for (let i = 0 ; i < store.currentMap.choroplethMapArray.length; i++){
+                if (feature.properties.name_en === store.currentMap.choroplethMapArray[i].regionName){
+                    return `Region: ${properties.name_en}<br>${store.currentMap.choroplethMapArray[i].densityOption}: ${store.currentMap.choroplethMapArray[i].data}`; // Adjust accordingly
+                }
+            }
+          });
+        },
+    }).addTo(mapInstance);
+
+      const geojsonBounds = geojsonLayer.getBounds();
+      map.fitBounds(geojsonBounds);
+    }
+}
+
   const loadMap = () => {
     try {
             const mapInstance = L.map('big-container').setView([0, 0], 5);
@@ -98,7 +160,14 @@ const CommunityScreen = () => {
                 }
             }
 
-            if (store.currentMap.mapTemplate=="null"){
+            if (store.currentMap.mapTemplate=='choroplethMap'){
+                console.log(store.currentMap.choroplethMapArray);
+                if (store.currentMap.choroplethMapArray && store.currentMap.choroplethMapArray.length > 0){
+                    renderChoro(mapInstance)
+                }
+            }
+
+            if (store.currentMap.mapTemplate=="regular"){
                 renderEdits(mapInstance);
             }
             

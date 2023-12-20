@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
   // store the type of map
-  const [mapType, setMapType] = useState('');
+  const [mapType, setMapType] = useState('regular');
   // store the mapFile
   const [selectedFile, setSelectedFile] = useState(false);
 
@@ -89,16 +89,6 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           <input
             type="radio"
             name="mapType"
-            value="symbolMap"
-            checked={mapType === 'symbolMap'}
-            onChange={handleMapTypeChange}
-          />
-          Symbol Map
-        </label>
-        <label style={{ marginLeft: '20px' }}>
-          <input
-            type="radio"
-            name="mapType"
             value="choroplethMap"
             checked={mapType === 'choroplethMap'}
             onChange={handleMapTypeChange}
@@ -130,11 +120,11 @@ const MapTemplateModal = ({ open, handleClose, onConfirm }) => {
           <input
             type="radio"
             name="mapType"
-            value="RegularMap"
-            checked={mapType === 'voronoiMap'}
+            value="regular"
+            checked={mapType === 'regular'}
             onChange={handleMapTypeChange}
           />
-          no specific map
+          regular map
         </label>
         <br></br>
         <input
