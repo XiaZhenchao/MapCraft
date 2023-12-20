@@ -209,7 +209,7 @@ const HeatmapEditScreen = () => {
                 <Button onClick={handleUndo} disabled={historyIndex === 0} style={{ margin: '8px' }}> Undo </Button>
                 <Button onClick={handleRedo} disabled={historyIndex === history.length - 1} style={{ margin: '8px' }}> Redo </Button>
                 <Button onClick={handleSave} style={{ margin: '8px' }}>Save</Button>
-                <Button onClick={handleExit} style={{ margin: '8px' }}style={{ margin: '8px' }}>Exit</Button>
+                <Button onClick={handleExit} style={{ margin: '8px' }}>Exit</Button>
             </div>
             <div id="heatmap-map" style={{ height: '500px' }} />
             {lastClickedPoint && (
