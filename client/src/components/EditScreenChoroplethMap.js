@@ -210,27 +210,27 @@ const ChoroplethEditScreen = () => {
     history.push('/');
   };
 
-  var legend = L.control({position: 'bottomright'});
-
-  if(map){
-    legend.onAdd = function (map) {
-
-      var div = L.DomUtil.create('div', 'info legend'),
-          grades = [0, 10, 100, 1000, 10000, 100000, 1000000, 100000000],
-          labels = [];
-
-      // loop through our density intervals and generate a label with a colored square for each interval
-      for (var i = 0; i < grades.length; i++) {
+  useEffect(() => {
+    console.log('Running legend.addTo(map)');
+    if (map) {
+      var legend = L.control({position: 'bottomright'});
+      legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [0, 10, 100, 1000, 10000, 100000, 1000000, 100000000],
+            labels = [];
+  
+        for (var i = 0; i < grades.length; i++) {
           div.innerHTML +=
-              '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-              grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-      }
-
-      return div;
-  };
-
-  legend.addTo(map);
-  }
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+  
+        return div;
+      };
+  
+      legend.addTo(map);
+    }
+  }, [map]);
 
   const handleDensityOptionChange = (event) => {
     console.log(event.target.value);
