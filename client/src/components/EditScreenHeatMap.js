@@ -202,13 +202,14 @@ const HeatmapEditScreen = () => {
                     label="Intensity"
                     value={intensity}
                     onChange={handleIntensityChange}
+                    style={{ margin: '8px' }}
                 />
-                <Button onClick={handleHeatpointSubmit}>Add Heat Point</Button>
-                <Button onClick={handleClearPoints}>Clear Points</Button>
-                <Button onClick={handleUndo} disabled={historyIndex === 0}> Undo </Button>
-                <Button onClick={handleRedo} disabled={historyIndex === history.length - 1}> Redo </Button>
-                <Button onClick={handleSave} >Save</Button>
-                <Button onClick={handleExit}>Exit</Button>
+                <Button onClick={handleHeatpointSubmit} style={{ margin: '8px' }}>Add Heat Point</Button>
+                <Button onClick={handleClearPoints} style={{ margin: '8px' }}>Clear Points</Button>
+                <Button onClick={handleUndo} disabled={historyIndex === 0} style={{ margin: '8px' }}> Undo </Button>
+                <Button onClick={handleRedo} disabled={historyIndex === history.length - 1} style={{ margin: '8px' }}> Redo </Button>
+                <Button onClick={handleSave} style={{ margin: '8px' }}>Save</Button>
+                <Button onClick={handleExit} style={{ margin: '8px' }}style={{ margin: '8px' }}>Exit</Button>
             </div>
             <div id="heatmap-map" style={{ height: '500px' }} />
             {lastClickedPoint && (
