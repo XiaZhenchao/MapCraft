@@ -240,7 +240,7 @@ const EditScreen = () => {
      if (legenddata.length>0){
        const le = legenddata[0]
        const textlabel = {"type":"legend","isCheck":isChecked,"legend name": legendName,"Legend Items":legendItems}
-       if(((le["isCheck"]==textlabel["isCheck"])||(le["Legend Items"]==textlabel["Legend Items"]))){
+       if(((le["isCheck"]==textlabel["isCheck"])&&(le["Legend Items"]==textlabel["Legend Items"]))){
         
        }
        else{

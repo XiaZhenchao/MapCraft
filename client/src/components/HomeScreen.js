@@ -29,7 +29,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import 'leaflet.heat/dist/leaflet-heat.js'; 
 import 'leaflet-easyprint';
-
+import locate from '../location.png';
 
 /*
    This React component lists all the top5 lists in the UI.
@@ -184,6 +184,62 @@ const HomeScreen = () => {
             }
         };
     }
+
+    const renderEdits=(mapInstance)=>{
+        const AllChanges = store.currentMap.customLabel
+        if (AllChanges.length>0){
+          console.log("current changes: ",AllChanges);
+          AllChanges.forEach(function (EditItem) {
+            if (EditItem["type"]=="text label"){
+              const currentZoom = mapInstance.getZoom();
+              const iconAnchor = [10 * currentZoom, 10 * currentZoom];
+              const customLabelIcon = L.divIcon({
+                className: 'custom-label',
+                html: `<div style="font-family: ${EditItem["fontFamily"]}; color: ${EditItem["color"]}; font-size:${EditItem["font-size"]}px">${EditItem["labelText"]}</div>`,
+                iconSize: [20,20],
+                iconAnchor: iconAnchor,
+              });
+              console.log('Custom label icon:', customLabelIcon);
+              L.marker(EditItem["coordinates"], { icon: customLabelIcon}).addTo(mapInstance);
+            }
+            else if (EditItem["type"]=="location label"){
+              const locationLogoIcon = L.icon({
+                iconUrl: locate,
+                iconSize: [25, 25],
+                iconAnchor: [25, 25],
+              });
+              L.marker(EditItem["coordinates"], {
+                icon: locationLogoIcon,
+                zIndexOffset: 2000,
+                draggable: false
+              }).addTo(mapInstance);
+            }
+            else if (EditItem["type"]=="legend"){
+              // Check if legend is initialized
+              if (EditItem["Legend Items"].length==0 || !EditItem["isCheck"]){
+                return null;
+              }
+              // Create a new legend based on the updated legendItems
+              const legend = L.control({ position: 'bottomleft' });
+              legend.onAdd = function () {
+                var div = L.DomUtil.create('div', 'legend');
+                div.innerHTML += '<h4>' + EditItem["legend name"]+ '</h4>';
+                EditItem["Legend Items"].forEach(function (legendItem) {
+                  div.innerHTML +=
+                    '<i style="background: ' + legendItem.color + '"></i><span>' + legendItem.description + '</span><br>';
+                });
+                return div;
+              };
+              if (mapInstance!=null){
+                legend.addTo(mapInstance);
+              }
+              else{
+                console.log('null!!!')
+              }
+            }
+          });
+        }
+      }
     
   const loadMap = () => {
     try {
@@ -219,6 +275,9 @@ const HomeScreen = () => {
                     const markerLayer = L.layerGroup(markers);
                     mapInstance.addLayer(markerLayer);
                 }
+            }
+            if (store.currentMap.mapTemplate=="null"){
+                renderEdits(mapInstance);
             }
             
     } catch (error) {
