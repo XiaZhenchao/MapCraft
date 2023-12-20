@@ -62,7 +62,7 @@ const HomeScreen = () => {
         {
                 if(auth.user.role == "admin")
             {
-                history.push("/admin-community/")
+                history.push("/community/")
             }
             else if(auth.user.role == "banned"){
                 handleBanUserLoginModal();
@@ -344,7 +344,7 @@ const HomeScreen = () => {
                 }
             }
             
-            if (store.currentMap.mapTemplate=="null"){
+            if (store.currentMap.mapTemplate=="regular"){
                 renderEdits(mapInstance);
             }
             
